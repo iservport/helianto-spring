@@ -33,7 +33,7 @@ case class ErrorWrapper(@BeanProperty status: Int,
                         @BeanProperty error: AnyRef,
                         @BeanProperty message: AnyRef,
                         @BeanProperty timestamp: AnyRef,
-                        @JsonIgnore trace: AnyRef) {
+                        @BeanProperty trace: AnyRef) {
 
-  @BeanProperty val traceLines = trace.toString.replaceAll("\\r\\n|\\r|\\n", " ").split("at ").take(5)
+//  @BeanProperty val traceLines = trace.toString.replaceAll("\\r\\n|\\r|\\n", " ").split("at ").take(5)
 }

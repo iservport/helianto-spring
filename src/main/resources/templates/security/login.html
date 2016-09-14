@@ -1,0 +1,93 @@
+[#ftl]
+<div class="row">
+    <div class="col-md-4 offset-md-4"></div>
+    <div class="col-md-4" data-ng-controller="LoginController as loginCtrl" >
+    <!-- login-redirect-token -->
+	[#--
+	 # Logo
+	 #--]
+    [#include "../security/login-splash.html" /]
+	<h3 align="middle">Bem vindo ao <strong>iservport</strong></h3>
+	<br/>
+	<script >
+		var email = [#if email??]'${email}' [#else]''[/#if];
+		var signed = false;
+	</script>
+    <div class="panel panel-default">
+        <!-- E-MAIL SIGNIN -->
+        <div class="panel-body">
+            <form  name="form" action="/login" method="POST">
+
+                [#--
+                 # CSRF
+                 #--]
+                <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+
+                [#--
+                 # Context id
+                 #--]
+                <input type="hidden" name="contextId" value="${contextId!1}" />
+
+                [#if error?? ]
+                <div class="alert alert-danger" role="alert">
+                    <i class="fa fa-lock"></i> {{'${error}'|i18n}}
+                </div>
+                [/#if]
+
+                <div id="form-group-email" class="form-group">
+                    <input type="email"  required="" name="username"  data-ng-model="username" placeholder="E-mail" class="form-control">
+                </div>
+                <div id="form-group-password" class="form-group">
+                    <input type="password"  required="" name="password" data-ng-model="password" placeholder="{{'PASSWORD'|common}}" class="form-control">
+                </div>
+
+                <!--
+                 ! Forgot password
+                 !-->
+                <div class="row">
+                    <div class="col-md-6">
+                        <p><input type="checkbox" name="remember-me" > {{'_LOGIN_REMEMBER'|i18n}}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <a target="_self" class="pull-right" data-ng-href="/recovery/">{{'_LOGIN_FORGOT'|i18n}}</a>
+                    </div>
+                </div>
+
+                <!--
+                 ! Submit
+                 !-->
+                <button type="submit" class="btn btn-primary" style="width: 100%" >{{'_CONTINUE'|common}}</button>
+            </form>
+        </div><!-- panel body -->
+    </div>
+    <div class="row">
+        <div class="col-md-12 text-center"><p>{{'_OR'|common}}</p></div>
+    </div>
+    <div class="panel panel-default">
+        <!-- FACEBOOK SIGNIN -->
+        <div class="panel-body">
+            <form name="fb_signin" id="fb_signin" action="/signin/facebook" method="POST" class="ng-pristine ng-valid">
+                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                <input type="hidden" name="scope" value="public_profile, email, user_photos,publish_actions,user_location">
+                <button type="submit" class="btn btn-default btn-facebook btn-block" ><i class="fa fa-facebook"></i> {{'_LOGIN_WITH'| i18n}} Facebook</button>
+            </form>
+        </div>
+
+        <div class="panel-body">
+            <form name="fb_signin" id="g_signin" action="/signin/google" method="POST" class="ng-pristine ng-valid">
+                <input type="hidden" name="_csrf" value="${_csrf.token}" />
+                <input type="hidden" name="scope" value="email https://www.googleapis.com/auth/plus.login https://www.googleapis.com/auth/plus.me https://www.googleapis.com/auth/tasks https://www.googleapis.com/auth/drive https://www.googleapis.com/auth/latitude.all.best" />
+                <input type="hidden" name="request_visible_actions" value="http://schemas.google.com/AddActivity http://schemas.google.com/BuyActivity http://schemas.google.com/CheckInActivity http://schemas.google.com/CommentActivity http://schemas.google.com/CreateActivity http://schemas.google.com/DiscoverActivity http://schemas.google.com/ListenActivity http://schemas.google.com/ReserveActivity http://schemas.google.com/ReviewActivity http://schemas.google.com/WantActivity"/>
+                <input type="hidden" name="access_type" value="offline"/>
+                <button type="submit" class="btn btn-default btn-google-plus btn-block" ><i class="fa fa-google-plus"></i> {{'_LOGIN_WITH'| i18n}} Google+</button>
+            </form>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <h5><a class="pull-right" href="/signup/">{{'_LOGIN_CREATE'|i18n}}</a></h5>
+            <h5 style="font-weight: bold;">{{'_LOGIN_JOIN'|i18n}}</h5>
+        </div>
+    </div>
+</div>
+</div>

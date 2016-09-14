@@ -17,6 +17,7 @@ class ResponseService {
   val env:Environment = null
 
   def loginResponse(model: Model, locale: Locale) = {
+    model.addAttribute("baseName", "security")
     model.addAttribute("main", "security/login.html")
     response(model, locale)
   }

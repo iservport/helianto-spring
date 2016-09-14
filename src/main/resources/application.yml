@@ -29,12 +29,7 @@ spring:
     show-sql: false
 # Server
 server:
-  port: 8080
-#  port: 8443
-#  ssl:
-#    key-store: classpath:keystore.jks
-#    key-store-password: helianto
-#    key-password: helianto
+  port: 8081
 
 # Logging
 logging:

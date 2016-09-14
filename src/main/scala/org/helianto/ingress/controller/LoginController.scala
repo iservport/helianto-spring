@@ -20,7 +20,7 @@ class LoginController(responseService:ResponseService) {
   /**
     * Login page.
     *
-    * @param model modelo
+    * @param model model
     * @param locale locale
     */
   @GetMapping
@@ -32,8 +32,8 @@ class LoginController(responseService:ResponseService) {
   /**
     * Login errors.
     *
-    * @param model modelo
-    * @param error parâmetro de erro
+    * @param model model
+    * @param error error parameter
     * @param locale locale
     */
   @RequestMapping(params = Array("error"), method = Array(RequestMethod.GET))
@@ -48,8 +48,8 @@ class LoginController(responseService:ResponseService) {
   /**
     * Login errors.
     *
-    * @param model  modelo
-    * @param type   tipo de erro
+    * @param model  model
+    * @param type   error type
     * @param locale locale
     */
   @RequestMapping(value = Array("/error"), method = Array(RequestMethod.GET))

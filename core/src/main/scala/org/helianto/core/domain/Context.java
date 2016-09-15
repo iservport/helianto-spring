@@ -16,7 +16,7 @@
 package org.helianto.core.domain;
 
 import javax.persistence.*;
-import java.util.Locale;
+import java.util.Date;
 
 /**
  * The <code>Context</code> domain class represents a mandatory
@@ -35,10 +35,13 @@ public class Context implements java.io.Serializable {
     
     @Id @GeneratedValue(strategy=GenerationType.AUTO)
     private int id;
-    
+
     @Column(length=20)
     private String contextName;
-    
+
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date installDate;
+
     /**
      * Default constructor.
      */
@@ -76,39 +79,55 @@ public class Context implements java.io.Serializable {
         this.contextName = contextName;
     }
 
-    /**
-     * toString
-     * @return String
-     */
-    public String toString() {
-        StringBuffer buffer = new StringBuffer();
-
-        buffer.append(getClass().getName()).append("@").append(Integer.toHexString(hashCode())).append(" [");
-        buffer.append("contextName").append("='").append(getContextName()).append("' ");
-        buffer.append("]");
-      
-        return buffer.toString();
+    public Date getInstallDate() {
+        if (this.installDate==null) {
+            return new Date();
+        }
+        return this.installDate;
     }
 
-   /**
-    * equals
-    */
-   public boolean equals(Object other) {
-         if ( (this == other ) ) return true;
-         if ( (other == null ) ) return false;
-         if ( !(other instanceof Context) ) return false;
-         Context castOther = (Context) other;
-         
-         return (this.getContextName()==castOther.getContextName()) || ( this.getContextName()!=null && castOther.getContextName()!=null && this.getContextName().equals(castOther.getContextName()) );
-   }
-   
-   /**
-    * hashCode
-    */
-   public int hashCode() {
-         int result = 17;
-         result = 37 * result + ( getContextName() == null ? 0 : this.getContextName().hashCode() );
-         return result;
-   }   
+    public void setInstallDate(Date installDate) {
+        this.installDate = installDate;
+    }
 
+    public Context refreshInstallDate() {
+        setInstallDate(new Date());
+        return this;
+    }
+
+    public boolean equals(Object o) {
+        if (o == this) return true;
+        if (!(o instanceof Context)) return false;
+        final Context other = (Context) o;
+        if (!other.canEqual((Object) this)) return false;
+        if (this.getId() != other.getId()) return false;
+        final Object this$contextName = this.getContextName();
+        final Object other$contextName = other.getContextName();
+        if (this$contextName == null ? other$contextName != null : !this$contextName.equals(other$contextName))
+            return false;
+        final Object this$installDate = this.installDate;
+        final Object other$installDate = other.installDate;
+        if (this$installDate == null ? other$installDate != null : !this$installDate.equals(other$installDate))
+            return false;
+        return true;
+    }
+
+    public int hashCode() {
+        final int PRIME = 59;
+        int result = 1;
+        result = result * PRIME + this.getId();
+        final Object $contextName = this.getContextName();
+        result = result * PRIME + ($contextName == null ? 0 : $contextName.hashCode());
+        final Object $installDate = this.installDate;
+        result = result * PRIME + ($installDate == null ? 0 : $installDate.hashCode());
+        return result;
+    }
+
+    protected boolean canEqual(Object other) {
+        return other instanceof Context;
+    }
+
+    public String toString() {
+        return "org.helianto.core.domain.Context(id=" + this.getId() + ", contextName=" + this.getContextName() + ", installDate=" + this.installDate + ")";
+    }
 }

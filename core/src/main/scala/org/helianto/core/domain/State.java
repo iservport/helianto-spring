@@ -17,6 +17,7 @@ package org.helianto.core.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Date;
 
 /**
  * State of a union or federation.
@@ -44,7 +45,10 @@ public class State
     @Column(length=64)
     private String stateName = "";
 
-    /**
+	@Temporal(TemporalType.TIMESTAMP)
+	private Date installDate;
+
+	/**
      * ISO 3166-1 alpha 3 code
      */
 	@Column(length=3)
@@ -168,43 +172,65 @@ public class State
 		this.priority = priority;
 	}
 
+	public Date getInstallDate() {
+		if (this.installDate==null) {
+			return new Date();
+		}
+		return this.installDate;
+	}
+
+	public void setInstallDate(Date installDate) {
+		this.installDate = installDate;
+	}
+
+	public State refreshInstallDate() {
+		setInstallDate(new Date());
+		return this;
+	}
+
 	public boolean equals(Object o) {
 		if (o == this) return true;
 		if (!(o instanceof State)) return false;
 		final State other = (State) o;
 		if (!other.canEqual((Object) this)) return false;
-		if (this.id != other.id) return false;
-		final Object this$contextName = this.contextName;
-		final Object other$contextName = other.contextName;
+		if (this.getId() != other.getId()) return false;
+		final Object this$contextName = this.getContextName();
+		final Object other$contextName = other.getContextName();
 		if (this$contextName == null ? other$contextName != null : !this$contextName.equals(other$contextName))
 			return false;
-		final Object this$stateCode = this.stateCode;
-		final Object other$stateCode = other.stateCode;
+		final Object this$stateCode = this.getStateCode();
+		final Object other$stateCode = other.getStateCode();
 		if (this$stateCode == null ? other$stateCode != null : !this$stateCode.equals(other$stateCode)) return false;
-		final Object this$stateName = this.stateName;
-		final Object other$stateName = other.stateName;
+		final Object this$stateName = this.getStateName();
+		final Object other$stateName = other.getStateName();
 		if (this$stateName == null ? other$stateName != null : !this$stateName.equals(other$stateName)) return false;
-		final Object this$countryCode = this.countryCode;
-		final Object other$countryCode = other.countryCode;
+		final Object this$installDate = this.installDate;
+		final Object other$installDate = other.installDate;
+		if (this$installDate == null ? other$installDate != null : !this$installDate.equals(other$installDate))
+			return false;
+		final Object this$countryCode = this.getCountryCode();
+		final Object other$countryCode = other.getCountryCode();
 		if (this$countryCode == null ? other$countryCode != null : !this$countryCode.equals(other$countryCode))
 			return false;
-		if (this.priority != other.priority) return false;
+		if (this.getPriority() != other.getPriority()) return false;
 		return true;
 	}
 
 	public int hashCode() {
 		final int PRIME = 59;
 		int result = 1;
-		result = result * PRIME + this.id;
-		final Object $contextName = this.contextName;
+		result = result * PRIME + this.getId();
+		final Object $contextName = this.getContextName();
 		result = result * PRIME + ($contextName == null ? 0 : $contextName.hashCode());
-		final Object $stateCode = this.stateCode;
+		final Object $stateCode = this.getStateCode();
 		result = result * PRIME + ($stateCode == null ? 0 : $stateCode.hashCode());
-		final Object $stateName = this.stateName;
+		final Object $stateName = this.getStateName();
 		result = result * PRIME + ($stateName == null ? 0 : $stateName.hashCode());
-		final Object $countryCode = this.countryCode;
+		final Object $installDate = this.installDate;
+		result = result * PRIME + ($installDate == null ? 0 : $installDate.hashCode());
+		final Object $countryCode = this.getCountryCode();
 		result = result * PRIME + ($countryCode == null ? 0 : $countryCode.hashCode());
-		result = result * PRIME + this.priority;
+		result = result * PRIME + this.getPriority();
 		return result;
 	}
 
@@ -213,7 +239,7 @@ public class State
 	}
 
 	public String toString() {
-		return "org.helianto.core.domain.State(id=" + this.id + ", contextName=" + this.contextName + ", stateCode=" + this.stateCode + ", stateName=" + this.stateName + ", countryCode=" + this.countryCode + ", priority=" + this.priority + ")";
+		return "org.helianto.core.domain.State(id=" + this.getId() + ", contextName=" + this.getContextName() + ", stateCode=" + this.getStateCode() + ", stateName=" + this.getStateName() + ", installDate=" + this.installDate + ", countryCode=" + this.getCountryCode() + ", priority=" + this.getPriority() + ")";
 	}
 }
 

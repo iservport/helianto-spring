@@ -8,7 +8,7 @@ trait UserRepository extends JpaRepository[User, String] {
 
   def findByEntityIdAndUserKey(entityId: String, userKey: String): User
 
-  def findByEntityAliasAndIdentity_Id(entityAlias: String, identityId: Int): User
+  def findByEntityIdAndIdentity_Id(entityId: String, identityId: Int): User
 
   def findByIdentity_IdOrderByLastEventDesc(identityId: String): java.util.List[UserProjection]
 

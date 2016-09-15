@@ -1,6 +1,6 @@
 package org.helianto.security.service
 
-import org.helianto.security.domain.{Secret, UserAuthority, UserDetailsAdapter}
+import org.helianto.security.domain.{UserAuthority, UserDetailsAdapter}
 import org.helianto.security.repository.UserAuthorityRepository
 import org.springframework.beans.factory.annotation.{Autowired, Qualifier}
 import org.springframework.security.core.authority.SimpleGrantedAuthority

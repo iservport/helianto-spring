@@ -63,7 +63,9 @@ lazy val security = (project in file("security")).
   .settings(
     name := "helianto-spring-security",
       libraryDependencies ++= Seq(
-      "org.springframework.boot"   % "spring-boot-starter-security"     % heliantoSpringBootVersion.value
+        "org.springframework.boot"           % "spring-boot-starter-security" % heliantoSpringBootVersion.value,
+        "org.springframework.security.oauth" % "spring-security-oauth2"       % "2.0.11.RELEASE",
+        "org.springframework.security"       % "spring-security-jwt"          % "1.0.5.RELEASE"
       )
   )
   .dependsOn(user)

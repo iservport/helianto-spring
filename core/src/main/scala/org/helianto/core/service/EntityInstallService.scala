@@ -17,7 +17,7 @@ class EntityInstallService {
   @Autowired
   val postInstaller: EntityPostInstallService = null
 
-  @Value("#{helianto.contextName")
+  @Value("${helianto.contextName}")
   val contextName: String = ""
 
   def installEntity(cityCode: String, alias: String, principal: String): Entity = {

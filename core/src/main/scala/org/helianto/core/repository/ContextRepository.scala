@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 trait ContextRepository extends JpaRepository[Context, Integer] {
 
-  def findByContextName(contextName: String = "DEFAULT"): Context
+  def findByContextName(contextName: String): Context
 
 }

@@ -15,7 +15,7 @@ import java.io.Serializable;
 @javax.persistence.Entity
 @Table(name="core_authority",
     uniqueConstraints = {
-		 @UniqueConstraint(columnNames={"userGroupId", "serviceCode"})
+		 @UniqueConstraint(columnNames={"userId", "serviceCode"})
     }
 )
 public class UserAuthority implements Serializable {

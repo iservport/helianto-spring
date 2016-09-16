@@ -16,10 +16,12 @@
 package org.helianto.core.domain;
 
 import org.helianto.core.domain.enums.EntityNature;
+import org.helianto.core.utils.Mergeable;
 
 import javax.persistence.*;
 import java.util.Date;
 import java.util.Locale;
+import java.util.Objects;
 import java.util.UUID;
 
 /**
@@ -65,7 +67,7 @@ import java.util.UUID;
     discriminatorType=DiscriminatorType.CHAR
 )
 @DiscriminatorValue("0")
-public class Entity
+public class Entity implements Mergeable<Entity>
 {
 
     private static final long serialVersionUID = 1L;
@@ -133,9 +135,9 @@ public class Entity
      */
     public Entity(String contextName, String alias, String cityCode) {
     	this();
-        setContextName(contextName);
-        setAlias(alias);
-        setCityCode(cityCode);
+        setContextName(Objects.requireNonNull(contextName));
+        setAlias(Objects.requireNonNull(alias));
+        setCityCode(Objects.requireNonNull(cityCode));
     }
     
  	/**
@@ -144,8 +146,6 @@ public class Entity
 	 * @param command
 	 */
 	public Entity merge(Entity command) {
-        setContextName(command.getContextName());
-        setAlias(command.getAlias());
 		setEntityCode(command.getEntityCode());
 		setInstallDate(command.getInstallDate());
 		setEntityType(command.getEntityType());

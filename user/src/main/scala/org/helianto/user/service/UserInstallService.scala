@@ -2,6 +2,7 @@ package org.helianto.user.service
 
 import org.helianto.core.domain.Identity
 import org.helianto.core.repository._
+import org.helianto.core.service.EntityPostInstallService
 import org.helianto.user.domain.{User, UserAssociation}
 import org.helianto.user.domain.enums.{UserState, UserType}
 import org.helianto.user.repository.{UserAssociationRepository, UserRepository}
@@ -14,47 +15,20 @@ class UserInstallService {
 
   val logger: Logger = LoggerFactory.getLogger(classOf[UserInstallService])
 
-  @Autowired private val identityRepository: IdentityRepository = null
-  @Autowired private val entityRepository: EntityRepository = null
-  @Autowired private val userRepository: UserRepository = null
-  @Autowired private val associationRepository: UserAssociationRepository = null
+  @Autowired
+  val identityRepository: IdentityRepository = null
 
-//  def installUser(entity: Entity, principal: String): User = {
-//    return installUser(entity, principal, 'A')
-//  }
-//
-//  def installUser(entity: Entity, principal: String, userState: Character): User = {
-//    val identity: Identity = identityInstallService.installIdentity(principal)
-//    val userGroups: util.List[User] = installUserGroups(entity)
-//    var user: User = null
-//    import scala.collection.JavaConversions._
-//    for (userGroup <- userGroups) {
-//      if (user == null) {
-//        user = installUser(userGroup.getEntity, identity, userState)
-//      }
-//      UserInstallService.logger.info("will find userAssociation to {} and {}.", user, userGroup)
-//      var association: UserAssociation = userAssociationRepository.findByParentAndChild(userGroup, user)
-//      UserInstallService.logger.info("userAssociation found  {} ", association)
-//      if (association == null) {
-//        UserInstallService.logger.info("userGroup.getUserType() {}  ", userGroup.getUserType)
-//        if (userGroup.getUserType != null && userGroup.isSystemGroup) {
-//          val adminUsers: util.List[UserAssociation] = userAssociationRepository.findByParent(userGroup)
-//          if (adminUsers != null && adminUsers.size > 0) {
-//          }
-//          else {
-//            UserInstallService.logger.info("ATENTION: a new user association was created between a SystemGroup {} and user {} ", userGroup, user)
-//            association = userAssociationRepository.saveAndFlush(new UserAssociation(userGroup, user))
-//          }
-//        }
-//        else {
-//          UserInstallService.logger.info("Will associate user {} with entity {}.", user, userGroup.getEntity)
-//          association = userAssociationRepository.saveAndFlush(new UserAssociation(userGroup, user))
-//        }
-//      }
-//    }
-//    UserInstallService.logger.info("finished associations to user {}.", user.getId)
-//    return user
-//  }
+  @Autowired
+  val entityRepository: EntityRepository = null
+
+  @Autowired
+  val userRepository: UserRepository = null
+
+  @Autowired
+  val associationRepository: UserAssociationRepository = null
+
+  @Autowired(required = false)
+  val postInstaller: UserPostInstallService = null
 
   def installUser(entityId: String, identityId: String, userState: UserState): User = {
     Option(identityRepository.findOne(identityId)) match {
@@ -64,7 +38,7 @@ class UserInstallService {
   }
 
   def installUser(entityId: String, identity: Identity, userState: UserState): User = {
-    Option(userRepository.findByEntityIdAndUserKey(entityId, identity.getPrincipal)) match {
+    val user = Option(userRepository.findByEntityIdAndUserKey(entityId, identity.getPrincipal)) match {
       case Some(u) => u
       case None =>
         Option(entityRepository.findOne(entityId)) match {
@@ -73,6 +47,10 @@ class UserInstallService {
             userRepository.saveAndFlush(new User(entityId, UserType.INTERNAL, identity, userState))
           case None => throw new IllegalArgumentException("Unable to install user: entity not found.")
         }
+    }
+    Option(postInstaller) match {
+      case Some(p) => p.userPostInstall(user)
+      case None => user
     }
   }
 

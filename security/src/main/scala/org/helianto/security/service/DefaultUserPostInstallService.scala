@@ -1,32 +1,31 @@
-package org.helianto.user.service
+package org.helianto.security.service
 
-import org.helianto.core.domain.{Entity, Identity}
-import org.helianto.core.service.EntityPostInstallService
+import org.helianto.core.domain.{Entity, Identity, PersonalData}
+import org.helianto.core.service.{EntityPostInstallService, IdentityInstallService}
 import org.helianto.user.domain.User
 import org.helianto.user.domain.enums.{UserState, UserType}
 import org.helianto.user.repository.UserRepository
-import org.slf4j.{Logger, LoggerFactory}
+import org.helianto.user.service.UserInstallService
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class DefaultEntityPostInstallService extends EntityPostInstallService {
-
-  val logger: Logger = LoggerFactory.getLogger(classOf[DefaultEntityPostInstallService])
+class DefaultUserPostInstallService extends EntityPostInstallService {
 
   @Autowired val userRepository: UserRepository = null
 
+  @Autowired val identityInstaller: IdentityInstallService = null
+
   @Autowired val userInstallService: UserInstallService = null
 
-  override def entityPostInstall(entity: Entity, identity: Identity) = {
-    Option(identity) match {
+  override def entityPostInstall(entity: Entity, principal: String) = {
+    // install manager
+    Option(identityInstaller.install(principal, s"${entity.getAlias} - admin", new PersonalData())) match {
       case Some(manager) =>
         val adminGroup = installSystemGroup(entity.getId, "ADMIN", manager)
-        logger.info(s"Installed $adminGroup.")
         val userGroup = installSystemGroup(entity.getId, "USER", manager)
-        logger.info(s"Installed $userGroup.")
       case None =>
-        throw new IllegalArgumentException(s"Unable to create system groups: manager not found with $identity.")
+        throw new IllegalArgumentException(s"Unable to create system groups: manager not found with $principal.")
     }
     entity
   }

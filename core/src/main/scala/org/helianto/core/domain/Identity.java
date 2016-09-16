@@ -21,6 +21,7 @@ import org.helianto.core.domain.enums.Appellation;
 import org.helianto.core.domain.enums.Gender;
 import org.helianto.core.domain.enums.IdentityType;
 import org.helianto.core.domain.enums.Notification;
+import org.helianto.core.utils.Mergeable;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.persistence.*;
@@ -41,7 +42,7 @@ import java.util.UUID;
     uniqueConstraints = {@UniqueConstraint(columnNames={"principal"}),
     @UniqueConstraint(columnNames={"email"})}
 )
-public class Identity implements java.io.Serializable {
+public class Identity implements IdentityData, Mergeable<Identity> {
 
     private static final long serialVersionUID = 1L;
     

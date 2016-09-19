@@ -15,8 +15,6 @@
 
 package org.helianto.core.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
 import javax.persistence.*;
 import java.io.Serializable;
 
@@ -28,16 +26,15 @@ import java.io.Serializable;
  */
 @javax.persistence.Entity
 @Table(name="core_city",
-    uniqueConstraints = {@UniqueConstraint(columnNames={"contextName", "cityCode"})
-    	,@UniqueConstraint(columnNames={"stateId", "cityCode"})}
+    uniqueConstraints = {@UniqueConstraint(columnNames={"contextName", "stateCode", "cityCode"})}
 )
 public class City
 	implements Serializable, Comparable<City> {
 
     private static final long serialVersionUID = 1L;
     
-    @Id @GeneratedValue(strategy=GenerationType.AUTO)
-    private int id;
+    @Id @Column(length=32)
+    private String id;
     
     @Version
     private int version;
@@ -45,20 +42,18 @@ public class City
 	@Column(length=20)
 	private String contextName = "";
 
-	@Column(length=12)
+    @Column(length=12)
+    private String stateCode;
+
+    @Transient
+    private State state;
+
+    @Column(length=12)
 	private String cityCode = "";
 
 	@Column(length=64)
     private String cityName = "";
-    
-    @JsonIgnore
-    @ManyToOne
-    @JoinColumn(name="stateId", nullable=true)
-    private State state;
-    
-    @Transient
-    public Integer stateId;
-    
+
     private boolean capital = false;
     
     private char priority = '0';
@@ -71,40 +66,33 @@ public class City
     }
 
     /**
-     * Key constructor.
-     * 
-     * @param contextName
-     * @param cityCode
-     */
-    public City(String contextName, String cityCode) {
-    	this();
-    	setContextName(contextName);
-    	setCityCode(cityCode);
-    }
-    
-    /**
      * State constructor.
      * 
-     * @param state
+     * @param contextName
+     * @param stateCode
      * @param cityCode
      */
-    public City(State state, String cityCode) {
-    	this(state.getContextName(), cityCode);
-    	setState(state);
+    public City(String contextName, String stateCode, String cityCode) {
+        this();
+        setContextName(contextName);
+        setStateCode(stateCode);
+        setCityCode(cityCode);
     }
-    
+
     /**
-     * Name constructor.
-     * 
-     * @param state
+     * Form constructor.
+     *
+     * @param contextName
+     * @param stateCode
      * @param cityCode
      * @param cityName
+     * @param capital
      */
-    public City(State state, String cityCode, String cityName) {
-    	this(state, cityCode);
-    	setCityName(cityName);
+    public City(String contextName, String stateCode, String cityCode, String cityName, boolean capital) {
+        this(contextName, stateCode, cityCode);
+        this.cityName = cityName;
+        this.capital = capital;
     }
-    
 
     public int compareTo(City next) {
         if (getPriority()==next.getPriority()) {
@@ -116,8 +104,37 @@ public class City
         return getPriority()-next.getPriority();
     }
 
+    public State getState() {
+        return this.state;
+    }
 
-    public int getId() {
+    public City setState(State state) {
+        this.state = state;
+        return this;
+    }
+
+    public String getStateName() {
+        if (getState()!=null) {
+            return getState().getStateName();
+        }
+        return "";
+    }
+
+    public String getStateAlias() {
+        if (getState()!=null) {
+            return getState().getStateAlias();
+        }
+        return "";
+    }
+
+    public String getCountryCode() {
+        if (getState()!=null) {
+            return getState().getCountryCode();
+        }
+        return "";
+    }
+
+    public String getId() {
         return this.id;
     }
 
@@ -137,12 +154,8 @@ public class City
         return this.cityName;
     }
 
-    public State getState() {
-        return this.state;
-    }
-
-    public Integer getStateId() {
-        return this.stateId;
+    public String getStateCode() {
+        return this.stateCode;
     }
 
     public boolean isCapital() {
@@ -153,7 +166,7 @@ public class City
         return this.priority;
     }
 
-    public void setId(int id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -173,12 +186,8 @@ public class City
         this.cityName = cityName;
     }
 
-    public void setState(State state) {
-        this.state = state;
-    }
-
-    public void setStateId(Integer stateId) {
-        this.stateId = stateId;
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
     }
 
     public void setCapital(boolean capital) {
@@ -194,7 +203,9 @@ public class City
         if (!(o instanceof City)) return false;
         final City other = (City) o;
         if (!other.canEqual((Object) this)) return false;
-        if (this.id != other.id) return false;
+        final Object this$id = this.id;
+        final Object other$id = other.id;
+        if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
         if (this.version != other.version) return false;
         final Object this$contextName = this.contextName;
         final Object other$contextName = other.contextName;
@@ -206,12 +217,9 @@ public class City
         final Object this$cityName = this.cityName;
         final Object other$cityName = other.cityName;
         if (this$cityName == null ? other$cityName != null : !this$cityName.equals(other$cityName)) return false;
-        final Object this$state = this.state;
-        final Object other$state = other.state;
-        if (this$state == null ? other$state != null : !this$state.equals(other$state)) return false;
-        final Object this$stateId = this.stateId;
-        final Object other$stateId = other.stateId;
-        if (this$stateId == null ? other$stateId != null : !this$stateId.equals(other$stateId)) return false;
+        final Object this$stateCode = this.stateCode;
+        final Object other$stateCode = other.stateCode;
+        if (this$stateCode == null ? other$stateCode != null : !this$stateCode.equals(other$stateCode)) return false;
         if (this.capital != other.capital) return false;
         if (this.priority != other.priority) return false;
         return true;
@@ -220,7 +228,8 @@ public class City
     public int hashCode() {
         final int PRIME = 59;
         int result = 1;
-        result = result * PRIME + this.id;
+        final Object $id = this.id;
+        result = result * PRIME + ($id == null ? 0 : $id.hashCode());
         result = result * PRIME + this.version;
         final Object $contextName = this.contextName;
         result = result * PRIME + ($contextName == null ? 0 : $contextName.hashCode());
@@ -228,10 +237,8 @@ public class City
         result = result * PRIME + ($cityCode == null ? 0 : $cityCode.hashCode());
         final Object $cityName = this.cityName;
         result = result * PRIME + ($cityName == null ? 0 : $cityName.hashCode());
-        final Object $state = this.state;
-        result = result * PRIME + ($state == null ? 0 : $state.hashCode());
-        final Object $stateId = this.stateId;
-        result = result * PRIME + ($stateId == null ? 0 : $stateId.hashCode());
+        final Object $stateCode = this.stateCode;
+        result = result * PRIME + ($stateCode == null ? 0 : $stateCode.hashCode());
         result = result * PRIME + (this.capital ? 79 : 97);
         result = result * PRIME + this.priority;
         return result;
@@ -242,7 +249,7 @@ public class City
     }
 
     public String toString() {
-        return "org.helianto.core.domain.City(id=" + this.id + ", version=" + this.version + ", contextName=" + this.contextName + ", cityCode=" + this.cityCode + ", cityName=" + this.cityName + ", state=" + this.state + ", stateId=" + this.stateId + ", capital=" + this.capital + ", priority=" + this.priority + ")";
+        return "org.helianto.core.domain.City(id=" + this.id + ", version=" + this.version + ", contextName=" + this.contextName + ", cityCode=" + this.cityCode + ", cityName=" + this.cityName + ", stateCode=" + this.stateCode + ", capital=" + this.capital + ", priority=" + this.priority + ")";
     }
 }
 

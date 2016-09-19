@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 trait StateRepository extends JpaRepository[State, Integer] {
 
-  def findByContextNameAndStateCode(contextName: String, stateCode: String)
+  def findByContextNameAndStateCode(contextName: String, stateCode: String): State
 
   def findByInstallDateIsLessThanEqual(installDate: Date): java.util.List[State]
 

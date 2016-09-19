@@ -225,7 +225,7 @@ class UpdateLastEventTests extends UnitSpec {
     service.test(userDetails)
     assert(user.getLastEvent.after(min))
     val max = new Date
-    assert(user.getLastEvent.before(max))
+    assert(!user.getLastEvent.after(max))
   }
 
   it should "fail if user is not found" in {

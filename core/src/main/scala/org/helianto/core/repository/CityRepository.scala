@@ -5,6 +5,6 @@ import org.springframework.data.jpa.repository.JpaRepository
 
 trait CityRepository extends JpaRepository[City, Integer] {
 
-  def findByContextNameAndCityCode(contextName: String, cityCode: String)
+  def findByContextNameAndStateCodeAndCityCode(contextName: String, stateCode: String, cityCode: String): City
 
 }

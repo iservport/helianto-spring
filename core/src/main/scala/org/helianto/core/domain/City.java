@@ -59,9 +59,9 @@ public class City
     @Transient
     public Integer stateId;
     
-    private boolean capital;
+    private boolean capital = false;
     
-    private char priority;
+    private char priority = '0';
 
 	/**
 	 * Default constructor.

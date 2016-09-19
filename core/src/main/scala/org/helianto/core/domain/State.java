@@ -41,9 +41,12 @@ public class State
 
 	@Column(length=12)
     private String stateCode = "";
-    
-    @Column(length=64)
-    private String stateName = "";
+
+	@Column(length=64)
+	private String stateName = "";
+
+	@Column(length=3)
+	private String stateAlias = "";
 
 	@Temporal(TemporalType.TIMESTAMP)
 	private Date installDate;
@@ -110,6 +113,7 @@ public class State
         setCountryCode(command.getCountryCode());
         setStateName(command.getStateName());
         setPriority(command.getPriority());
+		setStateAlias(command.getStateAlias());
         return this;
     }
 
@@ -123,6 +127,21 @@ public class State
 		return getPriority()-next.getPriority();
 	}
 
+	public Date getInstallDate() {
+		if (this.installDate==null) {
+			return new Date();
+		}
+		return this.installDate;
+	}
+
+	public void setInstallDate(Date installDate) {
+		this.installDate = installDate;
+	}
+
+	public State refreshInstallDate() {
+		setInstallDate(new Date());
+		return this;
+	}
 
 	public int getId() {
 		return this.id;
@@ -138,6 +157,10 @@ public class State
 
 	public String getStateName() {
 		return this.stateName;
+	}
+
+	public String getStateAlias() {
+		return this.stateAlias;
 	}
 
 	public String getCountryCode() {
@@ -164,6 +187,10 @@ public class State
 		this.stateName = stateName;
 	}
 
+	public void setStateAlias(String stateAlias) {
+		this.stateAlias = stateAlias;
+	}
+
 	public void setCountryCode(String countryCode) {
 		this.countryCode = countryCode;
 	}
@@ -172,65 +199,55 @@ public class State
 		this.priority = priority;
 	}
 
-	public Date getInstallDate() {
-		if (this.installDate==null) {
-			return new Date();
-		}
-		return this.installDate;
-	}
-
-	public void setInstallDate(Date installDate) {
-		this.installDate = installDate;
-	}
-
-	public State refreshInstallDate() {
-		setInstallDate(new Date());
-		return this;
-	}
-
 	public boolean equals(Object o) {
 		if (o == this) return true;
 		if (!(o instanceof State)) return false;
 		final State other = (State) o;
 		if (!other.canEqual((Object) this)) return false;
-		if (this.getId() != other.getId()) return false;
-		final Object this$contextName = this.getContextName();
-		final Object other$contextName = other.getContextName();
+		if (this.id != other.id) return false;
+		final Object this$contextName = this.contextName;
+		final Object other$contextName = other.contextName;
 		if (this$contextName == null ? other$contextName != null : !this$contextName.equals(other$contextName))
 			return false;
-		final Object this$stateCode = this.getStateCode();
-		final Object other$stateCode = other.getStateCode();
+		final Object this$stateCode = this.stateCode;
+		final Object other$stateCode = other.stateCode;
 		if (this$stateCode == null ? other$stateCode != null : !this$stateCode.equals(other$stateCode)) return false;
-		final Object this$stateName = this.getStateName();
-		final Object other$stateName = other.getStateName();
+		final Object this$stateName = this.stateName;
+		final Object other$stateName = other.stateName;
 		if (this$stateName == null ? other$stateName != null : !this$stateName.equals(other$stateName)) return false;
-		final Object this$installDate = this.installDate;
-		final Object other$installDate = other.installDate;
+		final Object this$stateAlias = this.stateAlias;
+		final Object other$stateAlias = other.stateAlias;
+		if (this$stateAlias == null ? other$stateAlias != null : !this$stateAlias.equals(other$stateAlias))
+			return false;
+		final Object this$installDate = this.getInstallDate();
+		final Object other$installDate = other.getInstallDate();
 		if (this$installDate == null ? other$installDate != null : !this$installDate.equals(other$installDate))
 			return false;
-		final Object this$countryCode = this.getCountryCode();
-		final Object other$countryCode = other.getCountryCode();
+		final Object this$countryCode = this.countryCode;
+		final Object other$countryCode = other.countryCode;
 		if (this$countryCode == null ? other$countryCode != null : !this$countryCode.equals(other$countryCode))
 			return false;
-		if (this.getPriority() != other.getPriority()) return false;
+		if (this.priority != other.priority) return false;
 		return true;
 	}
 
 	public int hashCode() {
 		final int PRIME = 59;
 		int result = 1;
-		result = result * PRIME + this.getId();
-		final Object $contextName = this.getContextName();
+		result = result * PRIME + this.id;
+		final Object $contextName = this.contextName;
 		result = result * PRIME + ($contextName == null ? 0 : $contextName.hashCode());
-		final Object $stateCode = this.getStateCode();
+		final Object $stateCode = this.stateCode;
 		result = result * PRIME + ($stateCode == null ? 0 : $stateCode.hashCode());
-		final Object $stateName = this.getStateName();
+		final Object $stateName = this.stateName;
 		result = result * PRIME + ($stateName == null ? 0 : $stateName.hashCode());
-		final Object $installDate = this.installDate;
+		final Object $stateAlias = this.stateAlias;
+		result = result * PRIME + ($stateAlias == null ? 0 : $stateAlias.hashCode());
+		final Object $installDate = this.getInstallDate();
 		result = result * PRIME + ($installDate == null ? 0 : $installDate.hashCode());
-		final Object $countryCode = this.getCountryCode();
+		final Object $countryCode = this.countryCode;
 		result = result * PRIME + ($countryCode == null ? 0 : $countryCode.hashCode());
-		result = result * PRIME + this.getPriority();
+		result = result * PRIME + this.priority;
 		return result;
 	}
 
@@ -239,7 +256,7 @@ public class State
 	}
 
 	public String toString() {
-		return "org.helianto.core.domain.State(id=" + this.getId() + ", contextName=" + this.getContextName() + ", stateCode=" + this.getStateCode() + ", stateName=" + this.getStateName() + ", installDate=" + this.installDate + ", countryCode=" + this.getCountryCode() + ", priority=" + this.getPriority() + ")";
+		return "org.helianto.core.domain.State(id=" + this.id + ", contextName=" + this.contextName + ", stateCode=" + this.stateCode + ", stateName=" + this.stateName + ", stateAlias=" + this.stateAlias + ", installDate=" + this.getInstallDate() + ", countryCode=" + this.countryCode + ", priority=" + this.priority + ")";
 	}
 }
 

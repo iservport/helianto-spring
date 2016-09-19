@@ -21,7 +21,7 @@ class EntityInstallService(val targetRepository: EntityRepository) extends Comma
 
   def install(cityCode: String, alias: String, identity: Identity): Entity = {
     val entity = Option(targetRepository.findByContextNameAndAliasIgnoreCase(contextName, alias)) match {
-      case Some(e) => e
+      case Some(e) => e.verify(contextName)
       case None => {
         logger.info(s"Installing entity: $contextName/$alias")
         targetRepository.saveAndFlush(new Entity(contextName, alias, cityCode))

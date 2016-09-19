@@ -9,3 +9,12 @@ facebook:
     clientAuthenticationScheme: form
   resource:
     userInfoUri: https://graph.facebook.com/me
+
+helianto:
+  root:
+    system:
+      ADMIN: READ,WRITE
+      USER: READ
+  password:
+    initial: 123456
+    install: h3l1@nt0

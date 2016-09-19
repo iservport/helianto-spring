@@ -14,9 +14,14 @@ class DefaultEntityPostInstallService extends EntityPostInstallService {
 
   val logger: Logger = LoggerFactory.getLogger(classOf[DefaultEntityPostInstallService])
 
-  @Autowired val userRepository: UserRepository = null
+  @Autowired
+  val userRepository: UserRepository = null
 
-  @Autowired val userInstallService: UserInstallService = null
+  @Autowired
+  val userInstallService: UserInstallService = null
+
+  @Autowired(required = false)
+  val postInstaller: UserPostInstallService = null
 
   override def entityPostInstall(entity: Entity, identity: Identity) = {
     Option(identity) match {
@@ -37,9 +42,13 @@ class DefaultEntityPostInstallService extends EntityPostInstallService {
       case None =>
         throw new IllegalArgumentException("Unable to create system group: null key.")
     }
-    Option(userRepository.findByEntityIdAndUserKey(entityId, userKey)) match {
+    val systemGroup = Option(userRepository.findByEntityIdAndUserKey(entityId, userKey)) match {
       case Some(u) => u
       case None => userRepository.saveAndFlush(new User(entityId, UserType.SYSTEM, normalizedKey, s"SYSTEM_$normalizedKey"))
+    }
+    Option(postInstaller) match {
+      case Some(p) => p.systemPostInstall(systemGroup)
+      case _ => systemGroup
     }
   }
 

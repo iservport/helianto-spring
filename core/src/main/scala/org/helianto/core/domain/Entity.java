@@ -161,6 +161,13 @@ public class Entity implements Mergeable<Entity>
 		return this;
 	}
 
+    public Entity verify(String contextName) {
+        if (this.contextName!=null && this.contextName.equals(contextName)) {
+            return this;
+        }
+        throw new IllegalArgumentException("Invalid context!");
+    }
+
     public String getId() {
         return this.id;
     }

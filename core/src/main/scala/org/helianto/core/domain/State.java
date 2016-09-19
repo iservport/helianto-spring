@@ -84,22 +84,25 @@ public class State
      * @param stateCode
      */
     public State(String contextName, String countryCode, String stateCode) {
-        this(contextName, countryCode, stateCode, "");
+        this(contextName, countryCode, stateCode, "", "");
     }
 
     /**
      * Name constructor.
      * 
-     * @param contextName
-     * @param stateCode
-     * @param stateName
+	 * @param contextName
+	 * @param countryCode
+	 * @param stateCode
+	 * @param stateName
+     * @param stateAlias
      */
-    public State(String contextName, String countryCode, String stateCode, String stateName) {
+    public State(String contextName, String countryCode, String stateCode, String stateName, String stateAlias) {
     	this();
         setContextName(contextName);
         setStateCode(stateCode);
         setCountryCode(countryCode);
     	setStateName(stateName);
+		setStateAlias(stateAlias);
     }
 
     /**
@@ -219,10 +222,7 @@ public class State
 		final Object other$stateAlias = other.stateAlias;
 		if (this$stateAlias == null ? other$stateAlias != null : !this$stateAlias.equals(other$stateAlias))
 			return false;
-		final Object this$installDate = this.getInstallDate();
-		final Object other$installDate = other.getInstallDate();
-		if (this$installDate == null ? other$installDate != null : !this$installDate.equals(other$installDate))
-			return false;
+        // install date is not part of equals
 		final Object this$countryCode = this.countryCode;
 		final Object other$countryCode = other.countryCode;
 		if (this$countryCode == null ? other$countryCode != null : !this$countryCode.equals(other$countryCode))
@@ -243,8 +243,6 @@ public class State
 		result = result * PRIME + ($stateName == null ? 0 : $stateName.hashCode());
 		final Object $stateAlias = this.stateAlias;
 		result = result * PRIME + ($stateAlias == null ? 0 : $stateAlias.hashCode());
-		final Object $installDate = this.getInstallDate();
-		result = result * PRIME + ($installDate == null ? 0 : $installDate.hashCode());
 		final Object $countryCode = this.countryCode;
 		result = result * PRIME + ($countryCode == null ? 0 : $countryCode.hashCode());
 		result = result * PRIME + this.priority;

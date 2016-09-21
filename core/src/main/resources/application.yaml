@@ -37,3 +37,6 @@ logging:
     com.iservport.basic: DEBUG
     org.springframework.security: INFO
 
+# Helianto
+helianto:
+  contextName: DEFAULT

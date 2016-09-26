@@ -114,6 +114,7 @@ public class Identity implements IdentityData, Mergeable<Identity> {
      * @param personalData
      */
     public Identity(String principal, String displayName, PersonalData personalData) {
+        this();
     	setPrincipal(principal);
     	setDisplayName(displayName);
         setPersonalData(personalData);

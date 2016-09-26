@@ -6,7 +6,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.0.11.DEV"
+version in ThisBuild := "1.0.12.DEV"
 
 sbtVersion in ThisBuild := "0.13.9"
 

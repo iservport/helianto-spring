@@ -59,7 +59,7 @@ import java.util.UUID;
 @javax.persistence.Entity
 @Table(name="core_entity",
     uniqueConstraints = {@UniqueConstraint(columnNames={"contextName", "alias"})
-			,@UniqueConstraint(columnNames={"contextName", "cityCode", "alias"})}
+			,@UniqueConstraint(columnNames={"contextName", "stateCode", "cityCode", "alias"})}
 )
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
@@ -109,10 +109,13 @@ public class Entity implements Mergeable<Entity>
     @Column(length=128)
     private String entityDomain = "";
 
-	@Column(length=12)
-	private String cityCode = "";
+    @Column(length=12)
+    private String stateCode = "";
 
-	@Column(length=1024)
+    @Column(length=12)
+    private String cityCode = "";
+
+    @Column(length=1024)
 	private String entityDesc = "";
 
 	@Column(length=20)
@@ -168,133 +171,6 @@ public class Entity implements Mergeable<Entity>
         throw new IllegalArgumentException("Invalid context!");
     }
 
-    public String getId() {
-        return this.id;
-    }
-
-    public int getVersion() {
-        return this.version;
-    }
-
-    public String getContextName() {
-        return this.contextName;
-    }
-
-    public String getAlias() {
-        return this.alias;
-    }
-
-    public String getEntityCode() {
-        return this.entityCode;
-    }
-
-    public Date getInstallDate() {
-        return this.installDate;
-    }
-
-    public char getEntityType() {
-        return this.entityType;
-    }
-
-    public EntityNature getNature() {
-        return this.nature;
-    }
-
-    public String getCustomStyle() {
-        return this.customStyle;
-    }
-
-    public String getExternalLogoUrl() {
-        return this.externalLogoUrl;
-    }
-
-    public char getActivityState() {
-        return this.activityState;
-    }
-
-    public String getEntityName() {
-        return this.entityName;
-    }
-
-    public String getEntityDomain() {
-        return this.entityDomain;
-    }
-
-    public String getCityCode() {
-        return this.cityCode;
-    }
-
-    public String getEntityDesc() {
-        return this.entityDesc;
-    }
-
-    public Locale getLocale() {
-        return this.locale;
-    }
-
-    public void setId(String id) {
-        this.id = id;
-    }
-
-    public void setVersion(int version) {
-        this.version = version;
-    }
-
-    public void setContextName(String contextName) {
-        this.contextName = contextName;
-    }
-
-    public void setAlias(String alias) {
-        this.alias = alias;
-    }
-
-    public void setEntityCode(String entityCode) {
-        this.entityCode = entityCode;
-    }
-
-    public void setInstallDate(Date installDate) {
-        this.installDate = installDate;
-    }
-
-    public void setEntityType(char entityType) {
-        this.entityType = entityType;
-    }
-
-    public void setNature(EntityNature nature) {
-        this.nature = nature;
-    }
-
-    public void setCustomStyle(String customStyle) {
-        this.customStyle = customStyle;
-    }
-
-    public void setExternalLogoUrl(String externalLogoUrl) {
-        this.externalLogoUrl = externalLogoUrl;
-    }
-
-    public void setActivityState(char activityState) {
-        this.activityState = activityState;
-    }
-
-    public void setEntityName(String entityName) {
-        this.entityName = entityName;
-    }
-
-    public void setEntityDomain(String entityDomain) {
-        this.entityDomain = entityDomain;
-    }
-
-    public void setCityCode(String cityCode) {
-        this.cityCode = cityCode;
-    }
-
-    public void setEntityDesc(String entityDesc) {
-        this.entityDesc = entityDesc;
-    }
-
-    public void setLocale(Locale locale) {
-        this.locale = locale;
-    }
 
     public boolean equals(Object o) {
         if (o == this) return true;
@@ -397,4 +273,139 @@ public class Entity implements Mergeable<Entity>
         return "org.helianto.core.domain.Entity(id=" + this.getId() + ", version=" + this.getVersion() + ", contextName=" + this.getContextName() + ", alias=" + this.getAlias() + ", entityCode=" + this.getEntityCode() + ", installDate=" + this.getInstallDate() + ", entityType=" + this.getEntityType() + ", nature=" + this.getNature() + ", customStyle=" + this.getCustomStyle() + ", externalLogoUrl=" + this.getExternalLogoUrl() + ", activityState=" + this.getActivityState() + ", entityName=" + this.getEntityName() + ", entityDomain=" + this.getEntityDomain() + ", cityCode=" + this.getCityCode() + ", entityDesc=" + this.getEntityDesc() + ", locale=" + this.getLocale() + ")";
     }
 
+    public String getId() {
+        return this.id;
+    }
+
+    public int getVersion() {
+        return this.version;
+    }
+
+    public String getContextName() {
+        return this.contextName;
+    }
+
+    public String getAlias() {
+        return this.alias;
+    }
+
+    public String getEntityCode() {
+        return this.entityCode;
+    }
+
+    public Date getInstallDate() {
+        return this.installDate;
+    }
+
+    public char getEntityType() {
+        return this.entityType;
+    }
+
+    public EntityNature getNature() {
+        return this.nature;
+    }
+
+    public String getCustomStyle() {
+        return this.customStyle;
+    }
+
+    public String getExternalLogoUrl() {
+        return this.externalLogoUrl;
+    }
+
+    public char getActivityState() {
+        return this.activityState;
+    }
+
+    public String getEntityName() {
+        return this.entityName;
+    }
+
+    public String getEntityDomain() {
+        return this.entityDomain;
+    }
+
+    public String getStateCode() {
+        return this.stateCode;
+    }
+
+    public String getCityCode() {
+        return this.cityCode;
+    }
+
+    public String getEntityDesc() {
+        return this.entityDesc;
+    }
+
+    public Locale getLocale() {
+        return this.locale;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setVersion(int version) {
+        this.version = version;
+    }
+
+    public void setContextName(String contextName) {
+        this.contextName = contextName;
+    }
+
+    public void setAlias(String alias) {
+        this.alias = alias;
+    }
+
+    public void setEntityCode(String entityCode) {
+        this.entityCode = entityCode;
+    }
+
+    public void setInstallDate(Date installDate) {
+        this.installDate = installDate;
+    }
+
+    public void setEntityType(char entityType) {
+        this.entityType = entityType;
+    }
+
+    public void setNature(EntityNature nature) {
+        this.nature = nature;
+    }
+
+    public void setCustomStyle(String customStyle) {
+        this.customStyle = customStyle;
+    }
+
+    public void setExternalLogoUrl(String externalLogoUrl) {
+        this.externalLogoUrl = externalLogoUrl;
+    }
+
+    public void setActivityState(char activityState) {
+        this.activityState = activityState;
+    }
+
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
+    public void setEntityDomain(String entityDomain) {
+        this.entityDomain = entityDomain;
+    }
+
+    public void setStateCode(String stateCode) {
+        this.stateCode = stateCode;
+    }
+
+    public void setCityCode(String cityCode) {
+        this.cityCode = cityCode;
+    }
+
+    public void setEntityDesc(String entityDesc) {
+        this.entityDesc = entityDesc;
+    }
+
+    public void setLocale(Locale locale) {
+        this.locale = locale;
+    }
 }

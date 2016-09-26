@@ -4,6 +4,7 @@ import org.helianto.core.domain.enums.ActivityState;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 /**
  * Domain class to represent user authority.
@@ -45,6 +46,7 @@ public class UserAuthority implements Serializable {
      */
     public UserAuthority() {
 		super();
+		this.id = UUID.randomUUID().toString().replaceAll("-", "");
 	}
     
     /**

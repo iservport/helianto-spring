@@ -17,6 +17,7 @@ package org.helianto.core.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.UUID;
 
 
 /**
@@ -63,6 +64,7 @@ public class City
 	 */
     public City() {
         super();
+        this.id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     /**

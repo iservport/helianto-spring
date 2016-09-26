@@ -212,6 +212,9 @@ public class Identity implements IdentityData, Mergeable<Identity> {
      * PersonalData getter.
      */
     public PersonalData getPersonalData() {
+        if (this.personalData==null) {
+            return new PersonalData();
+        }
         return this.personalData;
     }
     public void setPersonalData(PersonalData personalData) {

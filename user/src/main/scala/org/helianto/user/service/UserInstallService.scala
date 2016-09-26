@@ -54,7 +54,7 @@ class UserInstallService {
     }
   }
 
-  def associate(parent: User, child: User) = {
+  def associate(parent: User, child: User): UserAssociation = {
     Option(associationRepository.findByParentAndChild(parent, child)) match {
       case Some(a) => a
       case None => associationRepository.saveAndFlush(new UserAssociation(parent, child))

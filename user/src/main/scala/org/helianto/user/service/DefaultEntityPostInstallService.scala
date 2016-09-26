@@ -2,7 +2,7 @@ package org.helianto.user.service
 
 import org.helianto.core.domain.{Entity, Identity}
 import org.helianto.core.service.EntityPostInstallService
-import org.helianto.user.domain.User
+import org.helianto.user.domain.{User, UserAssociation}
 import org.helianto.user.domain.enums.{UserState, UserType}
 import org.helianto.user.repository.UserRepository
 import org.slf4j.{Logger, LoggerFactory}
@@ -25,11 +25,14 @@ class DefaultEntityPostInstallService extends EntityPostInstallService {
 
   override def entityPostInstall(entity: Entity, identity: Identity) = {
     Option(identity) match {
-      case Some(manager) =>
-        val adminGroup = installSystemGroup(entity.getId, "ADMIN", manager)
+      case Some(i) =>
+        val adminGroup = installSystemGroup(entity.getId, "ADMIN", i)
         logger.info(s"Installed $adminGroup.")
-        val userGroup = installSystemGroup(entity.getId, "USER", manager)
+        val manager = assignManager(adminGroup, i).getChild
+        logger.info(s"Installed $manager.")
+        val userGroup = installSystemGroup(entity.getId, "USER", i)
         logger.info(s"Installed $userGroup.")
+        userInstallService.associate(userGroup, manager)
       case None =>
         throw new IllegalArgumentException(s"Unable to create system groups: manager not found with $identity.")
     }
@@ -52,9 +55,9 @@ class DefaultEntityPostInstallService extends EntityPostInstallService {
     }
   }
 
-  def assignManager(userGroup: User, manager: Identity): User = {
+  def assignManager(userGroup: User, manager: Identity): UserAssociation = {
     Option(userInstallService.installUser(userGroup.getEntityId, manager, UserState.ACTIVE)) match {
-      case Some(u) => userInstallService.associate(userGroup, u).getParent
+      case Some(u) => userInstallService.associate(userGroup, u)
       case None =>
         throw new IllegalArgumentException(s"Unable to associate manager: user not valid for $manager")
     }

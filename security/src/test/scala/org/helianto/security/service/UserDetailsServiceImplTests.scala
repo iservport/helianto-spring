@@ -7,6 +7,7 @@ import org.helianto.security.domain.{Secret, UserAuthority, UserDetailsAdapter}
 import org.helianto.security.repository.{SecretRepository, UserAuthorityRepository}
 import org.helianto.test.UnitSpec
 import org.helianto.user.domain.User
+import org.helianto.user.domain.enums.UserState
 import org.helianto.user.repository.{UserProjection, UserRepository}
 import org.springframework.security.core.GrantedAuthority
 import org.springframework.security.core.authority.SimpleGrantedAuthority
@@ -169,8 +170,8 @@ class LoadLastUserTests extends UnitSpec {
     override def getUserId: String = userId
     override def getIdentityId: String = ""
     override def getUserName: String = ""
+    override def getUserState: UserState = UserState.ACTIVE
     override def isAccountNonExpired: Boolean = true
-    override def isAccountNonLocked: Boolean = true
     override def getEntityId: String = ""
   }
 
@@ -245,8 +246,8 @@ class LoadUserByUsernameTests extends UnitSpec {
     override def getUserId: String = userId
     override def getIdentityId: String = ""
     override def getUserName: String = "usernameFromDb"
+    override def getUserState: UserState = UserState.ACTIVE
     override def isAccountNonExpired: Boolean = true
-    override def isAccountNonLocked: Boolean = true
     override def getEntityId: String = ""
   }
   val encoder = new PasswordEncoder {

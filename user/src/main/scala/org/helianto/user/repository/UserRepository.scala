@@ -1,6 +1,7 @@
 package org.helianto.user.repository
 
 import org.helianto.user.domain.User
+import org.helianto.user.domain.enums.UserState
 import org.springframework.beans.factory.annotation.Value
 import org.springframework.data.jpa.repository.{JpaRepository, Query}
 
@@ -19,18 +20,18 @@ trait UserRepository extends JpaRepository[User, String] {
 
 trait UserProjection {
 
+  @Value("#{target.id}")
   def getUserId: String
 
   def getEntityId: String
 
+  @Value("#{target.identity.id}")
   def getIdentityId: String
 
   def isAccountNonExpired: Boolean
 
-  @Value("#{(target.userState=='A' ? true: false)}")
-  def isAccountNonLocked: Boolean
+  def getUserState: UserState
 
   def getUserName: String
-
 
 }

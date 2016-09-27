@@ -6,11 +6,11 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.0.15.DEV"
+version in ThisBuild := "1.0.16.DEV"
 
 sbtVersion in ThisBuild := "0.13.9"
 
-scalaVersion in ThisBuild := "2.11.7"
+scalaVersion in ThisBuild := "2.11.8"
 
 scalaJSUseRhino in Global := false
 
@@ -28,9 +28,7 @@ lazy val root = (project in file("."))
     dockerRepository := Some("helianto")
   )
   .dependsOn(user, security)
-  .aggregate(
-    core,user,security
-  )
+  .aggregate(core,user,security,kafka)
 
 lazy val core = (project in file("core"))
   .enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
@@ -38,7 +36,6 @@ lazy val core = (project in file("core"))
   .settings(
     name := "helianto-spring-core",
     libraryDependencies ++= Seq(
-      "org.scala-lang"             % "scala-library"                    % "2.11.7",
       "org.projectlombok"          % "lombok"                           % "1.16.8",
       "org.springframework.boot"   % "spring-boot-starter-web"          % heliantoSpringBootVersion.value,
       "org.springframework.boot"   % "spring-boot-starter-data-jpa"     % heliantoSpringBootVersion.value,
@@ -70,6 +67,17 @@ lazy val security = (project in file("security")).
   )
   .dependsOn(user)
 
+lazy val kafka = (project in file("kafka")).
+  enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
+  .settings(commonSettings)
+  .settings(
+    name := "helianto-spring-kafka",
+    libraryDependencies ++= Seq(
+      "org.springframework.kafka"       % "spring-kafka"          % "1.0.1.RELEASE"
+    )
+  )
+  .dependsOn(user)
+
 libraryDependencies ++= Seq(
   "org.springframework.boot"   % "spring-boot-starter-freemarker"   % heliantoSpringBootVersion.value,
   "org.springframework.boot"   % "spring-boot-starter-actuator"     % heliantoSpringBootVersion.value,
@@ -85,10 +93,10 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular-animate"      % "1.5.8",
   "org.webjars.bower" % "angular-i18n"         % "1.5.8",
   "org.webjars.bower" % "angular-loading-bar"  % "0.9.0",
-  "org.webjars" % "bootstrap" % "3.3.2",
-  "org.webjars" % "jquery" % "2.1.1",
-  "org.webjars.bower" % "slimScroll" % "1.3.3",
-  "org.webjars.bower" % "fontawesome" % "4.6.3"
+  "org.webjars.bower" % "slimScroll"           % "1.3.3"  exclude("org.webjars.bower", "jquery"),
+  "org.webjars.bower" % "bootstrap"            % "3.3.7"  exclude("org.webjars.bower", "jquery"),
+  "org.webjars.bower" % "jquery"               % "2.2.4",
+  "org.webjars.bower" % "fontawesome"          % "4.6.3"
 )
 
 lazy val commonSettings = Seq(

@@ -18,3 +18,9 @@ helianto:
   password:
     initial: 123456
     install: h3l1@nt0
+
+# Logging
+logging:
+  level:
+    org.helianto: DEBUG
+    org.springframework.security: DEBUG

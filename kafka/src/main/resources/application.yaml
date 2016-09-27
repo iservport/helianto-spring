@@ -1,0 +1,3 @@
+helianto:
+  kafka:
+    server: localhost:9092

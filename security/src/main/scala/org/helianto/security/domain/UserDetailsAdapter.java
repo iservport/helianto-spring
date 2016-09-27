@@ -115,7 +115,7 @@ public class UserDetailsAdapter
 
     public boolean isAccountNonLocked() {
     	if(user !=null){
-    		return user.isAccountNonLocked();
+    		return user.getUserState().isNonLocked();
     	}
     	return false;
     }

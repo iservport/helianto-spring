@@ -25,7 +25,7 @@ public enum UserState {
 	/**
 	 * Active.
 	 */
-    ACTIVE('A'),
+    ACTIVE('A', true),
     /**
      * Pending.
      */
@@ -34,13 +34,20 @@ public enum UserState {
      * Inactive.
      */
     INACTIVE('I');
-    
+
     private char value;
-    
+
+    private boolean nonLocked;
+
     private UserState(char type) {
-        this.value = type;
+        this(type, false);
     }
-    
+
+    private UserState(char type, boolean nonLocked) {
+        this.value = type;
+        this.nonLocked = nonLocked;
+    }
+
     /**
      * Database value.
      */
@@ -48,4 +55,7 @@ public enum UserState {
         return value;
     }
 
+    public boolean isNonLocked() {
+        return nonLocked;
+    }
 }

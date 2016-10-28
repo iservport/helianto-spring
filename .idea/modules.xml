@@ -2,16 +2,10 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core.iml" filepath="$PROJECT_DIR$/.idea/modules/core.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/core-build.iml" filepath="$PROJECT_DIR$/.idea/modules/core-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/kafka-build.iml" filepath="$PROJECT_DIR$/.idea/modules/kafka-build.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/root.iml" filepath="$PROJECT_DIR$/.idea/modules/root.iml" />
       <module fileurl="file://$PROJECT_DIR$/.idea/modules/root-build.iml" filepath="$PROJECT_DIR$/.idea/modules/root-build.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/security.iml" filepath="$PROJECT_DIR$/.idea/modules/security.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/security-build.iml" filepath="$PROJECT_DIR$/.idea/modules/security-build.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user.iml" filepath="$PROJECT_DIR$/.idea/modules/user.iml" />
-      <module fileurl="file://$PROJECT_DIR$/.idea/modules/user-build.iml" filepath="$PROJECT_DIR$/.idea/modules/user-build.iml" />
     </modules>
   </component>
 </project>

@@ -6,7 +6,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.0.16.DEV"
+version in ThisBuild := "1.1.0.DEV"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -22,50 +22,29 @@ lazy val root = (project in file("."))
   .settings(
     name := "helianto-spring",
     mainClass in (Compile, run) := Some("org.helianto.Application"),
+    libraryDependencies ++= Seq(
+      "org.projectlombok"                  % "lombok"                         % "1.16.8",
+      "org.springframework.boot"           % "spring-boot-starter-web"        % heliantoSpringBootVersion.value,
+      "org.springframework.boot"           % "spring-boot-starter-data-jpa"   % heliantoSpringBootVersion.value,
+      "org.springframework.boot"           % "spring-boot-starter-test"       % heliantoSpringBootVersion.value % "test",
+      "org.springframework.boot"           % "spring-boot-test-autoconfigure" % heliantoSpringBootVersion.value % "test",
+      "org.springframework.boot"           % "spring-boot-starter-security"   % heliantoSpringBootVersion.value,
+      "org.springframework.boot"           % "spring-boot-starter-freemarker" % heliantoSpringBootVersion.value,
+      "org.springframework.boot"           % "spring-boot-starter-actuator"   % heliantoSpringBootVersion.value,
+      "org.springframework.security.oauth" % "spring-security-oauth2"         % "2.0.11.RELEASE",
+      "org.springframework.security"       % "spring-security-jwt"            % "1.0.5.RELEASE",
+      "javax.servlet"  % "javax.servlet-api"    % "3.0.1"                     % "provided",
+      "commons-io"     % "commons-io"           % "2.4",
+      "com.zaxxer"     % "HikariCP"             % "2.4.3",
+      "com.h2database" % "h2"                   % "1.4.192",
+      "mysql"          % "mysql-connector-java" % "5.1.26",
+      "org.scalactic" %% "scalactic"            % "3.0.0"
+    ),
     dockerBaseImage := "azul/zulu-openjdk:8",
     dockerUpdateLatest := true,
-    dockerExposedPorts := Seq(8080),
-    dockerRepository := Some("helianto")
+    dockerExposedPorts := Seq(8081),
+    dockerRepository := Some("iservport")
   )
-  .dependsOn(user, security)
-  .aggregate(core,user,security,kafka)
-
-lazy val core = (project in file("core"))
-  .enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
-  .settings(commonSettings)
-  .settings(
-    name := "helianto-spring-core",
-    libraryDependencies ++= Seq(
-      "org.projectlombok"          % "lombok"                           % "1.16.8",
-      "org.springframework.boot"   % "spring-boot-starter-web"          % heliantoSpringBootVersion.value,
-      "org.springframework.boot"   % "spring-boot-starter-data-jpa"     % heliantoSpringBootVersion.value,
-      "org.springframework.boot"   % "spring-boot-starter-test"         % heliantoSpringBootVersion.value % "test",
-      "org.springframework.boot"   % "spring-boot-test-autoconfigure"   % heliantoSpringBootVersion.value % "test",
-      "com.zaxxer" % "HikariCP" % "2.4.3",
-      "org.scalactic" %% "scalactic" % "3.0.0"
-    )
-  )
-
-lazy val user = (project in file("user"))
-  .enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
-  .settings(commonSettings)
-  .settings(
-    name := "helianto-spring-user"
-  )
-  .dependsOn(core)
-
-lazy val security = (project in file("security")).
-  enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
-  .settings(commonSettings)
-  .settings(
-    name := "helianto-spring-security",
-      libraryDependencies ++= Seq(
-        "org.springframework.boot"           % "spring-boot-starter-security" % heliantoSpringBootVersion.value,
-        "org.springframework.security.oauth" % "spring-security-oauth2"       % "2.0.11.RELEASE",
-        "org.springframework.security"       % "spring-security-jwt"          % "1.0.5.RELEASE"
-      )
-  )
-  .dependsOn(user)
 
 lazy val kafka = (project in file("kafka")).
   enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
@@ -76,15 +55,7 @@ lazy val kafka = (project in file("kafka")).
       "org.springframework.kafka"       % "spring-kafka"          % "1.0.1.RELEASE"
     )
   )
-  .dependsOn(user)
-
-libraryDependencies ++= Seq(
-  "org.springframework.boot"   % "spring-boot-starter-freemarker"   % heliantoSpringBootVersion.value,
-  "org.springframework.boot"   % "spring-boot-starter-actuator"     % heliantoSpringBootVersion.value,
-  "javax.servlet"              % "javax.servlet-api"  % "3.0.1"     % "provided",
-  "commons-io"                 % "commons-io"         % "2.4",
-  "mysql" % "mysql-connector-java" % "5.1.26"
-)
+  .dependsOn(root)
 
 libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular"              % "1.5.8",
@@ -114,7 +85,7 @@ lazy val commonSettings = Seq(
     if (version.value.trim.endsWith("SNAPSHOT"))
       Some("Helianto Snapshots" at helianto + "snapshot")
     else if (version.value.trim.endsWith("RELEASE"))
-      Some("Helianto Snapshots" at helianto + "release")
+      Some("Helianto Releases" at helianto + "release")
     else
       Some("Helianto Development"  at helianto + "devel")
   },

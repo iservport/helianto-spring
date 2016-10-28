@@ -32,7 +32,7 @@ import java.util.UUID;
  * 
  * @author Mauricio Fernandes de Castro
  */
-@javax.persistence.Entity
+@Entity
 @Table(name="user_user",
         uniqueConstraints = {@UniqueConstraint(columnNames={"entityId", "userKey"})}
 )
@@ -438,6 +438,6 @@ public class User implements Comparable<User>{
     }
 
     public String toString() {
-        return "org.helianto.user.domain.User(id=" + this.id + ", version=" + this.version + ", entityId=" + this.entityId + ", userKey=" + this.userKey + ", userName=" + this.userName + ", lastEvent=" + this.lastEvent + ", userState=" + this.userState + ", userType=" + this.userType + ", accountNonExpired=" + this.accountNonExpired + ", userDesc=" + this.userDesc + ", identity=" + this.identity + ", identityId=" + this.identityId + ", minimalEducationRequirement=" + this.minimalEducationRequirement + ", privacyLevel=" + this.privacyLevel + ", scriptItems=" + this.scriptItems + ", parentAssociations=" + this.parentAssociations + ", childAssociations=" + this.childAssociations + ")";
+        return "org.helianto.User(id=" + this.id + ", version=" + this.version + ", entityId=" + this.entityId + ", userKey=" + this.userKey + ", userName=" + this.userName + ", lastEvent=" + this.lastEvent + ", userState=" + this.userState + ", userType=" + this.userType + ", accountNonExpired=" + this.accountNonExpired + ", userDesc=" + this.userDesc + ", identity=" + this.identity + ", identityId=" + this.identityId + ", minimalEducationRequirement=" + this.minimalEducationRequirement + ", privacyLevel=" + this.privacyLevel + ", scriptItems=" + this.scriptItems + ", parentAssociations=" + this.parentAssociations + ", childAssociations=" + this.childAssociations + ")";
     }
 }

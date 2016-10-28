@@ -31,12 +31,31 @@ spring:
 server:
   port: 8081
 
-# Logging
-logging:
-  level:
-    com.iservport.basic: DEBUG
-    org.springframework.security: INFO
-
 # Helianto
 helianto:
   contextName: DEFAULT
+  root:
+    system:
+      ADMIN: READ,WRITE
+      USER: READ
+  password:
+    initial: 123456
+    install: h3l1@nt0
+
+facebook:
+  client:
+    clientId: 233668646673605
+#    clientSecret: replace-me
+    accessTokenUri: https://graph.facebook.com/oauth/access_token
+    userAuthorizationUri: https://www.facebook.com/dialog/oauth
+    tokenName: oauth_token
+    authenticationScheme: query
+    clientAuthenticationScheme: form
+  resource:
+    userInfoUri: https://graph.facebook.com/me
+
+# Logging
+logging:
+  level:
+    org.helianto: OFF
+    org.springframework.security: DEBUG

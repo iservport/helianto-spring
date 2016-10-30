@@ -1,12 +1,15 @@
 package org.helianto.security;
 
+import org.helianto.security.service.CustomTokenEnhancer;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.ResourceServerProperties;
 import org.springframework.boot.autoconfigure.security.oauth2.resource.UserInfoTokenServices;
 import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
@@ -27,7 +30,9 @@ import org.springframework.security.oauth2.config.annotation.web.configuration.E
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
+import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
+import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.authentication.www.BasicAuthenticationFilter;
@@ -45,12 +50,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.sql.DataSource;
 import java.io.IOException;
+import java.security.KeyPair;
+import java.util.Arrays;
 
 @Configuration
 @EnableWebSecurity
 @EnableOAuth2Client
 @EnableGlobalMethodSecurity(prePostEnabled=true)
-@EnableAuthorizationServer
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static int REMEMBER_ME_DEFAULT_DURATION = 14*24*60*60; // duas semanas
@@ -136,23 +142,51 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @EnableAuthorizationServer
     protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
+        @Value("${key-store.password}")
+        private String keyStorePassword = "";
+
         @Autowired
         private AuthenticationManager authenticationManager;
 
+        @Autowired
+        private CustomTokenEnhancer tokenEnhancer;
+
+        // key pair to be used by accessTokenConverter
+        public KeyPair getKeyPair() {
+            KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
+                    new ClassPathResource("jwt.jks"),
+                    keyStorePassword.toCharArray());
+            return keyStoreKeyFactory.getKeyPair("jwt");
+        }
+
         @Bean
         public JwtAccessTokenConverter accessTokenConverter() {
-            return new JwtAccessTokenConverter();
+            JwtAccessTokenConverter converter = new JwtAccessTokenConverter();
+            converter.setKeyPair(getKeyPair());
+            return converter;
         }
 
         @Override
         public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
-            oauthServer.tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')").checkTokenAccess(
-                    "hasAuthority('ROLE_TRUSTED_CLIENT')");
+            oauthServer
+                .tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
+                .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
+        }
+
+        // Token Enhancer to be used to configure endpoints
+        private TokenEnhancerChain tokenEnhancerChain() {
+            TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+            tokenEnhancerChain.setTokenEnhancers(
+                    Arrays.asList(tokenEnhancer, accessTokenConverter()));
+            return tokenEnhancerChain;
         }
 
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-            endpoints.authenticationManager(authenticationManager).accessTokenConverter(accessTokenConverter());
+            endpoints
+                .authenticationManager(authenticationManager)
+                .accessTokenConverter(accessTokenConverter())
+                .tokenEnhancer(tokenEnhancerChain());
         }
 
         @Override

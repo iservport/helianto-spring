@@ -53,7 +53,11 @@ facebook:
     clientAuthenticationScheme: form
   resource:
     userInfoUri: https://graph.facebook.com/me
-
+# Key Store
+# generate with
+# keytool -genkeypair -alias jwt -keyalg RSA -dname "CN=jwt, L=CITY, S=STATE, C=BR" -keypass changeme -keystore jwt.jks -storepass changeme
+key-store:
+  password: changeme
 # Logging
 logging:
   level:

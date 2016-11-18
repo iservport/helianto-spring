@@ -2,35 +2,6 @@ spring:
 # Profiles
   profiles:
     active: dev
-# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
-  datasource:
-    driver-class-name: com.mysql.jdbc.Driver
-    hikari:
-      maximum-pool-size: 3
-      connection-timeout: 10
-    name: helianto
-    password: helianto
-    test-on-borrow: true
-    test-on-return: false
-    test-while-idle: true
-    time-between-eviction-runs-millis: 5000
-    url: jdbc:mysql://192.168.10.5:3306/helianto01?autoreconnect=true
-    username: helianto
-    validation-query: SELECT 1
-# Spring Data JPA
-  jpa:
-    repositories:
-      enabled: true
-    database-platform: org.hibernate.dialect.MySQL5Dialect
-    generate-ddl: true
-    hibernate:
-      ddl-auto: update
-      naming-strategy: org.hibernate.cfg.DefaultNamingStrategy
-    show-sql: false
-# Server
-server:
-  port: 8081
-
 # Helianto
 helianto:
   contextName: DEFAULT
@@ -41,25 +12,21 @@ helianto:
   password:
     initial: 123456
     install: h3l1@nt0
+  welcome:
+    logo: /images/logo-iserv64.png
+    copyright: i-serv Consultoria Empresarial Ltda. 2004-2016
+    inLineCss: |
+      h3,h5,.footer {color: white;}
+      .heliantoLogin {background-image: url('/images/photo-1434396505260-9ec0d6491795.jpeg');}
+  mfa:
+    cellPhone: required
+    service: none
 
-facebook:
-  client:
-    clientId: 233668646673605
-#    clientSecret: replace-me
-    accessTokenUri: https://graph.facebook.com/oauth/access_token
-    userAuthorizationUri: https://www.facebook.com/dialog/oauth
-    tokenName: oauth_token
-    authenticationScheme: query
-    clientAuthenticationScheme: form
-  resource:
-    userInfoUri: https://graph.facebook.com/me
-# Key Store
-# generate with
-# keytool -genkeypair -alias jwt -keyalg RSA -dname "CN=jwt, L=CITY, S=STATE, C=BR" -keypass changeme -keystore jwt.jks -storepass changeme
 key-store:
   password: changeme
 # Logging
 logging:
   level:
-    org.helianto: OFF
-    org.springframework.security: DEBUG
+    org.helianto: INFO
+    org.springframework.security: INFO
+    org.helianto.message: DEBUG

@@ -3,7 +3,6 @@ package org.helianto.security.service
 import java.util.Date
 
 import org.helianto.core.domain.Identity
-import org.helianto.security.domain.repository.UserAuthorityRepository
 import org.helianto.security.domain.{Secret, UserAuthority, UserDetailsAdapter}
 import org.helianto.security.repository.{SecretRepository, UserAuthorityRepository}
 import org.helianto.test.UnitSpec
@@ -30,39 +29,41 @@ class UserAuthoritiesAsStringTests extends UnitSpec {
     override def getUserId: String = "USER-ID"
   }
 
+  val userDetailsService = new UserDetailsServiceImpl
+
   "An UserAuthority Set " should "be a set of formatted strings based on an UserAuthority instance " in {
     authority.setServiceExtension("")
-    val userAuthoritySet = UserDetailsServiceImpl.getUserAuthoritiesAsString(authority)
+    val userAuthoritySet = userDetailsService.getUserAuthoritiesAsString(authority)
     userAuthoritySet should contain theSameElementsAs Set("ROLE_SERVICE_")
   }
 
   it should "grow with extensions" in {
     authority.setServiceExtension("EXT1")
-    val userAuthoritySet = UserDetailsServiceImpl.getUserAuthoritiesAsString(authority)
+    val userAuthoritySet = userDetailsService.getUserAuthoritiesAsString(authority)
     userAuthoritySet should contain theSameElementsAs Set("ROLE_SERVICE_EXT1")
   }
 
   it should "convert to upper case" in {
     authority.setServiceExtension("ext1")
-    val userAuthoritySet = UserDetailsServiceImpl.getUserAuthoritiesAsString(authority)
+    val userAuthoritySet = userDetailsService.getUserAuthoritiesAsString(authority)
     userAuthoritySet should contain theSameElementsAs Set("ROLE_SERVICE_EXT1")
   }
 
   it should "trim spaces" in {
     authority.setServiceExtension("ext1 ")
-    val userAuthoritySet = UserDetailsServiceImpl.getUserAuthoritiesAsString(authority)
+    val userAuthoritySet = userDetailsService.getUserAuthoritiesAsString(authority)
     userAuthoritySet should contain theSameElementsAs Set("ROLE_SERVICE_EXT1")
   }
 
   it should "allow for comma separated values" in {
     authority.setServiceExtension("ext1 , ExT 2")
-    val userAuthoritySet = UserDetailsServiceImpl.getUserAuthoritiesAsString(authority)
+    val userAuthoritySet = userDetailsService.getUserAuthoritiesAsString(authority)
     userAuthoritySet should contain theSameElementsAs Set("ROLE_SERVICE_EXT1", "ROLE_SERVICE_EXT2")
   }
 
   it should "tolerate null extensions" in {
     authority.setServiceExtension(null)
-    val userAuthoritySet = UserDetailsServiceImpl.getUserAuthoritiesAsString(authority)
+    val userAuthoritySet = userDetailsService.getUserAuthoritiesAsString(authority)
     userAuthoritySet should contain theSameElementsAs Set("ROLE_SERVICE_")
   }
 

@@ -36,12 +36,6 @@
   <logger name="ch.qos.logback" level="OFF"/>
   <logger name="com.zaxxer" level="OFF"/>
 
-  <logger name="org.helianto" level="OFF"/>
-  <logger name="org.helianto.security" level="DEBUG"/>
-  <logger name="org.helianto.core.test.DomainTestSupport" level="OFF"/>
-  <logger name="org.helianto.install" level="OFF"/>
-  <logger name="org.helianto.entity" level="DEBUG"/>
-
   <root level="INFO">
     <appender-ref ref="STDOUT" />
   </root>  

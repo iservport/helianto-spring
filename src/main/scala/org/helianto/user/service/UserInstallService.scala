@@ -2,7 +2,6 @@ package org.helianto.user.service
 
 import org.helianto.core.domain.Identity
 import org.helianto.core.repository._
-import org.helianto.core.service.EntityPostInstallService
 import org.helianto.user.domain.{User, UserAssociation}
 import org.helianto.user.domain.enums.{UserState, UserType}
 import org.helianto.user.repository.{UserAssociationRepository, UserRepository}

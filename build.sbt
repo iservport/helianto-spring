@@ -6,7 +6,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.2.0.DEV"
+version in ThisBuild := "1.2.2.DEV"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -30,9 +30,16 @@ lazy val root = (project in file("."))
       "org.springframework.boot"           % "spring-boot-test-autoconfigure" % heliantoSpringBootVersion.value % "test",
       "org.springframework.boot"           % "spring-boot-starter-security"   % heliantoSpringBootVersion.value,
       "org.springframework.boot"           % "spring-boot-starter-freemarker" % heliantoSpringBootVersion.value,
+      "org.springframework.boot"           % "spring-boot-starter-social-facebook" % heliantoSpringBootVersion.value,
+      "org.springframework.boot"           % "spring-boot-starter-social-linkedin" % heliantoSpringBootVersion.value,
       "org.springframework.boot"           % "spring-boot-starter-actuator"   % heliantoSpringBootVersion.value,
       "org.springframework.security.oauth" % "spring-security-oauth2"         % "2.0.11.RELEASE",
       "org.springframework.security"       % "spring-security-jwt"            % "1.0.5.RELEASE",
+      "org.springframework.social"         % "spring-social-google"           % "1.0.0.RELEASE",
+      "com.twilio.sdk"                     % "twilio"                         % "7.1.0",
+      "io.springfox"                       % "springfox-swagger2"             % "2.6.0",
+      "io.springfox"                       % "springfox-swagger-ui"           % "2.6.0",
+      "io.swagger"                         % "swagger-core"                   % "1.5.10",
       "javax.servlet"  % "javax.servlet-api"    % "3.0.1"                     % "provided",
       "commons-io"     % "commons-io"           % "2.4",
       "com.zaxxer"     % "HikariCP"             % "2.4.3",

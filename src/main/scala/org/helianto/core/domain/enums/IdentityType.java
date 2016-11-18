@@ -25,7 +25,7 @@ public enum IdentityType {
     /**
      * The identity principal may not be used as email.
      */
-    NOT_ADDRESSABLE('N'),
+    USERNAME('N'),
     /**
      * Requires an organization email as principal.
      */
@@ -34,21 +34,11 @@ public enum IdentityType {
      * Requires a personal email as principal.
      */
     PERSONAL_EMAIL('P', true),
-    // The following new types will replace the previous
-    // old ones in future releases
     /**
-     * The principal is any user supplied e-mail.
+     * Identity principal formatted as TYPE:UNIQUE_NUMBER.
      */
-    EMAIL('E', true),
-    /**
-     * The principal is a plain identity.
-     */
-    PLAIN('I'),
-    /**
-     * The principal is automatically assigned by the system.
-     */
-    SYSTEM_GENERATED('S');
-    
+    PREFIXED_DOCUMENT('D');
+
     private char value;
     private boolean addressable;
     
@@ -100,7 +90,7 @@ public enum IdentityType {
     			return identityType;
     		} 
     	}
-    	return IdentityType.NOT_ADDRESSABLE;
+    	return IdentityType.USERNAME;
     }
 
 }

@@ -1,4 +1,4 @@
-package org.helianto.core.service
+package org.helianto
 
 import org.scalatest._
 import org.scalatest.mockito.MockitoSugar

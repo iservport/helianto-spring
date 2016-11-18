@@ -1,0 +1,85 @@
+[#ftl]
+[#--
+ # Lead is USER
+ #--]
+<form class="form-horizontal" role="form" action="/register" method="POST">
+    <div class="panel panel-default">
+        <div class="panel-body" data-ng-init="isAdmin=false; domain=true">
+            <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+            <input type="hidden" ng-model="isAdmin" name="admin" value="false">
+            [#--
+             # Domain or numberCode?
+             #--]
+            <div class="form-group">
+                <div class="col-xs-1">
+                    <input type="checkbox" ng-model="domain" ng-true-value="true" name="isDomain" value="{{domain}}"
+                           ng-false-value="false">
+                </div>
+                <div class="col-xs-11">
+                    <b>Domínio</b>
+                </div>
+                <div class="col-xs-1">
+                    <input type="checkbox" ng-model="domain" ng-true-value="false" name="isDomain" value="{{domain}}"
+                           ng-false-value="true">
+                </div>
+                <div class="col-xs-11">
+                    <b> CNPJ </b>
+                </div>
+            </div>
+            <div class="form-group">
+                <div class="col-sm-12">
+                    <input type="text" required name="entityAlias" data-ng-model="entityAlias"  class="form-control" data-ng-if="domain">
+
+                    <div class="input-group" data-ng-if="!domain">
+                        <input type="text" name="entityAlias" required data-ng-keyup="valideCNPJ(entityAlias)"
+                               data-ng-blur="valideCNPJ(entityAlias)"
+                               value="{{entityAlias}}"
+                               class="form-control" data-ui-mask="99.999.999/9999-99" data-ng-model="entityAlias">
+                             <span class="input-group-btn">
+                                <button aria-label="Help" class="btn btn-default" type="button">
+                                    <i class="fa fa-check" style="color:green;" data-ng-show="cnpjOk"></i>
+                                    <i class="fa fa-close" style="color:red;" data-ng-show="!cnpjOk  || entityAlias.length==0"></i>
+                                </button>
+                             </span>
+                    </div><!-- /input-group -->
+                </div>
+            </div>
+            [#--
+             # Password confirmation
+             #--]
+            <div class="form-group">
+                <label class="col-sm-3 control-label">Identificação</label>
+                <div class="col-sm-9">
+                    <input type="text" disabled="disabled" name="email" class="form-control" value="${form.principal}">
+                    <input type="hidden" name="email" value="${form.principal}">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="password" class="col-sm-3 control-label">{{'PASSWORD' | common}}*</label>
+                <div class="col-sm-9">
+                    <input id="password" type="password" required="" name="password" class="form-control" data-ng-model="password">
+                </div>
+            </div>
+            <div class="form-group">
+                <label for="cpassword" class="col-sm-3 control-label">{{'PASSWORD_CONFIRMATION' | common}}*</label>
+                <div class="col-sm-9">
+                    <input id="cpassword" type="password" required="" name="cpassword" class="form-control" data-ng-model="cpassword">
+                </div>
+            </div>
+            [#--
+             # Aceita termos de uso?
+             #--]
+            <div class="row">
+                <div class="col-md-8">
+                    <p><input type="checkbox" name="licenseAccepted" data-ng-model="checked"> {{'_ACCEPTED_TERMS_OF_USE'|common}}</p>
+                </div>
+                <div class="col-md-4">
+                    <a target="_new" class="pull-right" data-ng-href="/information/license/" href="/information/license/">{{'_SEE_TERMS_OF_USE'|common}}</a>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer text-center">
+            <button type="submit" class="btn btn-primary" data-ng-disabled="cannotChangePassword || (!domain && !cnpjOk)">Prosseguir como usuário e aguardar confirmação.</button>
+        </div>
+    </div>
+</form>

@@ -1,7 +1,8 @@
 package org.helianto.core.service
 
+import org.helianto.UnitSpec
 import org.helianto.core.domain.Entity
-import org.helianto.core.repository.EntityRepository
+import org.helianto.core.repository.{EntityRepository, IdentityRepository}
 
 /**
   * Each entity must refer to a city and have a manager identity
@@ -10,7 +11,7 @@ class EntitySaveOrUpdateTests extends UnitSpec {
 
   import org.mockito.Mockito._
 
-  val service = new EntityInstallService(mock[EntityRepository]) {
+  val service = new EntityInstallService(mock[EntityRepository], mock[IdentityRepository]) {
     override val contextName: String = "CONTEXT"
   }
 

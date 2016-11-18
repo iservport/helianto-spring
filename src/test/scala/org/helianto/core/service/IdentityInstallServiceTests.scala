@@ -1,5 +1,6 @@
 package org.helianto.core.service
 
+import org.helianto.UnitSpec
 import org.helianto.core.domain.{Entity, Identity}
 import org.helianto.core.repository.IdentityRepository
 
@@ -11,7 +12,7 @@ class IdentityInstallServiceTests extends UnitSpec {
   import org.mockito.Mockito._
 
   "An identity command" should "should be saved as an identity" in {
-    val service = new  IdentityInstallService(mock[IdentityRepository])
+    val service = new  IdentityService(mock[IdentityRepository])
     val c = new Identity
     val t = new Identity
     when(service.targetRepository.findByPrincipal("principal"))

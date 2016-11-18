@@ -66,10 +66,23 @@ public class PersonalData implements Serializable {
      * @param lastName
      */
     public PersonalData(String firstName, String lastName) {
-        setFirstName(firstName);
-        setLastName(lastName);
+        this();
+        this.firstName = firstName;
+        this.lastName = lastName;
     }
-    
+
+    /**
+     * Name and image constructor.
+     *
+     * @param firstName
+     * @param lastName
+     * @param imageUrl
+     */
+    public PersonalData(String firstName, String lastName, String imageUrl) {
+        this(firstName, lastName);
+        this.imageUrl = imageUrl;
+    }
+
     /**
      * Convenience constructor.
      * 
@@ -82,11 +95,10 @@ public class PersonalData implements Serializable {
      */
     public PersonalData(String firstName, String lastName, char gender,
 			char appellation, Date birthDate, String imageUrl) {
-		this(firstName, lastName);
+		this(firstName, lastName, imageUrl);
 		this.gender = gender;
 		this.appellation = appellation;
 		this.birthDate = birthDate;
-		this.imageUrl = imageUrl;
 	}
 
 	/**

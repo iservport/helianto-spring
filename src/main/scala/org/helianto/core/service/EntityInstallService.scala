@@ -1,15 +1,14 @@
 package org.helianto.core.service
 
 import org.helianto.core.domain.{Entity, Identity}
-import org.helianto.core.repository.EntityRepository
+import org.helianto.core.repository.{EntityRepository, IdentityRepository}
 import org.helianto.core.utils.CommandMixin
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
-import org.springframework.context.annotation.Lazy
 import org.springframework.stereotype.Service
 
 @Service
-class EntityInstallService(val targetRepository: EntityRepository) extends CommandMixin[Entity]{
+class EntityInstallService(val targetRepository: EntityRepository, val identityRepository: IdentityRepository) extends CommandMixin[Entity]{
 
   val logger = LoggerFactory.getLogger(classOf[EntityInstallService])
 
@@ -19,8 +18,17 @@ class EntityInstallService(val targetRepository: EntityRepository) extends Comma
   @Autowired(required = false)
   val postInstaller: EntityPostInstallService = null
 
+  def findOption(alias: String) = Option(targetRepository.findByContextNameAndAliasIgnoreCase(contextName, alias))
+
+  def install(cityCode: String, alias: String, principal: String): Entity = {
+    Option(identityRepository.findByPrincipal(principal)) match {
+      case Some(identity) => install(cityCode, alias, identity)
+      case None => throw new IllegalArgumentException
+    }
+  }
+
   def install(cityCode: String, alias: String, identity: Identity): Entity = {
-    val entity = Option(targetRepository.findByContextNameAndAliasIgnoreCase(contextName, alias)) match {
+    val entity = findOption(alias) match {
       case Some(e) => e.verify(contextName)
       case None => {
         logger.info(s"Installing entity: $contextName/$alias")

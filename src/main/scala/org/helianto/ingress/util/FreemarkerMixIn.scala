@@ -1,4 +1,4 @@
-package org.helianto.ingress.controller
+package org.helianto.ingress.util
 
 import java.security.Principal
 import java.util.Locale

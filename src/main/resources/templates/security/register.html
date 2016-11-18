@@ -1,0 +1,63 @@
+[#ftl]
+<div class="container" data-ng-cloak >
+    <div class="heading">
+        <h3 align="middle">{{'PASSWORD_UPDATE' | i18n}}</h3>
+    </div>
+
+    [#if userExists??]
+    <div class="alert alert-danger" role="alert">
+        <p>{{'OK_TO_CHANGE_PASSWORD'}}</p>
+    </div>
+    [/#if]
+
+    [#if recoverFail?? && recoverFail="true" ]
+    <div class="alert alert-danger" role="alert">
+        <p>{{'FAILED_TO_CHANGE_PASSWORD'}}</p>
+    </div>
+    [/#if]
+
+    [#if recoverFail?? && recoverFail="false"]
+    <div class="alert alert-success" role="alert">
+        <p>{{'OK_TO_CHANGE_PASSWORD'}}</p>
+    </div>
+    [/#if]
+
+    [#if recoverFailMsg?? ]
+    <div class="alert alert-warning" role="alert">
+        <@spring.message "${recoverFailMsg}" />
+    </div>
+    [/#if]
+
+    <div class="row">
+        <div class="col-sm-12">
+            <h5 class="text-center">Obrigado pela sua solicitação, <strong>${form.firstName} ${form.lastName}</strong>.</h5>
+            <p>Agora você pode completar seu registro seguindo apenas uma das opções abaixo. Escolha cuidadosamente
+                a que mais se adaptar às suas necessidades. Qualquer que seja sua escolha, você precisará identificar sua
+                organização através do domínio internet (ex. dominio.com.br) ou pelo CNPJ.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6">
+            <h4>Prosseguir como usuário</h4>
+            <p>Desejo completar meu registro como usuário de <b>um negócio já existente</b> (e já cadastrado aqui). Meus dados serão enviados
+                para o administrador e aguardarei confirmação por e-mail de meu cadastro. Nenhuma nova entidade será criada
+                na base de dados deste serviço.</b>
+        </div>
+        <div class="col-md-6">
+            <h4>Prosseguir como proprietário</h4>
+            <p>Desejo completar meu registro como proprietário de um negócio, para o qual serei cadastrado como administrador.
+                Estou ciente de que terei a autoridade e responsabilidade requeridas para gerenciar o acesso de outros usuários.
+                Uma nova entidade será criada na base de dados deste serviço.</p>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 col-sm-12">
+            [#include "/security/register-user.html" /]
+        </div>
+        <div class="col-md-6 col-sm-12">
+            [#include "/security/register-owner.html" /]
+        </div>
+    </div>
+
+
+</div>

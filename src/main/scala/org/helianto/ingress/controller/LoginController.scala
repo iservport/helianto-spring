@@ -20,12 +20,11 @@ class LoginController(responseService:ResponseService) {
   /**
     * Login page.
     *
-    * @param model model
-    * @param locale locale
+    * @param model model injetado automaticamente pelo container para receber o modelo
+    * @param locale locale injetado automaticamente pelo container para identificar a localização
     */
   @GetMapping
   def getSignInPage(model: Model, locale: Locale) = {
-    model.addAttribute("titlePage", "Login")
     responseService.loginResponse(model, locale)
   }
 
@@ -36,13 +35,9 @@ class LoginController(responseService:ResponseService) {
     * @param error error parameter
     * @param locale locale
     */
-  @RequestMapping(params = Array("error"), method = Array(RequestMethod.GET))
+  @GetMapping(params = Array("error"))
   def showLoginErrorParam(model: Model, @RequestParam error: String, locale: Locale) = {
-    model.addAttribute("error", error)
-    val user: User = new User
-    user.setAccountNonExpired(false)
-    model.addAttribute("user", user)
-    responseService.loginResponse(model, locale)
+    responseService.loginErrorResponse(model, locale, error)
   }
 
   /**
@@ -52,13 +47,9 @@ class LoginController(responseService:ResponseService) {
     * @param type   error type
     * @param locale locale
     */
-  @RequestMapping(value = Array("/error"), method = Array(RequestMethod.GET))
+  @GetMapping(value = Array("/error"))
   def showLoginErrorPath(model: Model, @RequestParam `type`: String, locale: Locale) = {
-    model.addAttribute("error", true)
-    val user: User = new User
-    user.setAccountNonExpired(false)
-    model.addAttribute("user", user)
-    responseService.loginResponse(model, locale)
+    responseService.loginErrorResponse(model, locale, `type`)
   }
 
 }

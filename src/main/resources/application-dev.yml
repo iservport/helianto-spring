@@ -1,0 +1,55 @@
+# Server
+server:
+  port: 8081
+
+helianto:
+  api:
+    url: http://localhost:8081
+  mailer:
+    url: http://localhost:8082
+    entityName: helianto.org
+    service:
+      serviceType: echo_mailer
+      serviceName: sendConfirmation
+      user: iservport
+      password: NONE
+    senderEmail: noreply@helianto.org
+    senderFullName: Maurício Fernandes de Castro
+  sms:
+    url: https://api.evoline.com.br/
+    accessToken: 67e750120e59192b118c81ea78a7d3d0
+    service:
+      serviceType: sms
+      serviceName: sms
+      user: iservport
+      password: NONE
+
+spring:
+# DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
+  datasource:
+    driver-class-name: com.mysql.jdbc.Driver
+    hikari:
+      maximum-pool-size: 3
+      connection-timeout: 10
+    name: helianto
+    password: helianto
+    test-on-borrow: true
+    test-on-return: false
+    test-while-idle: true
+    time-between-eviction-runs-millis: 5000
+    url: jdbc:mysql://192.168.10.5:3306/helianto01?autoreconnect=true
+    username: helianto
+    validation-query: SELECT 1
+# Spring Data JPA
+  jpa:
+    repositories:
+      enabled: true
+    database-platform: org.hibernate.dialect.MySQL5Dialect
+    generate-ddl: true
+    hibernate:
+      ddl-auto: update
+      naming-strategy: org.hibernate.cfg.DefaultNamingStrategy
+    show-sql: false
+# Json
+  jackson:
+    serialization-inclusion: non_null

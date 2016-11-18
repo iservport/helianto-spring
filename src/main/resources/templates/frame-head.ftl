@@ -10,6 +10,7 @@
 		<link rel='stylesheet' href="/webjars/fontawesome/4.6.3/css/font-awesome.css">
 
 		<link rel='stylesheet' href="/css/select.min.css">
+		<link rel='stylesheet' href="/css/bootstrap-social.css">
 
 		<script type="text/javascript" src="/webjars/jquery/2.2.4/dist/jquery.min.js"></script>
 	    

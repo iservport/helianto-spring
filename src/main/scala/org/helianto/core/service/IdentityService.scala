@@ -8,19 +8,21 @@ import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
 @Service
-class IdentityInstallService (val targetRepository: IdentityRepository) extends CommandMixin[Identity] with IdentityInstaller {
+class IdentityService(val targetRepository: IdentityRepository) extends CommandMixin[Identity] with IdentityInstaller {
 
-  val logger = LoggerFactory.getLogger(classOf[IdentityInstallService])
+  val logger = LoggerFactory.getLogger(classOf[IdentityService])
 
   @Autowired(required = false)
   val postInstaller: IdentityPostInstallService = null
+
+  def findOption(principal: String):Option[Identity] = Option(targetRepository.findByPrincipal(principal))
 
   def install(root: IdentityData): Identity = {
     install(root.getPrincipal, root.getDisplayName, root.getPersonalData)
   }
 
   def install(principal: String, displayName: String, personalData: PersonalData): Identity = {
-    val identity = Option(targetRepository.findByPrincipal(principal)) match {
+    val identity = findOption(principal) match {
       case Some (i) => i
       case _ =>
         logger.info(s"Installing identity: $displayName <$principal>")

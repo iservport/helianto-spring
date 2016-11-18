@@ -1,6 +1,6 @@
-package org.helianto.user.repository
+package org.helianto.ingress.repository
 
-import org.helianto.user.domain.UserToken
+import org.helianto.ingress.domain.UserToken
 import org.springframework.data.jpa.repository.JpaRepository
 
 trait UserTokenRepository extends JpaRepository[UserToken, Integer] {

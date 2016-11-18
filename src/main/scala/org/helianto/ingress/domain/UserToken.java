@@ -1,20 +1,13 @@
-package org.helianto.user.domain;
+package org.helianto.ingress.domain;
 
+import org.helianto.core.domain.IdentityData;
+import org.helianto.core.domain.PersonalData;
+import org.hibernate.validator.constraints.NotEmpty;
+
+import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.UUID;
-
-import javax.persistence.Column;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
-import javax.persistence.UniqueConstraint;
-import javax.persistence.Version;
-
-import org.hibernate.validator.constraints.NotEmpty;
 
 /**
  * Simple token registration.
@@ -26,7 +19,7 @@ import org.hibernate.validator.constraints.NotEmpty;
 	uniqueConstraints = {@UniqueConstraint(columnNames={"tokenSource","principal"}),@UniqueConstraint(columnNames={"token"})}
 )
 public class UserToken 
-	implements Serializable
+	implements Serializable, IdentityData
 {
 
 	private static final long serialVersionUID = 1L;
@@ -128,6 +121,17 @@ public class UserToken
 	public String getPrincipal() {
 		return principal;
 	}
+
+	@Override
+	public String getDisplayName() {
+		return this.firstName;
+	}
+
+	@Override
+	public PersonalData getPersonalData() {
+		return new PersonalData(this.firstName, this.lastName);
+	}
+
 	public void setPrincipal(String principal) {
 		this.principal = principal;
 	}

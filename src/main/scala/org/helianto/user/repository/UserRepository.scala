@@ -7,6 +7,8 @@ import org.springframework.data.jpa.repository.{JpaRepository, Query}
 
 trait UserRepository extends JpaRepository[User, String] {
 
+  def findById(userId: String): UserProjection
+
   def findByEntityIdAndUserKey(entityId: String, userKey: String): User
 
   def findByEntityIdAndIdentity_Id(entityId: String, identityId: Int): User

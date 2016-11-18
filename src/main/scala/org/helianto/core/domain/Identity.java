@@ -51,10 +51,10 @@ public class Identity implements IdentityData, Mergeable<Identity> {
     
     @Column(length=64)
 	private String displayName = "";
-	
+
     @Column(length=40)
     private String principal = "";
-    
+
     @Column(length=40)
     private String email = "";
     
@@ -178,7 +178,7 @@ public class Identity implements IdentityData, Mergeable<Identity> {
     	}
         return "";
     }
-    
+
     /**
      * Actual e-mail, if the principal is used only to identify the person.
      */

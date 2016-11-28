@@ -53,3 +53,10 @@ spring:
 # Json
   jackson:
     serialization-inclusion: non_null
+
+# Logging
+logging:
+  level:
+    org.helianto: INFO
+    org.helianto.core: DEBUG
+    org.helianto.message: DEBUG

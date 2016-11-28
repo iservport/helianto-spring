@@ -3,7 +3,7 @@ package org.helianto.ingress.controller
 import javax.servlet.http.HttpServletRequest
 import javax.validation.Valid
 
-import org.helianto.ingress.domain.UserToken
+import org.helianto.ingress.domain.{Registration, UserToken}
 import org.helianto.ingress.service.{ResponseService, SignupService}
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -54,7 +54,7 @@ class SignupController(signUpService:SignupService, responseService:ResponseServ
     * @param request
     */
   @PostMapping
-  def submitSignupPage(model: Model, @Valid command: UserToken, error: BindingResult, request: HttpServletRequest): String =
+  def submitSignupPage(model: Model, @Valid command: Registration, error: BindingResult, request: WebRequest): String =
     signUpService.submitSignupPage(command, request, model)
 
 }

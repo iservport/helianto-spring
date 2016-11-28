@@ -139,7 +139,7 @@ public class User implements Comparable<User>{
     }
 
     /**
-     * True if user state is active.
+     * True if user command is active.
      */
     public boolean isAccountNonLocked() {
         if (getUserState().equals(ActivityState.ACTIVE)) {

@@ -3,9 +3,12 @@ package org.helianto.ingress.util
 import java.security.Principal
 import java.util.Locale
 
+import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.ui.Model
 
 trait FreemarkerMixIn {
+
+  val logger: Logger = LoggerFactory.getLogger(classOf[FreemarkerMixIn])
 
   /**
     * Default response.
@@ -26,6 +29,7 @@ trait FreemarkerMixIn {
     * Default template name.
     */
   protected def getTemplateName(baseName: String, model: Model) = {
+    logger.info(s"Rendering frame-bootstrap with baseName $baseName.")
     "frame-bootstrap"
   }
 

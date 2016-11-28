@@ -48,16 +48,16 @@ trait EntityProjection {
   @Value("#{target.city.cityName}")
   def getCityName(): String
 
-  @Value("#{target.city.state.id}")
+  @Value("#{target.city.command.id}")
   def getStateId(): Int
 
-  @Value("#{target.city.state.stateCode}")
+  @Value("#{target.city.command.stateCode}")
   def getStateCode(): String
 
-  @Value("#{target.city.state.stateName}")
+  @Value("#{target.city.command.stateName}")
   def getStateName(): String
 
-  @Value("#{target.city.state.country.id}")
+  @Value("#{target.city.command.country.id}")
   def getCountryId(): Int
 
 }

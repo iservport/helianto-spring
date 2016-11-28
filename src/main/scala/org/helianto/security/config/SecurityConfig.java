@@ -5,6 +5,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.core.annotation.Order;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
@@ -12,13 +13,12 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
+import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
-import org.springframework.security.oauth2.config.annotation.web.configuration.EnableOAuth2Client;
+import org.springframework.security.oauth2.config.annotation.web.configuration.*;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
@@ -47,6 +47,7 @@ import java.util.Arrays;
 @EnableWebSecurity
 @EnableOAuth2Client
 @EnableGlobalMethodSecurity(prePostEnabled=true)
+@Order(6)
 public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     public static int REMEMBER_ME_DEFAULT_DURATION = 14*24*60*60; // duas semanas
@@ -57,41 +58,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Autowired
     private UserDetailsService userDetailsService;
 
-    @Override
-    protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-            //Configures url based authorization
-            .antMatchers("/", "/oauth/**").permitAll()
-            //Form login
-            .and()
-                .formLogin()
-                .loginPage("/login").permitAll()
-                .failureUrl("/login?error=bad_credentials")
-                .defaultSuccessUrl("/", false)
-            //Secure channel
-//            .and()
-//                .requiresChannel().anyRequest().requiresSecure()
-            //Csrf
-            .and()
-                .addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
-                .csrf().csrfTokenRepository(csrfTokenRepository())
-                .ignoringAntMatchers("/app/content/upload", "/login/**", "/oauth/**")
-            //Remember me
-            .and()
-                .rememberMe().tokenRepository(persistentTokenRepository())
-                .tokenValiditySeconds(REMEMBER_ME_DEFAULT_DURATION)
-            //Form logout
-            .and()
-                .logout()
-                .deleteCookies("JSESSIONID")
-                .deleteCookies("remember-me")
-                .deleteCookies("X-XSRF-TOKEN")
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-        ;
-
-    }
-
+    /**
+     * Authorization server
+     */
     @Configuration
     @EnableAuthorizationServer
     protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
@@ -165,6 +134,52 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                     .scopes("read", "write")
                     .secret("secret");
         }
+
+    }
+
+    /**
+     * Resource server
+     */
+    @Configuration
+    @EnableResourceServer
+    static class ResourceServer extends ResourceServerConfigurerAdapter {
+
+        @Override
+        public void configure(HttpSecurity http) throws Exception {
+            // @formatter:off
+            http.antMatcher("/api/**")
+                    .authorizeRequests().anyRequest().permitAll() // access("#oauth2.hasScope('write')")
+                .and().sessionManagement()
+                    .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
+                .and().csrf().disable()
+            ;
+            // @formatter:on
+        }
+
+    }
+
+    @Override
+    protected void configure(HttpSecurity http) throws Exception {
+        http.authorizeRequests()
+                .antMatchers("/oauth/**").authenticated()
+                .anyRequest().permitAll()
+            .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+                .csrf().csrfTokenRepository(csrfTokenRepository())
+                .ignoringAntMatchers("/app/content/upload", "/login/**", "/oauth/**")
+            .and().rememberMe()
+                .tokenRepository(persistentTokenRepository())
+                .tokenValiditySeconds(REMEMBER_ME_DEFAULT_DURATION)
+            .and().formLogin()
+                .loginPage("/login").permitAll()
+                .failureUrl("/login?error=bad_credentials")
+                .defaultSuccessUrl("/", false)
+            .and().logout()
+                .deleteCookies("JSESSIONID")
+                .deleteCookies("remember-me")
+                .deleteCookies("X-XSRF-TOKEN")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+        ;
 
     }
 

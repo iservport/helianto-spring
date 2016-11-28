@@ -17,6 +17,7 @@ package org.helianto.core.domain;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Optional;
 import java.util.UUID;
 
 
@@ -198,6 +199,16 @@ public class City
 
     public void setPriority(char priority) {
         this.priority = priority;
+    }
+
+    public City validateAll() {
+        if (Optional.ofNullable(this.contextName).orElse("").isEmpty()
+                || Optional.ofNullable(this.stateCode).orElse("").isEmpty()
+                || Optional.ofNullable(this.cityCode).orElse("").isEmpty()
+                || Optional.ofNullable(this.cityName).orElse("").isEmpty()) {
+            throw new IllegalArgumentException();
+        }
+        return this;
     }
 
     public boolean equals(Object o) {

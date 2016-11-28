@@ -59,7 +59,7 @@ import java.util.UUID;
 @javax.persistence.Entity
 @Table(name="core_entity",
     uniqueConstraints = {@UniqueConstraint(columnNames={"contextName", "alias"})
-			,@UniqueConstraint(columnNames={"contextName", "stateCode", "cityCode", "alias"})}
+			,@UniqueConstraint(columnNames={"cityId", "alias"})}
 )
 @Inheritance(strategy = InheritanceType.SINGLE_TABLE)
 @DiscriminatorColumn(
@@ -112,8 +112,8 @@ public class Entity implements Mergeable<Entity>
     @Column(length=12)
     private String stateCode = "";
 
-    @Column(length=12)
-    private String cityCode = "";
+    @Column(length=32)
+    private String cityId = "";
 
     @Column(length=1024)
 	private String entityDesc = "";
@@ -134,13 +134,13 @@ public class Entity implements Mergeable<Entity>
      * 
      * @param contextName
      * @param alias
-     * @param cityCode
+     * @param cityId
      */
-    public Entity(String contextName, String alias, String cityCode) {
+    public Entity(String contextName, String alias, String cityId) {
     	this();
         setContextName(Objects.requireNonNull(contextName));
         setAlias(Objects.requireNonNull(alias));
-        setCityCode(Objects.requireNonNull(cityCode));
+        setCityId(Objects.requireNonNull(cityId));
     }
     
  	/**
@@ -158,7 +158,7 @@ public class Entity implements Mergeable<Entity>
 		setActivityState(command.getActivityState());
 		setEntityName(command.getEntityName());
 		setEntityDomain(command.getEntityDomain());
-        setCityCode(command.getCityCode());
+        setCityId(command.getCityId());
         setEntityDesc(command.getEntityDesc());
         setLocale(command.getLocale());
 		return this;
@@ -217,9 +217,9 @@ public class Entity implements Mergeable<Entity>
         final Object other$entityDomain = other.getEntityDomain();
         if (this$entityDomain == null ? other$entityDomain != null : !this$entityDomain.equals(other$entityDomain))
             return false;
-        final Object this$cityCode = this.getCityCode();
-        final Object other$cityCode = other.getCityCode();
-        if (this$cityCode == null ? other$cityCode != null : !this$cityCode.equals(other$cityCode)) return false;
+        final Object this$cityId = this.getCityId();
+        final Object other$cityId = other.getCityId();
+        if (this$cityId == null ? other$cityId != null : !this$cityId.equals(other$cityId)) return false;
         final Object this$entityDesc = this.getEntityDesc();
         final Object other$entityDesc = other.getEntityDesc();
         if (this$entityDesc == null ? other$entityDesc != null : !this$entityDesc.equals(other$entityDesc))
@@ -256,8 +256,8 @@ public class Entity implements Mergeable<Entity>
         result = result * PRIME + ($entityName == null ? 0 : $entityName.hashCode());
         final Object $entityDomain = this.getEntityDomain();
         result = result * PRIME + ($entityDomain == null ? 0 : $entityDomain.hashCode());
-        final Object $cityCode = this.getCityCode();
-        result = result * PRIME + ($cityCode == null ? 0 : $cityCode.hashCode());
+        final Object $cityId = this.getCityId();
+        result = result * PRIME + ($cityId == null ? 0 : $cityId.hashCode());
         final Object $entityDesc = this.getEntityDesc();
         result = result * PRIME + ($entityDesc == null ? 0 : $entityDesc.hashCode());
         final Object $locale = this.getLocale();
@@ -270,7 +270,7 @@ public class Entity implements Mergeable<Entity>
     }
 
     public String toString() {
-        return "org.helianto.core.domain.Entity(id=" + this.getId() + ", version=" + this.getVersion() + ", contextName=" + this.getContextName() + ", alias=" + this.getAlias() + ", entityCode=" + this.getEntityCode() + ", installDate=" + this.getInstallDate() + ", entityType=" + this.getEntityType() + ", nature=" + this.getNature() + ", customStyle=" + this.getCustomStyle() + ", externalLogoUrl=" + this.getExternalLogoUrl() + ", activityState=" + this.getActivityState() + ", entityName=" + this.getEntityName() + ", entityDomain=" + this.getEntityDomain() + ", cityCode=" + this.getCityCode() + ", entityDesc=" + this.getEntityDesc() + ", locale=" + this.getLocale() + ")";
+        return "org.helianto.core.domain.Entity(id=" + this.getId() + ", version=" + this.getVersion() + ", contextName=" + this.getContextName() + ", alias=" + this.getAlias() + ", entityCode=" + this.getEntityCode() + ", installDate=" + this.getInstallDate() + ", entityType=" + this.getEntityType() + ", nature=" + this.getNature() + ", customStyle=" + this.getCustomStyle() + ", externalLogoUrl=" + this.getExternalLogoUrl() + ", activityState=" + this.getActivityState() + ", entityName=" + this.getEntityName() + ", entityDomain=" + this.getEntityDomain() + ", cityId=" + this.getCityId() + ", entityDesc=" + this.getEntityDesc() + ", locale=" + this.getLocale() + ")";
     }
 
     public String getId() {
@@ -329,8 +329,8 @@ public class Entity implements Mergeable<Entity>
         return this.stateCode;
     }
 
-    public String getCityCode() {
-        return this.cityCode;
+    public String getCityId() {
+        return this.cityId;
     }
 
     public String getEntityDesc() {
@@ -397,8 +397,8 @@ public class Entity implements Mergeable<Entity>
         this.stateCode = stateCode;
     }
 
-    public void setCityCode(String cityCode) {
-        this.cityCode = cityCode;
+    public void setCityId(String cityId) {
+        this.cityId = cityId;
     }
 
     public void setEntityDesc(String entityDesc) {

@@ -148,28 +148,6 @@ angular.module('app.services')
         return result;
     };
 
-    /**
-     * Get states.
-     */
-    $rootScope.getStates = function(){
-        $rootScope.locationResource.query({path: 'state'}).$promise.then(function(data){
-            $rootScope.states = data;
-            if(data.length>0){
-                $rootScope.stateId = data[0].id;
-                $rootScope.getCities($rootScope.stateId);
-            }
-        })
-    };
-
-    /**
-     * Get cities.
-     */
-    $rootScope.getCities = function(val){
-        $rootScope.locationResource.query({path: 'city', stateId:val}).$promise.then(function(data){
-            $rootScope.cities = data;
-        })
-    };
-
     $rootScope.openForm = function(url){
         $rootScope.message =[];
         $rootScope.formUrl = url;

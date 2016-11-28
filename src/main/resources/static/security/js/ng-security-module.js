@@ -19,9 +19,58 @@
 	.controller('LoginController', ['$scope', '$window', '$http', '$resource', 'resources' , 'genericServices'
     	                                  , function($scope, $window, $http, $resource, resources, genericServices) {
     }])
+	.controller('SignupController', ['$scope', function($scope)
+	{
+    	var self = this;
+	    console.log("SignupController is active");
+	    self.adminValue = false;
+    }])
+	.controller('RegisterController', ['$scope', '$http', function($scope, $http)
+	{
+    	var self = this;
+	    console.log("RegisterController is active");
+        /**
+         * Get states.
+         */
+        $scope.getStates = function(initState){
+	        console.log("Getting states...");
+	        $scope.registration.stateCode=initState;
+            $http.get('/api/context/state')
+            .success(function(data) {
+                $scope.states = data;
+                console.log("Found "+data.length);
+                $scope.getCities(initState);
+            })
+        }
+        /**
+         * Get cities.
+         */
+        $scope.getCities = function(stateCode){
+            $http.get('/api/context/city/'+stateCode)
+            .success(function(data){
+                $scope.cities = data;
+            })
+        }
+        /**
+         * Confirm password
+         */
+        $scope.passwordConfirmed = true;
+        $scope.passwordStrong = true;
+        $scope.$watch('[password,cpassword]', function () {
+            if(angular.isUndefined($scope.password) || $scope.password==null) {
+                $scope.passwordStrong    = false;
+                $scope.passwordConfirmed = false;
+            }
+            else {
+                $scope.passwordStrong    = ($scope.password.length > 5);
+                $scope.passwordConfirmed = ($scope.password === $scope.cpassword);
+            }
+        }, true);
+
+    }])
 	.controller('SecurityController', ['$scope', '$window', '$http', '$resource', 'resources' , 'genericServices'
 	                                  , function($scope, $window, $http, $resource, resources, genericServices) {
-	
+
 		$scope.baseName = "home";
 		
 		$scope.cannotChangePassword = true;
@@ -148,42 +197,38 @@
 				$scope.cities = data;
 			})
 		};
-		
+
 //		$scope.getStates();
 
 
-		$scope.cnpjOk=false;
-        $scope.valideCNPJ = function(value){
-            $scope.cnpjOk=validarCNPJ(value);
-        };
+		$scope.validPun=false;
+        $scope.valideCNPJ = function(pun){
 
-        function validarCNPJ(cnpj) {
-            if(cnpj == null || cnpj == 'undefined' || cnpj == '') return false;
-            cnpj = cnpj.replace(/[^\d]+/g,'');
+            if(pun == null || pun == 'undefined' || pun == '') return false;
+            pun = pun.replace(/[^\d]+/g,'');
+            if (pun.length != 14) return false;
 
-            if (cnpj.length != 14) return false;
-
-            // Elimina CNPJs invalidos conhecidos
-            if (cnpj == "00000000000000" ||
-                cnpj == "11111111111111" ||
-                cnpj == "22222222222222" ||
-                cnpj == "33333333333333" ||
-                cnpj == "44444444444444" ||
-                cnpj == "55555555555555" ||
-                cnpj == "66666666666666" ||
-                cnpj == "77777777777777" ||
-                cnpj == "88888888888888" ||
-                cnpj == "99999999999999")
+            // known as invalid
+            if (pun == "00000000000000" ||
+                pun == "11111111111111" ||
+                pun == "22222222222222" ||
+                pun == "33333333333333" ||
+                pun == "44444444444444" ||
+                pun == "55555555555555" ||
+                pun == "66666666666666" ||
+                pun == "77777777777777" ||
+                pun == "88888888888888" ||
+                pun == "99999999999999")
                 return false;
 
-            // Valida DVs
-            tamanho = cnpj.length - 2
-            numeros = cnpj.substring(0,tamanho);
-            digitos = cnpj.substring(tamanho);
+            // Validate digits
+            netSize = pun.length - 2
+            numeros = pun.substring(0,netSize);
+            digitos = pun.substring(netSize);
             soma = 0;
-            pos = tamanho - 7;
-            for (i = tamanho; i >= 1; i--) {
-              soma += numeros.charAt(tamanho - i) * pos--;
+            pos = netSize - 7;
+            for (i = netSize; i >= 1; i--) {
+              soma += numeros.charAt(netSize - i) * pos--;
               if (pos < 2)
                     pos = 9;
             }
@@ -191,12 +236,12 @@
             if (resultado != digitos.charAt(0))
                 return false;
 
-            tamanho = tamanho + 1;
-            numeros = cnpj.substring(0,tamanho);
+            netSize = netSize + 1;
+            numeros = pun.substring(0,netSize);
             soma = 0;
-            pos = tamanho - 7;
-            for (i = tamanho; i >= 1; i--) {
-              soma += numeros.charAt(tamanho - i) * pos--;
+            pos = netSize - 7;
+            for (i = netSize; i >= 1; i--) {
+              soma += numeros.charAt(netSize - i) * pos--;
               if (pos < 2)
                     pos = 9;
             }

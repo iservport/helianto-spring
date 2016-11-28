@@ -70,15 +70,16 @@ public class SocialConfig implements SocialConfigurer {
      * Sign in configuration.
      */
     @Configuration
-//    @ConditionalOnProperty(prefix = "spring", name = "social")
-//    @ConditionalOnBean({ConnectionFactoryLocator.class, UsersConnectionRepository.class})
+    @ConditionalOnProperty(prefix = "spring.social", name = "enable", havingValue = "true")
     static class ProviderSignInConfigurer  {
 
         @Inject
         private UserSignInService userSignInService;
 
         /**
-         * A controller to ccordinate the OAuth dance and sign-in the remote user locally.
+         * A controller to coordinate the OAuth dance and sign-in the remote user locally.
+         *
+         * if the user is not registered, will redirect to signup
          *
          * @param connectionFactoryLocator
          * @param usersConnectionRepository

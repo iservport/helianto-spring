@@ -1,0 +1,9 @@
+[#ftl]
+[#--
+ # CSRF
+ #--]
+[#if _csrf??]<input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />[/#if]
+[#--
+ # Error
+ #--]
+[#if error?? ]<div class="alert alert-danger" role="alert"><i class="fa fa-lock"></i> ${msg("error."+error)}</div>[/#if]

@@ -7,7 +7,7 @@ import org.helianto.core.service.IdentityService
 import org.helianto.ingress.domain.UserToken
 import org.helianto.ingress.repository.UserTokenRepository
 import org.slf4j.{Logger, LoggerFactory}
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Service
 
 /**
@@ -19,6 +19,8 @@ import org.springframework.stereotype.Service
 class UserTokenService {
 
   val logger: Logger = LoggerFactory.getLogger(classOf[UserTokenService])
+
+  @Value("${helianto.user-token-validity:5}") val userTokenValidity = 5
 
   @Autowired val identityService: IdentityService = null
 
@@ -61,14 +63,18 @@ class UserTokenService {
     * @param confirmationToken
     */
   def getIdentityOption(confirmationToken: String): Option[Identity] = {
-    Option(userTokenRepository.findByToken(confirmationToken)) match {
+    getUserTokenOption(confirmationToken, 0) match {
       case Some(userToken) => identityService.findOption(userToken.getPrincipal)
       case None => None
     }
   }
 
-  // TODO
-  def findPreviousSignupAttempts(token: String, attempts: Int): Identity = ???
+  // TODO consider attempts
+  def getUserTokenOption(confirmationToken: String, attempts: Int): Option[UserToken] =
+  Option(userTokenRepository.findByToken(confirmationToken)) match {
+    case Some(userToken) if userToken.isValidTo(userTokenValidity)=> Some(userToken)
+    case _ => None
+  }
 
   // TODO
   def identityExists(principal: String): Boolean = ???
@@ -89,12 +95,12 @@ class UserTokenService {
         logger.info("New identity {} created", command.getPrincipal)
         identityService.install(command)
     }
-    Option(userTokenRepository.findByTokenSourceAndPrincipal(UserToken.TokenSources.SIGNUP.name(), identity.getPrincipal)) match {
+    Option(userTokenRepository.findByTokenSourceAndPrincipal("SIGNUP", identity.getPrincipal)) match {
       case Some(userToken) => userToken
       case None =>
         logger.info("New userToken for {} created", command.getPrincipal)
         userTokenRepository.saveAndFlush(
-          new UserToken(UserToken.TokenSources.SIGNUP, command.getPrincipal).appendFirstName(command.getFirstName))
+          new UserToken("SIGNUP", command.getPrincipal).appendFirstName(command.getFirstName))
     }
   }
 

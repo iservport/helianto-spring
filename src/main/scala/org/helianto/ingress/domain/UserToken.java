@@ -18,7 +18,7 @@ import java.util.UUID;
 @Table(name="core_token",
 	uniqueConstraints = {@UniqueConstraint(columnNames={"tokenSource","principal"}),@UniqueConstraint(columnNames={"token"})}
 )
-public class UserToken 
+public class UserToken extends AbstractRegistration
 	implements Serializable, IdentityData
 {
 
@@ -49,12 +49,6 @@ public class UserToken
 	@Column(length=128)
 	private String lastName = "";
 	
-	@Column(length=64)
-	private String remoteAddress;
-	
-	@Temporal(TemporalType.TIMESTAMP)
-	private Date issueDate;
-	
 	public UserToken() {
 		super();
 		setIssueDate(new Date());
@@ -71,16 +65,6 @@ public class UserToken
 		this();
 		setTokenSource(tokenSource);
 		setPrincipal(principal);
-	}
-	
-	/**
-	 * UUID constructor.
-	 * 
-	 * @param tokenSource
-	 * @param principal
-	 */
-	public UserToken(TokenSources tokenSource, String principal) {
-		this(tokenSource.name(), principal);
 	}
 	
 	public int getId() {
@@ -155,30 +139,11 @@ public class UserToken
 		return this;
 	}
 	
-	public String getRemoteAddress() {
-		return remoteAddress;
-	}
-	public void setRemoteAddress(String remoteAddress) {
-		this.remoteAddress = remoteAddress;
-	}
-	
 	public UserToken appendLastName(String lastName) {
 		this.lastName = lastName;
 		return this;
 	}
 	
-	public Date getIssueDate() {
-		return issueDate;
-	}
-	public void setIssueDate(Date issueDate) {
-		this.issueDate = issueDate;
-	}
-	
-	public static enum TokenSources {
-		SIGNUP,
-		PASSWORD_RECOVERY
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

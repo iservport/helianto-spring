@@ -1,5 +1,6 @@
 package org.helianto.security.service
 
+import org.helianto.core.service.ContextInstallService
 import org.helianto.security.domain.{UserAuthority, UserDetailsAdapter}
 import org.helianto.security.repository.{SecretRepository, UserAuthorityRepository}
 import org.helianto.user.repository.{UserProjection, UserRepository}
@@ -13,6 +14,7 @@ class AbstractDetailsService {
   @Autowired val secretRepository: SecretRepository = null
   @Autowired val userRepository: UserRepository = null
   @Autowired val userAuthorityRepository: UserAuthorityRepository = null
+  @Autowired val contextInstallService: ContextInstallService = null
 
   val logger: Logger = LoggerFactory.getLogger(classOf[AbstractDetailsService])
 
@@ -56,7 +58,15 @@ class AbstractDetailsService {
     updateAuthorities(userDetails)
   }
 
+  /**
+    * As an additional control, if an error occurs during login, the context installation service is invoked.
+    *
+    * @param source
+    *
+    * @throws UsernameNotFoundException
+    */
   private[service] def error(source: String) = {
+    contextInstallService.installDefaultContext()
     logger.error("Unable to load by user name with {}.", source)
     throw new UsernameNotFoundException("Unable to find user name for " + source)
   }

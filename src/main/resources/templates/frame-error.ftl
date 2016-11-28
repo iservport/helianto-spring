@@ -30,6 +30,10 @@
             <div class="col-md-3 offset-md-3"></div>
             <div class="col-md-6 text-center" >
                 <hr>
+                <p>
+                    <a class="text-muted" target="_new" href="/agreement/privacy">${msg("legal.PRIVACY_POLICY")}</a>  |
+                    <a target="_new" class="text-muted" href="/agreement/terms">${msg("legal.TERMS_OF_SERVICE")}</a>
+                </p>
                 <p><small>${copyright!''} | build ${buildNumber!0}</small></p>
             </div>
         </div>

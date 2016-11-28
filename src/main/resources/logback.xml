@@ -16,7 +16,7 @@
   <logger name="org.springframework.transaction" level="OFF"/>
   <logger name="org.springframework.orm" level="OFF"/>
   <logger name="org.springframework.security" level="OFF"/>
-  <logger name="org.springframework.security.authentication.dao" level="DEBUG"/>
+  <logger name="org.springframework.security.authentication.dao" level="OFF"/>
   <logger name="org.springframework.security.access" level="OFF"/>
   <logger name="org.springframework.validation" level="OFF"/>
   <logger name="org.springframework.web" level="OFF"/>
@@ -27,7 +27,7 @@
   <logger name="org.springframework.social" level="DEBUG"/>
   
   <logger name="org.hibernate" level="OFF"/>
-  <logger name="org.hibernate.SQL" level="DEBUG"/>
+  <logger name="org.hibernate.SQL" level="OFF"/>
   <logger name="org.hibernate.jdbc" level="OFF"/>
   <logger name="org.hibernate.jdbc.AbstractBatcher" level="OFF"/>
   <logger name="org.hibernate.impl" level="OFF"/>

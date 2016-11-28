@@ -35,11 +35,13 @@ class RegistrationController(registrationService: RegistrationService) {
     *
     * @param model
     * @param confirmationToken
+    * @param userType
     * @param locale
     */
-  @GetMapping(params = Array("confirmationToken"))
-  def getRegistrationPage(model: Model, @RequestParam confirmationToken: String, locale: Locale) =
-    registrationService.get(confirmationToken, model, locale)
+  @GetMapping(path = Array("/{userType}/{confirmationToken}"))
+  def getAdminRegistrationPage(@PathVariable userType: String, @PathVariable confirmationToken: String
+                               , model: Model, locale: Locale) =
+  registrationService.get(confirmationToken, model, locale, userType)
 
   /**
     * Post the registration before the user atually submits.

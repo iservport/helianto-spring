@@ -19,6 +19,8 @@ public class Message {
 
     private String id = UUID.randomUUID().toString().replaceAll("-", "");
 
+    private String token = "";
+
     private String template = "4853b17b-e5f2-4b8f-b313-7067088fb3c5";
 
     public Message() {
@@ -34,9 +36,13 @@ public class Message {
         this.defaults = defaults;
     }
 
-    public Message(ContactData sender, ContactData recipient, String servicePath, MessageData messageData, MessageDefaults defaults, String id, String template) {
+    public Message(ContactData sender, ContactData recipient, String servicePath, MessageData messageData, MessageDefaults defaults, String token) {
         this(sender, recipient, servicePath, messageData, defaults);
-        this.id = id;
+        this.token = token;
+    }
+
+    public Message(ContactData sender, ContactData recipient, String servicePath, MessageData messageData, MessageDefaults defaults, String token, String template) {
+        this(sender, recipient, servicePath, messageData, defaults, token);
         this.template = template;
     }
 
@@ -62,6 +68,10 @@ public class Message {
 
     public String getId() {
         return this.id;
+    }
+
+    public String getToken() {
+        return token;
     }
 
     public String getTemplate() {
@@ -90,6 +100,10 @@ public class Message {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public void setToken(String token) {
+        this.token = token;
     }
 
     public void setTemplate(String template) {
@@ -121,6 +135,9 @@ public class Message {
         final Object this$id = this.getId();
         final Object other$id = other.getId();
         if (this$id == null ? other$id != null : !this$id.equals(other$id)) return false;
+        final Object this$token = this.getToken();
+        final Object other$token = other.getToken();
+        if (this$token == null ? other$token != null : !this$token.equals(other$token)) return false;
         final Object this$template = this.getTemplate();
         final Object other$template = other.getTemplate();
         if (this$template == null ? other$template != null : !this$template.equals(other$template)) return false;
@@ -142,6 +159,8 @@ public class Message {
         result = result * PRIME + ($defaults == null ? 43 : $defaults.hashCode());
         final Object $id = this.getId();
         result = result * PRIME + ($id == null ? 43 : $id.hashCode());
+        final Object $token = this.getToken();
+        result = result * PRIME + ($token == null ? 43 : $token.hashCode());
         final Object $template = this.getTemplate();
         result = result * PRIME + ($template == null ? 43 : $template.hashCode());
         return result;
@@ -152,6 +171,6 @@ public class Message {
     }
 
     public String toString() {
-        return "org.helianto.message.domain.Message(sender=" + this.getSender() + ", recipient=" + this.getRecipient() + ", servicePath=" + this.getServicePath() + ", messageData=" + this.getMessageData() + ", defaults=" + this.getDefaults() + ", id=" + this.getId() + ", template=" + this.getTemplate() + ")";
+        return "org.helianto.message.domain.Message(sender=" + this.getSender() + ", recipient=" + this.getRecipient() + ", servicePath=" + this.getServicePath() + ", messageData=" + this.getMessageData() + ", defaults=" + this.getDefaults() + ", id=" + this.getId() + ", token=" + this.getToken() + ", template=" + this.getTemplate() + ")";
     }
 }

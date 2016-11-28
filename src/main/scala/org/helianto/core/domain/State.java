@@ -18,6 +18,7 @@ package org.helianto.core.domain;
 import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.Optional;
 
 /**
  * State of a union or federation.
@@ -119,6 +120,16 @@ public class State
 		setStateAlias(command.getStateAlias());
         return this;
     }
+
+    public State validateAll() {
+		if (Optional.ofNullable(this.contextName).orElse("").isEmpty()
+                || Optional.ofNullable(this.stateCode).orElse("").isEmpty()
+                || Optional.ofNullable(this.countryCode).orElse("").isEmpty()
+                || Optional.ofNullable(this.stateName).orElse("").isEmpty()) {
+            throw new IllegalArgumentException();
+		}
+		return this;
+	}
 
 	public int compareTo(State next) {
 		if (getPriority()==next.getPriority()) {

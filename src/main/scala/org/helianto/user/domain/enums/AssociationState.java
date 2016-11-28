@@ -1,7 +1,7 @@
 package org.helianto.user.domain.enums;
 
 /**
- * Association state definition.
+ * Association command definition.
  * 
  * @author mauriciofernandesdecastro
  */

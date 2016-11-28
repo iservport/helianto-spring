@@ -1,0 +1,121 @@
+[#ftl]
+<div class="col-md-12">
+    <h5 class="text-center">${msg('register.form.HEAD')} <strong>${registration.firstName} ${registration.lastName}</strong>.</h5>
+</div>
+<div class="row" data-ng-controller="RegisterController as registerCtrl">
+    <div class="col-md-3">
+        <h2>${msg('register.form.WELCOME', [brandName])}</h2>
+    </div>
+    <div class="col-md-6" >
+        <form class="form-horizontal" name="form" role="form" action="/register" method="POST" novalidate >
+            <div class="panel panel-default">
+                <div class="panel-body" data-ng-init="isAdmin=false; domain=true; noDomain=false; entityAliasPrefix='iservport.com'">
+                    [#include "/security/form-head.html" /]
+                    <input type="hidden" name="admin" value="true">
+                    <input type="hidden" name="id" value="${registration.id!''}">
+                    [#--
+                     # Domain
+                     #--]
+                    <div class="form-group" data-ng-init="registration.entityAlias='${registration.entityAlias!''}'">
+                        <label class="col-sm-3 control-label">${msg('register.form.DOMAIN_ONLY')}</label>
+                        <div class="col-sm-9">
+                            <div class="row">
+                                <div class="col-md-12" data-ng-if="!noDomain">
+                                    <input type="text" required name="entityAlias" data-ng-model="registration.entityAlias"  class="form-control">
+                                </div>
+                                <div class="col-md-6" data-ng-if="noDomain">
+                                    <input type="text" disabled name="entityAliasPrefix" data-ng-model="registration.entityAlias" class="form-control">
+                                </div>
+                                <div class="col-md-1 size-h3 text-center" data-ng-if="noDomain">/</div>
+                                <div class="col-md-5" data-ng-if="noDomain">
+                                    <input type="text" required name="entityAlias" data-ng-model="entityAlias"  class="form-control">
+                                </div>
+                            </div>
+                            <div class="row help-block" data-ng-init="noDomain=false">
+                                <div class="col-xs-1">
+                                    <input type="checkbox" ng-model="noDomain" ng-true-value="true" value="{{noDomain}}"
+                                           ng-false-value="false">
+                                </div>
+                                <div class="col-xs-10">
+                                    <small>${msg('register.form.DOMAIN_URI')}</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    [#--
+                     # Public unique number
+                     #--]
+                    [#if enablePun?? ]
+                    <div class="form-group" data-ng-init="registration.pun='${registration.pun!''}'">
+                        <label class="col-sm-3 control-label">${msg('register.form.PUN')}</label>
+                        <div class="col-sm-9">
+                            <div class="input-group">
+                                <input type="text" name="pun" required data-ng-keyup="valideCNPJ(registration.pun)"
+                                       data-ng-blur="valideCNPJ(entityAlias)"
+                                       value="{{registration.pun}}"
+                                       class="form-control" data-ui-mask="99.999.999/9999-99" data-ng-model="registration.pun">
+                                <span class="input-group-btn">
+                                    <button aria-label="Help" class="btn btn-default" type="button">
+                                        <i class="fa fa-check text-success" data-ng-show="validPun"></i>
+                                        <i class="fa fa-close text-danger"  data-ng-hide="validPun"></i>
+                                    </button>
+                                 </span>
+                            </div><!-- /input-group -->
+                        </div>
+                    </div>
+                    [/#if]
+                    [#--
+                     # State and city
+                     #--]
+                    <div class="form-group" data-ng-init="getStates('${registration.stateCode!''}')">
+                        <label class="col-sm-3 control-label">${msg('register.form.PROVINCE')}</label>
+                        <div class="col-sm-9" >
+                            <select id="stateCode" class="form-control" name="stateCode" data-ng-model="registration.stateCode" data-ng-change="getCities(registration.stateCode)"
+                                    data-ng-options="option.stateCode as option.stateName+' ('+option.stateAlias+')' for option in states"
+                                    required="required">
+                            </select>
+                        </div>
+                    </div>
+                    <div class="form-group" data-ng-init="registration.cityId='${registration.cityId!''}'">
+                        <label class="col-sm-3 control-label">${msg('register.form.CITY')}</label>
+                        <div class="col-sm-9">
+                            <select id="cityId" class="form-control" name="cityId"  data-ng-model="registration.cityId"
+                                    data-ng-options="option.id as option.cityName for option in cities track by option.id"
+                                    required="required">
+                            </select>
+                        </div>
+                    </div>
+                    [#include "/security/register-data-personal.html" /]
+                    [#--
+                     # Registration role
+                     #--]
+                    <div class="form-group" data-ng-init="registration.role='${registration.role!'ADMIN'}'">
+                        <label class="col-sm-3 control-label">${msg('register.form.ROLE')}</label>
+                        <div class="col-sm-9">
+                            <select id="role" class="form-control" name="role" data-ng-model="registration.role" required="required">
+                                <option value="ADMIN" >${msg('register.form.ROLE_ADMIN')}</option>
+                                <option value="DELEGATE" >${msg('register.form.ROLE_DELEGATE')}</option>
+                            </select>
+                        </div>
+                    </div>
+                    [#include "/security/register-accept.html" /]
+                </div>
+                <div class="panel-footer text-center">
+                    <button type="submit" class="btn btn-primary"
+                            data-ng-disabled="!passwordConfirmed || !checked || (!domain && !cnpjOk)">${msg('register.form.CREATE_ADMIN', [brandName])}</button>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body small">
+                ${msg('register.form.NOTICE', [brandName])}
+                <b data-ng-show="registration.role=='ADMIN'">${msg('register.form.NOTICE_ADMIN')}</b>
+                <b data-ng-show="registration.role=='DELEGATE'">${msg('register.form.NOTICE_DELEGATE')}</b>
+                ${msg('register.form.DISCLAIMER')}<br/>
+                <a href="/register/admin">${msg('register.form.TRY_USER')}</a>
+            </div>
+        </div>
+    </div>
+</div>

@@ -11,4 +11,7 @@ class IngressConfig {
   @Bean
   def mfaProperties  = new MfaProperties
 
+  @Bean
+  def entityInstallProperties  = new RegisterProperties
+
 }

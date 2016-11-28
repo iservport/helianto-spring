@@ -9,18 +9,26 @@ helianto:
     system:
       ADMIN: READ,WRITE
       USER: READ
+  user-token-validity: 5
   password:
     initial: 123456
     install: h3l1@nt0
   welcome:
+    brandName: Helianto
     logo: /images/logo-iserv64.png
     copyright: i-serv Consultoria Empresarial Ltda. 2004-2016
     inLineCss: |
-      h3,h5,.footer {color: white;}
+      h2,h3,h5,.footer {color: white;}
       .heliantoLogin {background-image: url('/images/photo-1434396505260-9ec0d6491795.jpeg');}
-  mfa:
-    cellPhone: required
-    service: none
+#  mfa:
+#    cellPhone: required
+#    service: none
+  register:
+    # public unique number may be required
+    pun: required
+    inLineCss: |
+      h2,h3,h5,.footer {color: white;}
+      .heliantoLogin {background-image: url('/images/photo-9240912-peq.jpg');}
 
 key-store:
   password: changeme

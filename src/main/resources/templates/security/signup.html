@@ -1,27 +1,24 @@
 [#ftl]
-<div class="row">
-    <div class="col-md-3 offset-md-3"></div>
+<div class="col-md-12">
+    <h3 class="text-center">${msg("signup.FREE_TITLE")}</h3>
+    <h5 class="text-center">${msg("signup.SIGNUP_FREE")}</h5>
+    <h5 class="small text-center">${msg("signup.FREE_DETAIL")}</h5>
+</div>
+<div class="row" data-ng-controller="SignupController as signupCtrl">
+    <div class="col-md-3">
+        <h2>${msg('signup.form.WELCOME', [brandName])}</h2>
+    </div>
     <div class="col-md-6" >
-        <h3 class="text-center">${msg("signup.FREE_TITLE")}</h3>
-        <h5 class="text-center">${msg("signup.SIGNUP_FREE")}</h5>
-        <h5 class="small text-center">${msg("signup.FREE_DETAIL")}</h5>
         <p></p>
         <form class="m-t" role="form" method="POST" action="/signup">
             <div class="panel panel-default">
                 <div class="panel-body">
-                    <script >var principal  = [#if registration?? && registration.principal??]'${registration.principal}' [#else]''[/#if];
-                    </script>
-                    [#--
-                     # CSRF
-                     #--]
-                    <input type="hidden" name="${_csrf.parameterName}" value="${_csrf.token}" />
+                    [#include "/security/form-head.html" /]
+
+                    <input type="hidden" name="contextName" value="${registration.contextName!''}">
                     [#if registration?? && registration.providerUserId??]<input type="hidden" name="providerUserId" value="${registration.providerUserId}" />[/#if]
                     [#if registration?? && registration.imgUrl??] <input type="hidden" name="imgUrl" value="${registration.imgUrl}" />[/#if]
 
-                    [#--
-                     # Context id
-                     #--]
-                    <input type="hidden" name="contextId" value="${contextId!1}" />
                     <div id="form-group-email" class="form-group">
                         <div class="input-group">
                             <input type="email" required="true" id="email"
@@ -48,18 +45,29 @@
                     <div>
                         [#if enableCellPhone?? ]
                         <div class="form-group" >
-                            <input type="text" class="form-control" name="cellPhone"  value="${registration.cellPhone}" placeholder="${msg('signup.CELLPHONE')}"
-                                   required="" />
+                            <input type="text" class="form-control" name="cellPhone"  value="${registration.cellPhone}"
+                                   placeholder="${msg('signup.CELLPHONE')}" required="" />
                         </div>
                         [/#if]
                         <div class="form-group" >
-                            <input type="text" class="form-control" name="firstName"  value="${registration.firstName}" placeholder="${msg('signup.NAME')}" required="" />
+                            <input type="text" class="form-control" name="firstName"  value="${registration.firstName}"
+                                   placeholder="${msg('signup.NAME')}" required="" />
                         </div>
-                        <div id="input-group-lastName" class="form-group">
-                            <input type="text" required="true" name="lastName" id="lastName" value="${registration.lastName}" placeholder="${msg('signup.LAST_NAME')}" class="form-control">
+                        <div class="form-group">
+                            <input type="text" required="true" name="lastName" id="lastName" value="${registration.lastName}"
+                                   placeholder="${msg('signup.LAST_NAME')}" class="form-control">
                         </div>
-                        <div id="input-group-admin" class="form-group">
-                            <input type="text" required="true" name="lastName" id="entityAlias" value="${registration.entityAlias!''}" placeholder="${msg('signup.DOMAIN_NAME')}" class="form-control">
+                        <div class="form-group">
+                            <div class="checkbox" data-ng-init="adminValue=${registration.admin?c}" >
+                                <label>
+                                    <input type="checkbox" name="admin" id="admin" data-ng-model="adminValue" value="{{adminValue}}">
+                                    <span>${msg('signup.IS_ADMIN')}</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="form-group" data-ng-show="adminValue">
+                            <input type="text" name="entityAlias" id="entityAlias" value="${registration.entityAlias!''}"
+                                   placeholder="${msg('signup.DOMAIN_NAME')}" class="form-control">
                         </div>
                     </div>
                 </div>
@@ -79,5 +87,12 @@
                 <p >${msg("signup.SIGNUP_FREE_TEXT")}</p>
             </div>
         </form>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body small">
+                ${msg('signup.form.NOTICE')}
+            </div>
+        </div>
     </div>
 </div>

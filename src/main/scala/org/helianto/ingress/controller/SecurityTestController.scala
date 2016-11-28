@@ -59,9 +59,38 @@ class SecurityTestController(service: ResponseService) {
     * @param locale
     */
   @GetMapping(Array("/register/admin"))
-  def getRegister(model: Model, locale: Locale): String = {
+  def getRegisterAdmin(model: Model, locale: Locale): String = {
     val identity = new Identity
-    service.registerResponse(model, locale, identity)
+    service.registerResponse(model, locale, new Registration(identity), "admin")
+  }
+
+  /**
+    * The same page (here with a sample) is presented after the user follows a link in the confirmation e-mail,
+    * or receives a code via cellphone.
+    *
+    * @param model
+    * @param locale
+    */
+  @GetMapping(Array("/register/admin/sample"))
+  def getRegisterAdminSample(model: Model, locale: Locale): String = {
+    val registration = new Registration("someone@someOrg.com", "John", "Doe")
+    registration.setEntityAlias("SomeOrg.com")
+    registration.setPun("12345678000123")
+    registration.setStateCode("41")
+    service.registerResponse(model, locale, registration, "admin")
+  }
+
+  /**
+    * The same page is presented after the user follows a link in the confirmation e-mail,
+    * or receives a code via cellphone.
+    *
+    * @param model
+    * @param locale
+    */
+  @GetMapping(Array("/register/user"))
+  def getRegisterUser(model: Model, locale: Locale): String = {
+    val identity = new Identity
+    service.registerResponse(model, locale, new Registration(identity), "user")
   }
 
   @GetMapping(Array("/register/phone"))

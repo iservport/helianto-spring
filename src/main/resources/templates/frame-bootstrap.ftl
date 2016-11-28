@@ -19,11 +19,6 @@
 
     <title>${title!''}</title>
 
-    [#if _csrf??]
-	<meta name="_csrf" content="${_csrf.token}"/>
-    <meta name="_csrf_header" content="${_csrf.headerName}"/>
-    [/#if]
-
 </head>
 <body id="app" 
 	data-ng-controller="${baseName?capitalize}Controller as ${baseName}Ctrl"

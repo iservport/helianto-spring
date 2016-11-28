@@ -1,9 +1,7 @@
 package org.helianto.message.service
 
-import org.helianto.ingress.domain.UserToken
-import org.helianto.message.config.MailerProperties
+import org.helianto.ingress.domain.{Registration, UserToken}
 import org.helianto.message.repository.MessageLogRepository
-import org.springframework.context.MessageSource
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
 
@@ -15,12 +13,13 @@ import org.springframework.web.client.RestTemplate
 @Service
 class SecurityNotificationService
 (val messageLogRepository: MessageLogRepository
+ , val messageService: MessageService
  , val restTemplate: RestTemplate
- , val mailerProperties: MailerProperties
- , val messageSource: MessageSource
 ) extends AbstractNotificationService {
 
-  def sendSignUp(userToken: UserToken) = send(userToken, "/register", "register")
+  def sendSignUpUser(registration: Registration) = send(registration, "/register/user", "register")
+
+  def sendSignUpAdmin(registration: Registration) = send(registration, "/register/admin", "register")
 
   def sendSubscription(userToken: UserToken) = send(userToken, "/subscribe", "subscribe")
 

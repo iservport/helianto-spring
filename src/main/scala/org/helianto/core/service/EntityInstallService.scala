@@ -22,15 +22,20 @@ class EntityInstallService(val targetRepository: EntityRepository, val identityS
   def findOption(alias: String) = Option(targetRepository.findByContextNameAndAliasIgnoreCase(contextName, alias))
 
   def install(registration: Registration): Entity =
-    install(registration.getCityId, registration.getEntityAlias, identityService.install(registration))
+    install(registration.getCityId
+      , registration.getEntityAlias
+      , registration.getEntityName
+      , identityService.install(registration)
+      , registration.getStateCode
+      , registration.getPun)
 
 
-  def install(cityId: String, alias: String, identity: Identity): Entity = {
+  def install(cityId: String, alias: String, entityName: String, identity: Identity, stateCode: String, pun: String): Entity = {
     val entity = findOption(alias) match {
       case Some(e) => e.verify(contextName)
       case None => {
         logger.info(s"Installing entity: $contextName/$alias")
-        targetRepository.saveAndFlush(new Entity(contextName, alias, cityId))
+        targetRepository.saveAndFlush(new Entity(contextName, alias, entityName, cityId, stateCode, pun))
       }
     }
     Option(postInstaller) match {
@@ -45,6 +50,7 @@ class EntityInstallService(val targetRepository: EntityRepository, val identityS
 
   override def validateTarget(target: Entity, command: Entity) = (target.getContextName equals contextName)
 
-  def getNewTarget(command: Entity) = new Entity(contextName, command.getAlias, command.getCityId)
+  def getNewTarget(command: Entity) =
+    new Entity(contextName, command.getAlias, command.getEntityName, command.getCityId, command.getStateCode, command.getPun)
 
 }

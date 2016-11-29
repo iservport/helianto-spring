@@ -43,6 +43,9 @@ public class Registration extends AbstractRegistration implements IdentityData {
     @Column(length=64)
     private String entityAlias = "";
 
+    @Column(length=128)
+    private String entityName = "";
+
     @Column(length=20)
     private String pun = "";
 
@@ -163,6 +166,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         return this.entityAlias;
     }
 
+    public String getEntityName() {
+        return entityName;
+    }
+
     public String getPun() {
         return pun;
     }
@@ -251,6 +258,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         this.entityAlias = entityAlias;
     }
 
+    public void setEntityName(String entityName) {
+        this.entityName = entityName;
+    }
+
     public void setPun(String pun) {
         this.pun = pun;
     }
@@ -291,6 +302,7 @@ public class Registration extends AbstractRegistration implements IdentityData {
         setDisplayName(command.getDisplayName());
         setPersonalData(command.getPersonalData());
         setEntityAlias(command.getEntityAlias());
+        setEntityName(command.getEntityName());
         setPun(command.getPun());
         setAdmin(command.isAdmin());
         setStateCode(command.getStateCode());
@@ -347,6 +359,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         final Object other$entityAlias = other.getEntityAlias();
         if (this$entityAlias == null ? other$entityAlias != null : !this$entityAlias.equals(other$entityAlias))
             return false;
+        final Object this$entityName = this.getEntityName();
+        final Object other$entityName = other.getEntityName();
+        if (this$entityName == null ? other$entityName != null : !this$entityName.equals(other$entityName))
+            return false;
         final Object this$pun = this.getPun();
         final Object other$pun = other.getPun();
         if (this$pun == null ? other$pun != null : !this$pun.equals(other$pun)) return false;
@@ -388,6 +404,8 @@ public class Registration extends AbstractRegistration implements IdentityData {
         result = result * PRIME + ($password == null ? 43 : $password.hashCode());
         final Object $entityAlias = this.getEntityAlias();
         result = result * PRIME + ($entityAlias == null ? 43 : $entityAlias.hashCode());
+        final Object $entityName = this.getEntityName();
+        result = result * PRIME + ($entityName == null ? 43 : $entityName.hashCode());
         final Object $pun = this.getPun();
         result = result * PRIME + ($pun == null ? 43 : $pun.hashCode());
         result = result * PRIME + (this.isAdmin() ? 79 : 97);
@@ -408,6 +426,6 @@ public class Registration extends AbstractRegistration implements IdentityData {
     }
 
     public String toString() {
-        return "org.helianto.ingress.domain.Registration(id=" + this.getId() + ", contextName=" + this.getContextName() + ", version=" + this.getVersion() + ", principal=" + this.getPrincipal() + ", cellPhone=" + this.getCellPhone() + ", displayName=" + this.getDisplayName() + ", personalData=" + this.getPersonalData() + ", password=[******]" + ", entityAlias=" + this.getEntityAlias() + ", pun=" + this.getPun() + ", admin=" + this.isAdmin() + ", isDomain=" + this.isDomain() + ", stateCode=" + this.getStateCode() + ", cityId=" + this.getCityId() + ", providerUserId=" + this.getProviderUserId() + ", role=" + this.getRole() + ")";
+        return "org.helianto.ingress.domain.Registration(id=" + this.getId() + ", contextName=" + this.getContextName() + ", version=" + this.getVersion() + ", principal=" + this.getPrincipal() + ", cellPhone=" + this.getCellPhone() + ", displayName=" + this.getDisplayName() + ", personalData=" + this.getPersonalData() + ", password=[******], entityAlias=" + this.getEntityAlias() + ", entityName=" + this.getEntityName() + ", pun=" + this.getPun() + ", admin=" + this.isAdmin() + ", isDomain=" + this.isDomain() + ", stateCode=" + this.getStateCode() + ", cityId=" + this.getCityId() + ", providerUserId=" + this.getProviderUserId() + ", role=" + this.getRole() + ")";
     }
 }

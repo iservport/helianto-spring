@@ -84,8 +84,8 @@ public class Entity implements Mergeable<Entity>
 	@Column(length=64)
     private String alias = "";
     
-    @Column(length=36)
-    private String entityCode = "";
+    @Column(length=20)
+    private String pun = "";
     
     @Temporal(TemporalType.TIMESTAMP)
     private Date installDate = new Date();
@@ -132,15 +132,21 @@ public class Entity implements Mergeable<Entity>
     /**
      * City constructor.
      * 
-     * @param contextName
-     * @param alias
-     * @param cityId
+     * @param contextName the context name
+     * @param alias teh entity alias
+     * @param entityName the entity name
+     * @param cityId id of the city
+     * @param stateCode the state code
+     * @param pun public unique number, optional
      */
-    public Entity(String contextName, String alias, String cityId) {
+    public Entity(String contextName, String alias, String entityName, String cityId, String stateCode, String pun) {
     	this();
         setContextName(Objects.requireNonNull(contextName));
         setAlias(Objects.requireNonNull(alias));
+        setEntityName(entityName);
         setCityId(Objects.requireNonNull(cityId));
+        setStateCode(stateCode);
+        setPun(pun);
     }
     
  	/**
@@ -149,7 +155,7 @@ public class Entity implements Mergeable<Entity>
 	 * @param command
 	 */
 	public Entity merge(Entity command) {
-		setEntityCode(command.getEntityCode());
+		setPun(command.getPun());
 		setInstallDate(command.getInstallDate());
 		setEntityType(command.getEntityType());
 		setNature(command.getNature());
@@ -188,8 +194,8 @@ public class Entity implements Mergeable<Entity>
         final Object this$alias = this.getAlias();
         final Object other$alias = other.getAlias();
         if (this$alias == null ? other$alias != null : !this$alias.equals(other$alias)) return false;
-        final Object this$entityCode = this.getEntityCode();
-        final Object other$entityCode = other.getEntityCode();
+        final Object this$entityCode = this.getPun();
+        final Object other$entityCode = other.getPun();
         if (this$entityCode == null ? other$entityCode != null : !this$entityCode.equals(other$entityCode))
             return false;
         final Object this$installDate = this.getInstallDate();
@@ -240,7 +246,7 @@ public class Entity implements Mergeable<Entity>
         result = result * PRIME + ($contextName == null ? 0 : $contextName.hashCode());
         final Object $alias = this.getAlias();
         result = result * PRIME + ($alias == null ? 0 : $alias.hashCode());
-        final Object $entityCode = this.getEntityCode();
+        final Object $entityCode = this.getPun();
         result = result * PRIME + ($entityCode == null ? 0 : $entityCode.hashCode());
         final Object $installDate = this.getInstallDate();
         result = result * PRIME + ($installDate == null ? 0 : $installDate.hashCode());
@@ -270,7 +276,7 @@ public class Entity implements Mergeable<Entity>
     }
 
     public String toString() {
-        return "org.helianto.core.domain.Entity(id=" + this.getId() + ", version=" + this.getVersion() + ", contextName=" + this.getContextName() + ", alias=" + this.getAlias() + ", entityCode=" + this.getEntityCode() + ", installDate=" + this.getInstallDate() + ", entityType=" + this.getEntityType() + ", nature=" + this.getNature() + ", customStyle=" + this.getCustomStyle() + ", externalLogoUrl=" + this.getExternalLogoUrl() + ", activityState=" + this.getActivityState() + ", entityName=" + this.getEntityName() + ", entityDomain=" + this.getEntityDomain() + ", cityId=" + this.getCityId() + ", entityDesc=" + this.getEntityDesc() + ", locale=" + this.getLocale() + ")";
+        return "org.helianto.core.domain.Entity(id=" + this.getId() + ", version=" + this.getVersion() + ", contextName=" + this.getContextName() + ", alias=" + this.getAlias() + ", pun=" + this.getPun() + ", installDate=" + this.getInstallDate() + ", entityType=" + this.getEntityType() + ", nature=" + this.getNature() + ", customStyle=" + this.getCustomStyle() + ", externalLogoUrl=" + this.getExternalLogoUrl() + ", activityState=" + this.getActivityState() + ", entityName=" + this.getEntityName() + ", entityDomain=" + this.getEntityDomain() + ", cityId=" + this.getCityId() + ", entityDesc=" + this.getEntityDesc() + ", locale=" + this.getLocale() + ")";
     }
 
     public String getId() {
@@ -289,8 +295,8 @@ public class Entity implements Mergeable<Entity>
         return this.alias;
     }
 
-    public String getEntityCode() {
-        return this.entityCode;
+    public String getPun() {
+        return this.pun;
     }
 
     public Date getInstallDate() {
@@ -357,8 +363,8 @@ public class Entity implements Mergeable<Entity>
         this.alias = alias;
     }
 
-    public void setEntityCode(String entityCode) {
-        this.entityCode = entityCode;
+    public void setPun(String pun) {
+        this.pun = pun;
     }
 
     public void setInstallDate(Date installDate) {

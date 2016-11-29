@@ -86,14 +86,12 @@ class UserTokenService {
     * @param ipAddress
     */
   def saveOrUpdate(command: UserToken, ipAddress: String): UserToken = {
-    //TODO criar campo ip para UserToken
+    //TODO create ip field on UserToken
     val identity:Identity = identityService.findOption(command.getPrincipal) match {
       case Some(id) =>
         logger.warn("Identity {} trying userToken already existing", command.getPrincipal)
         id
-      case None =>
-        logger.info("New identity {} created", command.getPrincipal)
-        identityService.install(command)
+      case None => throw new IllegalArgumentException("Token must reference an existing identity.")
     }
     Option(userTokenRepository.findByTokenSourceAndPrincipal("SIGNUP", identity.getPrincipal)) match {
       case Some(userToken) => userToken
@@ -103,6 +101,5 @@ class UserTokenService {
           new UserToken("SIGNUP", command.getPrincipal).appendFirstName(command.getFirstName))
     }
   }
-
 
 }

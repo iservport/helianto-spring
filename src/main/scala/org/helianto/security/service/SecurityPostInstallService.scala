@@ -31,20 +31,17 @@ class SecurityPostInstallService extends IdentityPostInstallService with UserPos
 
   @Autowired val env: Environment = null
 
-  override def identityPostInstall (identity: Identity) = {
-    val secret = Option(secretRepository.findByIdentityId(identity.getId)) match {
-      case Some(s) => s
+  override def identityPostInstall (identity: Identity, password: String): Identity =
+    Option(secretRepository.findByIdentityId(identity.getId)) match {
+      case Some(s) => identity
       case None =>
         val secret = new Secret(identity, identity.getPrincipal)
-        Try(env.getRequiredProperty("helianto.password.initial")) match {
-          case Success(password) => secretRepository.saveAndFlush(secret.encode(encoder, password))
-          case _ =>
-            throw new IllegalArgumentException(s"Default password must be " +
-              "supplied as a configuration property under the key helianto.password.initial")
+        Option(password).filter(_.nonEmpty) match {
+          case Some(p) => secretRepository.saveAndFlush(secret.encode(encoder, p)) ; identity
+          case None => throw new IllegalArgumentException("Must define a password")
         }
     }
-    identity
-  }
+
 
   override def userPostInstall(user: User) = {
     // TODO user post install

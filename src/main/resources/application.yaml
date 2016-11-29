@@ -26,6 +26,7 @@ helianto:
   register:
     # public unique number may be required
     pun: required
+    contextDomain: helianto.org
     inLineCss: |
       h2,h3,h5,.footer {color: white;}
       .heliantoLogin {background-image: url('/images/photo-9240912-peq.jpg');}

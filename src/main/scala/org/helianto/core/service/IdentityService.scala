@@ -5,7 +5,10 @@ import org.helianto.core.repository.IdentityRepository
 import org.helianto.core.utils.CommandMixin
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.core.env.Environment
 import org.springframework.stereotype.Service
+
+import scala.util.{Success, Try}
 
 @Service
 class IdentityService(val targetRepository: IdentityRepository) extends CommandMixin[Identity] with IdentityInstaller {
@@ -15,13 +18,24 @@ class IdentityService(val targetRepository: IdentityRepository) extends CommandM
   @Autowired(required = false)
   val postInstaller: IdentityPostInstallService = null
 
+  @Autowired val env: Environment = null
+
   def findOption(principal: String):Option[Identity] = Option(targetRepository.findByPrincipal(principal))
 
   def install(root: IdentityData): Identity = {
-    install(root.getPrincipal, root.getDisplayName, root.getPersonalData)
+    val password = Option(root.getPassword).filter(_.nonEmpty).getOrElse(getInitialPassword)
+    install(root.getPrincipal, root.getDisplayName, root.getPersonalData, password)
   }
 
-  def install(principal: String, displayName: String, personalData: PersonalData): Identity = {
+  def getInitialPassword =
+    Try(env.getRequiredProperty("helianto.password.initial")) match {
+      case Success(p) => p
+      case _ =>
+        throw new IllegalArgumentException("Default password must be " +
+          "supplied as a configuration property under the key helianto.password.initial")
+    }
+
+  def install(principal: String, displayName: String, personalData: PersonalData, password: String): Identity = {
     val identity = findOption(principal) match {
       case Some (i) => i
       case _ =>
@@ -29,7 +43,7 @@ class IdentityService(val targetRepository: IdentityRepository) extends CommandM
         targetRepository.saveAndFlush(new Identity(principal, displayName, personalData))
     }
     Option(postInstaller) match {
-      case Some(p) => p.identityPostInstall(identity)
+      case Some(p) => p.identityPostInstall(identity, password)
       case None => identity
     }
   }
@@ -43,6 +57,6 @@ trait IdentityInstaller {
 
   def install(root: IdentityData): Identity
 
-  def install(principal: String, displayName: String, personalData: PersonalData): Identity
+  def install(principal: String, displayName: String, personalData: PersonalData, password: String): Identity
 
 }

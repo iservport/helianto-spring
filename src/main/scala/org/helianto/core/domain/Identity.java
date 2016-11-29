@@ -203,6 +203,9 @@ public class Identity implements IdentityData, Mergeable<Identity> {
      * Display name.
      */
     public String getDisplayName() {
+        if (displayName==null || displayName.equals("")) {
+            return getIdentityFirstName();
+        }
 		return displayName;
 	}
     public void setDisplayName(String displayName) {
@@ -460,6 +463,9 @@ public class Identity implements IdentityData, Mergeable<Identity> {
     public String getPasswordToChange() {
 		return passwordToChange;
 	}
+    public String getPassword() {
+        return passwordToChange;
+    }
     public void setPasswordToChange(String passwordToChange) {
 		this.passwordToChange = passwordToChange;
 	}

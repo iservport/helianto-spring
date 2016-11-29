@@ -8,4 +8,6 @@ public interface IdentityData {
 
     PersonalData getPersonalData();
 
+    String getPassword();
+
 }

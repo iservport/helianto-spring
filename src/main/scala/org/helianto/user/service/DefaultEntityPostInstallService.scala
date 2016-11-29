@@ -9,6 +9,19 @@ import org.slf4j.{Logger, LoggerFactory}
 import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.stereotype.Service
 
+/**
+  * Called after entity installation.
+  *
+  * <p>Performs 4 post-installation tasks:</p>
+  * <ol>
+  *   <li>Installs a system group with name ADMIN, delegating any user post-installation action to the appropriate bean,
+  *   if available.</li>
+  *   <li>Associates a manager to the ADMIN group.</li>
+  *   <li>Installs a system group with name USER, delegating any user post-installation action to the appropriate bean,
+  *   if available.</li>
+  *   <li>Associates the manager also to the USER group.</li>
+  * </ol>
+  */
 @Service
 class DefaultEntityPostInstallService extends EntityPostInstallService {
 
@@ -39,6 +52,14 @@ class DefaultEntityPostInstallService extends EntityPostInstallService {
     entity
   }
 
+  /**
+    * Installs system groups.
+    *
+    * @param entityId
+    * @param userKey
+    * @param manager
+    * @return the intalled system group.
+    */
   def installSystemGroup(entityId: String, userKey: String, manager: Identity) = {
     val normalizedKey = Option(userKey) match {
       case Some(k) => k.toUpperCase
@@ -55,6 +76,13 @@ class DefaultEntityPostInstallService extends EntityPostInstallService {
     }
   }
 
+  /**
+    * Associates a manager to a group.
+    *
+    * @param userGroup the group
+    * @param manager the manager identity
+    * @return the user association
+    */
   def assignManager(userGroup: User, manager: Identity): UserAssociation = {
     Option(userInstallService.installUser(userGroup.getEntityId, manager, UserState.ACTIVE)) match {
       case Some(u) => userInstallService.associate(userGroup, u)

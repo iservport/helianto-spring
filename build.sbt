@@ -6,7 +6,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.2.3.DEV"
+version in ThisBuild := "1.2.4.DEV"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -65,11 +65,11 @@ lazy val kafka = (project in file("kafka")).
   .dependsOn(root)
 
 libraryDependencies ++= Seq(
-  "org.webjars.bower" % "angular"              % "1.5.8",
-  "org.webjars.bower" % "angular-sanitize"     % "1.5.8",
-  "org.webjars.bower" % "angular-resource"     % "1.5.8",
-  "org.webjars.bower" % "angular-animate"      % "1.5.8",
-  "org.webjars.bower" % "angular-i18n"         % "1.5.8",
+  "org.webjars.bower" % "angular"              % "1.5.9",
+  "org.webjars.bower" % "angular-sanitize"     % "1.5.9",
+  "org.webjars.bower" % "angular-resource"     % "1.5.9",
+  "org.webjars.bower" % "angular-animate"      % "1.5.9",
+  "org.webjars.bower" % "angular-i18n"         % "1.5.9",
   "org.webjars.bower" % "angular-loading-bar"  % "0.9.0",
   "org.webjars.bower" % "slimScroll"           % "1.3.3"  exclude("org.webjars.bower", "jquery"),
   "org.webjars.bower" % "bootstrap"            % "3.3.7"  exclude("org.webjars.bower", "jquery"),

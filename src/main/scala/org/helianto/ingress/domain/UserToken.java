@@ -1,6 +1,5 @@
 package org.helianto.ingress.domain;
 
-import org.helianto.core.domain.IdentityData;
 import org.helianto.core.domain.PersonalData;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -19,7 +18,7 @@ import java.util.UUID;
 	uniqueConstraints = {@UniqueConstraint(columnNames={"tokenSource","principal"}),@UniqueConstraint(columnNames={"token"})}
 )
 public class UserToken extends AbstractRegistration
-	implements Serializable, IdentityData
+	implements Serializable
 {
 
 	private static final long serialVersionUID = 1L;
@@ -106,12 +105,10 @@ public class UserToken extends AbstractRegistration
 		return principal;
 	}
 
-	@Override
 	public String getDisplayName() {
 		return this.firstName;
 	}
 
-	@Override
 	public PersonalData getPersonalData() {
 		return new PersonalData(this.firstName, this.lastName);
 	}

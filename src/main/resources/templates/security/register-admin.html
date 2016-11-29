@@ -14,7 +14,7 @@
                     <input type="hidden" name="admin" value="true">
                     <input type="hidden" name="id" value="${registration.id!''}">
                     [#--
-                     # Domain
+                     # Domain and name
                      #--]
                     <div class="form-group" data-ng-init="registration.entityAlias='${registration.entityAlias!''}'">
                         <label class="col-sm-3 control-label">${msg('register.form.DOMAIN_ONLY')}</label>
@@ -23,23 +23,21 @@
                                 <div class="col-md-12" data-ng-if="!noDomain">
                                     <input type="text" required name="entityAlias" data-ng-model="registration.entityAlias"  class="form-control">
                                 </div>
+                                [#if enableContextDomain?? ]
                                 <div class="col-md-6" data-ng-if="noDomain">
-                                    <input type="text" disabled name="entityAliasPrefix" data-ng-model="registration.entityAlias" class="form-control">
+                                    <div class="form-control-static">${contextDomain}/</div>
                                 </div>
-                                <div class="col-md-1 size-h3 text-center" data-ng-if="noDomain">/</div>
-                                <div class="col-md-5" data-ng-if="noDomain">
-                                    <input type="text" required name="entityAlias" data-ng-model="entityAlias"  class="form-control">
+                                <div class="col-md-6" data-ng-if="noDomain">
+                                    <input type="text" required name="entityAlias" data-ng-model="registration.entityAlias"  class="form-control">
                                 </div>
+                                [/#if]
                             </div>
-                            <div class="row help-block" data-ng-init="noDomain=false">
-                                <div class="col-xs-1">
-                                    <input type="checkbox" ng-model="noDomain" ng-true-value="true" value="{{noDomain}}"
-                                           ng-false-value="false">
-                                </div>
-                                <div class="col-xs-10">
-                                    <small>${msg('register.form.DOMAIN_URI')}</small>
-                                </div>
-                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group" data-ng-init="registration.entityName='${registration.entityName!''}'">
+                        <label class="col-sm-3 control-label">${msg('register.form.NAME')}</label>
+                        <div class="col-sm-9">
+                            <input type="text" required name="entityName" data-ng-model="registration.entityName" placeholder="${msg('register.form.NAME_HELP')}" class="form-control">
                         </div>
                     </div>
                     [#--
@@ -67,18 +65,16 @@
                     [#--
                      # State and city
                      #--]
-                    <div class="form-group" data-ng-init="getStates('${registration.stateCode!''}')">
-                        <label class="col-sm-3 control-label">${msg('register.form.PROVINCE')}</label>
-                        <div class="col-sm-9" >
+                    <div class="form-group"
+                         data-ng-init="getStates('${registration.stateCode!''}');registration.cityId='${registration.cityId!''}'">
+                        <label class="col-sm-3 control-label">${msg('register.form.CITY')}</label>
+                        <div class="col-sm-4" >
                             <select id="stateCode" class="form-control" name="stateCode" data-ng-model="registration.stateCode" data-ng-change="getCities(registration.stateCode)"
                                     data-ng-options="option.stateCode as option.stateName+' ('+option.stateAlias+')' for option in states"
                                     required="required">
                             </select>
                         </div>
-                    </div>
-                    <div class="form-group" data-ng-init="registration.cityId='${registration.cityId!''}'">
-                        <label class="col-sm-3 control-label">${msg('register.form.CITY')}</label>
-                        <div class="col-sm-9">
+                        <div class="col-sm-5">
                             <select id="cityId" class="form-control" name="cityId"  data-ng-model="registration.cityId"
                                     data-ng-options="option.id as option.cityName for option in cities track by option.id"
                                     required="required">
@@ -108,6 +104,17 @@
         </form>
     </div>
     <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body small">
+                ${msg('register.form.NOTICE_DOMAIN')}
+            </div>
+            [#if enableContextDomain?? ]
+            <div class="panel-footer small">
+                <input type="checkbox" ng-model="noDomain" ng-true-value="true" value="{{noDomain}}"
+                       ng-false-value="false"> <small>${msg('register.form.DOMAIN_URI')}</small>
+            </div>
+            [/#if]
+        </div>
         <div class="panel panel-default">
             <div class="panel-body small">
                 ${msg('register.form.NOTICE', [brandName])}

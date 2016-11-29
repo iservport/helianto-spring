@@ -68,6 +68,10 @@ class ResponseService
   def registerResponse(model: Model, locale: Locale, registration: Registration, userType: String) = {
     if (!Array("admin", "user").contains(userType)) throw new IllegalArgumentException(s"Invalid registration page $userType")
     if (Option(registerProperties).exists(_.enablePun)) { model.addAttribute("enablePun", "TRUE") }
+    if (Option(registerProperties).exists(_.enableContextDomain)) {
+      model.addAttribute("enableContextDomain", "TRUE")
+      model.addAttribute("contextDomain", registerProperties.contextDomain)
+    }
     model.addAttribute("registration", registration)
     model.addAttribute("inLineCss", registerProperties.inLineCss)
     model.addAttribute("main", s"security/register-$userType.html")

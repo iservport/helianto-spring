@@ -44,7 +44,7 @@ class RegistrationController(registrationService: RegistrationService) {
   registrationService.get(confirmationToken, model, locale, userType)
 
   /**
-    * Post the registration before the user atually submits.
+    * Post the registration before the user actually submits.
     *
     * @param model
     * @param registration
@@ -68,15 +68,15 @@ class RegistrationController(registrationService: RegistrationService) {
   registrationService.createAdmin(registration, model , locale)
 
   /**
-    * Post a new member submission.
+    * Post a new user submission.
     *
     * @param model
     * @param registration
     * @param locale
     *
     */
-  @PostMapping(path = Array("/member"))
-  def postMemberSubmission(model: Model, @ModelAttribute registration : Registration , locale: Locale) =
+  @PostMapping(path = Array("/user"))
+  def postUserSubmission(model: Model, @ModelAttribute registration : Registration , locale: Locale) =
     registrationService.subscribe(registration, model , locale)
 
 }

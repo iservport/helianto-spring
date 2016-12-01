@@ -1,9 +1,9 @@
 package org.helianto.ingress.controller
 
-import javax.servlet.http.HttpServletRequest
+import java.util.Locale
 import javax.validation.Valid
 
-import org.helianto.ingress.domain.{Registration, UserToken}
+import org.helianto.ingress.domain.Registration
 import org.helianto.ingress.service.{ResponseService, SignupService}
 import org.springframework.stereotype.Controller
 import org.springframework.ui.Model
@@ -30,31 +30,38 @@ class SignupController(signUpService:SignupService, responseService:ResponseServ
     */
   @GetMapping
   def getSignupPage(model: Model, @RequestParam(defaultValue = "1") contextId: Integer, @RequestParam(required = false) principal: String, request: WebRequest):String =
-    signUpService.signUpOrRegister(request, model)
+    signUpService.prompt(request, model)
 
 
   /**
-    * Quando o usuário confirma o pedido de inclusão no cadastro.
+    * After user submission.
     *
     * <p>
-    *   Envia um e-mail de confirmação para o cliente. As condições são as seguintes:
+    *   If the principal type, defined by helianto.register.principal is e-mail, send confirmation by e-mail, otherwise
+    *   use an alternative method.
     * </p>
-    * <ol>
-    *   <li>Verifica se não é uma submissão dupla e notifica adequadamente.</li>
-    *   <li>Caso não exista a entidade, cria e convida o solicitante a tornar-se o administrador.</li>
-    *   <li>Caso exista a entidade, verifica se o solicitante já não é usuário;</li>
-    *   <li>caso não seja, convida-o para participar da entidade,</li>
-    *   <li>caso seja e esteja ativo, notifica-o e redireciona para o login,</li>
-    *   <li>caso inativo, informa-o para solicitar readmissão junto ao administrador.</li>
-    * </ol>
     *
     * @param model
     * @param command
     * @param error
     * @param request
+    * @param locale
     */
   @PostMapping
-  def submitSignupPage(model: Model, @Valid command: Registration, error: BindingResult, request: WebRequest): String =
-    signUpService.submitSignupPage(command, request, model)
+  def submitSignupPage(model: Model, @Valid command: Registration, error: BindingResult, request: WebRequest, locale: Locale): String =
+    signUpService.confirm(command, request, model, locale)
+
+  /**
+    * Once required by the configuration (@see MfaProperties), the user must submit a valid confirmation code.
+    *
+    * @param model
+    * @param registrationId
+    * @param confirmationCode
+    * @param request
+    * @param locale
+    */
+  @PostMapping(path = Array("/confirm"))
+  def submitSignupConfirmPage(model: Model, @RequestParam registrationId: String, @RequestParam confirmationCode: String, request: WebRequest, locale: Locale): String =
+    signUpService.submit(registrationId, confirmationCode, request, model, locale)
 
 }

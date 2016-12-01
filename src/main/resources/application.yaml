@@ -20,12 +20,19 @@ helianto:
     inLineCss: |
       h2,h3,h5,.footer {color: white;}
       .heliantoLogin {background-image: url('/images/photo-1434396505260-9ec0d6491795.jpeg');}
-#  mfa:
-#    cellPhone: required
-#    service: none
+  mfa:
+    # cell phone, one of required | none
+    cellPhone: none
+    service: totalVoice
   register:
+    # define admin option, one of ALLOW | DENY | a domain name
+    admin: allow
+    # define principal type, one of EMAIL | PIN  - to be implemented: | PHONE | USERNAME
+    principal: pin
+    pinMask: 999.999.999-99
     # public unique number may be required
     pun: required
+    punMask: 99.999.999/9999-99
     contextDomain: helianto.org
     inLineCss: |
       h2,h3,h5,.footer {color: white;}

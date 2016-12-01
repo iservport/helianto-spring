@@ -103,7 +103,7 @@ class PasswordService
       case _ =>
         model.addAttribute("emailSent", false)
     }
-    responseService.confirmationResponse(model, locale)
+    responseService.signUpEmailResponse(model, locale)
   }
 
 }

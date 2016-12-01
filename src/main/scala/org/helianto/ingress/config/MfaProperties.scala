@@ -17,4 +17,6 @@ class MfaProperties {
 
   def requireCellPhone = Array("REQUIRED").contains(Option(cellPhone).getOrElse("NONE").toUpperCase)
 
+  def requireMfa = enableCellPhone && !Array("NONE").contains(Option(service).getOrElse("NONE").toUpperCase)
+
 }

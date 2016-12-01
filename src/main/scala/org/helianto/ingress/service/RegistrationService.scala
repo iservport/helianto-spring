@@ -2,9 +2,9 @@ package org.helianto.ingress.service
 
 import java.util.Locale
 
-import org.helianto.core.domain.{Entity, Identity}
+import org.helianto.core.domain.Entity
 import org.helianto.core.service.{EntityInstallService, IdentityService}
-import org.helianto.ingress.domain.{Registration, UserToken}
+import org.helianto.ingress.domain.Registration
 import org.helianto.ingress.repository.RegistrationRepository
 import org.helianto.security.domain.UserDetailsAdapter
 import org.helianto.user.service.UserInstallService
@@ -55,7 +55,7 @@ class RegistrationService
     findRegistrationOption(confirmationToken) match {
       case Some(registration) =>
         responseService.registerResponse(model, locale, registration, userType)
-      case None => responseService.signupResponse(model, locale, new Registration(contextName, true))
+      case None => responseService.signUpPromptResponse(model, locale, new Registration(contextName, true))
     }
 
   private[service] def findRegistrationOption(id: String) = Option(registrationRepository.findOne(id))

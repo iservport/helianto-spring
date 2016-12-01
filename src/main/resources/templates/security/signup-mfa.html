@@ -1,0 +1,59 @@
+[#ftl]
+<div class="col-md-12">
+    <h3 class="text-center">${msg("signup.FREE_TITLE_CODE")}</h3>
+</div>
+<div class="row" data-ng-controller="SignupController as signupCtrl">
+    <div class="col-md-3">
+        <h2>${msg('signup.form.YOUR_CODE', [brandName])}</h2>
+    </div>
+    <div class="col-md-6" >
+        <p></p>
+        <form class="m-t" role="form" method="POST" action="/signup/confirm">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    [#include "/security/form-head.html" /]
+
+                    <input type="hidden" name="registrationId" value="${registration.id!''}">
+                    [#if registration?? && registration.providerUserId??]<input type="hidden" name="providerUserId" value="${registration.providerUserId}" />[/#if]
+                    [#if registration?? && registration.imgUrl??] <input type="hidden" name="imgUrl" value="${registration.imgUrl}" />[/#if]
+
+                    <div class="form-group">
+                        <input value="${registration.principal}" class="form-control" disabled="disabled" />
+                    </div>
+                    <div class="form-group" >
+                        <input value="${registration.fullName}" class="form-control" disabled="disabled" />
+                    </div>
+                    <hr/>
+                    <div class="form-group">
+                        <label class="col-sm-4 control-label">${msg('signup.VERIFICATION')}</label>
+                        <div class="col-sm-4">
+                            <input type="text" name="confirmationCode" class="form-control">
+                        </div>
+                    </div>
+                </div>
+                <div class="panel-body">
+                    <div id="input-group-submit" class="form-group">
+                        <button type="submit" class="form-control btn btn-primary full-width" data-ng-disabled="principalExisting"> ${msg('signup.SEND_SIGNUO_EMAIL')} </button>
+                    </div>
+                </div>
+                <div class="panel-footer">
+                    <div class="row">
+                        <div class="col-md-6"> ${msg("signup.ALREADY_HAVE_ACCOUNT")}</div>
+                        <div class="col-md-6">	<a class="pull-right" href="/login">${msg("signup.BACK_TO_LOGIN")}</a></div>
+                    </div>
+                </div>
+            </div>
+            [#if captchaKey?? ]<div class="g-recaptcha" data-sitekey="${captchaKey}"></div>[/#if]
+            <div class="text-center">
+                <p >${msg("signup.SIGNUP_FREE_TEXT")}</p>
+            </div>
+        </form>
+    </div>
+    <div class="col-md-3">
+        <div class="panel panel-default">
+            <div class="panel-body small">
+                ${msg('signup.form.NOTICE')}
+            </div>
+        </div>
+    </div>
+</div>

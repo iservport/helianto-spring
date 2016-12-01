@@ -11,9 +11,12 @@ import java.util.Objects;
 import java.util.Optional;
 import java.util.UUID;
 
+/**
+ * Registration form.
+ */
 @Entity
 @Table(name="core_registration")
-public class Registration extends AbstractRegistration implements IdentityData {
+public class Registration extends AbstractRegistration implements IdentityData, ReCaptcha {
 
     @Id @Column(length=32)
     private String id;
@@ -27,6 +30,9 @@ public class Registration extends AbstractRegistration implements IdentityData {
     @Column(length=64)
     private String principal = "";
 
+    @Column(length=10)
+    private String principalType = "";
+
     @Column(length=20)
     private String cellPhone = "";
 
@@ -39,6 +45,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
 
     @Transient
     private String password = "";
+
+    private int confirmationCode = 0;
+
+    private Date lastConfirmed;
 
     @Column(length=64)
     private String entityAlias = "";
@@ -65,10 +75,18 @@ public class Registration extends AbstractRegistration implements IdentityData {
     @Column(length=20)
     private String role = "ADMIN";
 
+    @Transient
+    private String gRecaptchaResponse;
+
     public Registration() {
         super();
         this.id = UUID.randomUUID().toString().replaceAll("-", "");
+        this.confirmationCode = generateConfirmationCode();
         setIssueDate(new Date());
+    }
+
+    private static int generateConfirmationCode() {
+        return (int) (89999 * Math.random()) + 10000;
     }
 
     public Registration(String contextName, boolean failIfNoContext) {
@@ -122,6 +140,13 @@ public class Registration extends AbstractRegistration implements IdentityData {
         return this.principal;
     }
 
+    public String getPrincipalType() {
+        if (principalType==null) {
+            return "EMAIL";
+        }
+        return principalType;
+    }
+
     public String getCellPhone() {
         if (this.cellPhone==null) {
             return "";
@@ -147,6 +172,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         return "";
     }
 
+    public String getFullName() {
+        return getFirstName() + " " + getLastName();
+    }
+
     public String getImageUrl() {
         if (getPersonalData()!=null) {
             return getPersonalData().getImageUrl();
@@ -160,6 +189,14 @@ public class Registration extends AbstractRegistration implements IdentityData {
 
     public String getPassword() {
         return this.password;
+    }
+
+    public int getConfirmationCode() {
+        return confirmationCode;
+    }
+
+    public Date getLastConfirmed() {
+        return lastConfirmed;
     }
 
     public String getEntityAlias() {
@@ -204,6 +241,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         return role;
     }
 
+    public String getgRecaptchaResponse() {
+        return gRecaptchaResponse;
+    }
+
     public void setId(String id) {
         this.id = id;
     }
@@ -218,6 +259,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
 
     public void setPrincipal(String principal) {
         this.principal = principal;
+    }
+
+    public void setPrincipalType(String principalType) {
+        this.principalType = principalType;
     }
 
     public void setCellPhone(String cellPhone) {
@@ -252,6 +297,31 @@ public class Registration extends AbstractRegistration implements IdentityData {
 
     public void setPassword(String password) {
         this.password = password;
+    }
+
+    public void setConfirmationCode(int confirmationCode) {
+        this.confirmationCode = confirmationCode;
+    }
+
+    public void setLastConfirmed(Date lastConfirmed) {
+        this.lastConfirmed = lastConfirmed;
+    }
+
+    public Registration verifyConfirmationCode(int verifyConfirmation) {
+        if (this.confirmationCode==verifyConfirmation) {
+            setLastConfirmed(new Date());
+        }
+        return this;
+    }
+
+    public boolean isConfirmationCodeVerified() {
+        return getLastConfirmed()!=null;
+    }
+
+    public Registration resetConfirmationCode() {
+        setConfirmationCode(generateConfirmationCode());
+        setLastConfirmed(null);
+        return this;
     }
 
     public void setEntityAlias(String entityAlias) {
@@ -290,6 +360,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         this.role = role;
     }
 
+    public void setgRecaptchaResponse(String gRecaptchaResponse) {
+        this.gRecaptchaResponse = gRecaptchaResponse;
+    }
+
     /**
      * Merger
      *
@@ -298,9 +372,12 @@ public class Registration extends AbstractRegistration implements IdentityData {
     public Registration merge(Registration command) {
         super.merge(command);
         setPrincipal(command.getPrincipal());
+        setPrincipalType(command.getPrincipalType());
         setCellPhone(command.getCellPhone());
         setDisplayName(command.getDisplayName());
         setPersonalData(command.getPersonalData());
+        setConfirmationCode(command.getConfirmationCode());
+        setLastConfirmed(command.getLastConfirmed());
         setEntityAlias(command.getEntityAlias());
         setEntityName(command.getEntityName());
         setPun(command.getPun());
@@ -341,6 +418,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         final Object this$principal = this.getPrincipal();
         final Object other$principal = other.getPrincipal();
         if (this$principal == null ? other$principal != null : !this$principal.equals(other$principal)) return false;
+        final Object this$principalType = this.getPrincipalType();
+        final Object other$principalType = other.getPrincipalType();
+        if (this$principalType == null ? other$principalType != null : !this$principalType.equals(other$principalType))
+            return false;
         final Object this$cellPhone = this.getCellPhone();
         final Object other$cellPhone = other.getCellPhone();
         if (this$cellPhone == null ? other$cellPhone != null : !this$cellPhone.equals(other$cellPhone)) return false;
@@ -355,6 +436,11 @@ public class Registration extends AbstractRegistration implements IdentityData {
         final Object this$password = this.getPassword();
         final Object other$password = other.getPassword();
         if (this$password == null ? other$password != null : !this$password.equals(other$password)) return false;
+        if (this.getConfirmationCode() != other.getConfirmationCode()) return false;
+        final Object this$lastConfirmed = this.getLastConfirmed();
+        final Object other$lastConfirmed = other.getLastConfirmed();
+        if (this$lastConfirmed == null ? other$lastConfirmed != null : !this$lastConfirmed.equals(other$lastConfirmed))
+            return false;
         final Object this$entityAlias = this.getEntityAlias();
         final Object other$entityAlias = other.getEntityAlias();
         if (this$entityAlias == null ? other$entityAlias != null : !this$entityAlias.equals(other$entityAlias))
@@ -381,6 +467,10 @@ public class Registration extends AbstractRegistration implements IdentityData {
         final Object this$role = this.getRole();
         final Object other$role = other.getRole();
         if (this$role == null ? other$role != null : !this$role.equals(other$role)) return false;
+        final Object this$gRecaptchaResponse = this.getgRecaptchaResponse();
+        final Object other$gRecaptchaResponse = other.getgRecaptchaResponse();
+        if (this$gRecaptchaResponse == null ? other$gRecaptchaResponse != null : !this$gRecaptchaResponse.equals(other$gRecaptchaResponse))
+            return false;
         return true;
     }
 
@@ -394,6 +484,8 @@ public class Registration extends AbstractRegistration implements IdentityData {
         result = result * PRIME + this.getVersion();
         final Object $principal = this.getPrincipal();
         result = result * PRIME + ($principal == null ? 43 : $principal.hashCode());
+        final Object $principalType = this.getPrincipalType();
+        result = result * PRIME + ($principalType == null ? 43 : $principalType.hashCode());
         final Object $cellPhone = this.getCellPhone();
         result = result * PRIME + ($cellPhone == null ? 43 : $cellPhone.hashCode());
         final Object $displayName = this.getDisplayName();
@@ -402,6 +494,9 @@ public class Registration extends AbstractRegistration implements IdentityData {
         result = result * PRIME + ($personalData == null ? 43 : $personalData.hashCode());
         final Object $password = this.getPassword();
         result = result * PRIME + ($password == null ? 43 : $password.hashCode());
+        result = result * PRIME + this.getConfirmationCode();
+        final Object $lastConfirmed = this.getLastConfirmed();
+        result = result * PRIME + ($lastConfirmed == null ? 43 : $lastConfirmed.hashCode());
         final Object $entityAlias = this.getEntityAlias();
         result = result * PRIME + ($entityAlias == null ? 43 : $entityAlias.hashCode());
         final Object $entityName = this.getEntityName();
@@ -418,6 +513,8 @@ public class Registration extends AbstractRegistration implements IdentityData {
         result = result * PRIME + ($providerUserId == null ? 43 : $providerUserId.hashCode());
         final Object $role = this.getRole();
         result = result * PRIME + ($role == null ? 43 : $role.hashCode());
+        final Object $gRecaptchaResponse = this.getgRecaptchaResponse();
+        result = result * PRIME + ($gRecaptchaResponse == null ? 43 : $gRecaptchaResponse.hashCode());
         return result;
     }
 
@@ -426,6 +523,6 @@ public class Registration extends AbstractRegistration implements IdentityData {
     }
 
     public String toString() {
-        return "org.helianto.ingress.domain.Registration(id=" + this.getId() + ", contextName=" + this.getContextName() + ", version=" + this.getVersion() + ", principal=" + this.getPrincipal() + ", cellPhone=" + this.getCellPhone() + ", displayName=" + this.getDisplayName() + ", personalData=" + this.getPersonalData() + ", password=[******], entityAlias=" + this.getEntityAlias() + ", entityName=" + this.getEntityName() + ", pun=" + this.getPun() + ", admin=" + this.isAdmin() + ", isDomain=" + this.isDomain() + ", stateCode=" + this.getStateCode() + ", cityId=" + this.getCityId() + ", providerUserId=" + this.getProviderUserId() + ", role=" + this.getRole() + ")";
+        return "org.helianto.ingress.domain.Registration(id=" + this.getId() + ", contextName=" + this.getContextName() + ", version=" + this.getVersion() + ", principal=" + this.getPrincipal() + ", principalType=" + this.getPrincipalType() + ", cellPhone=" + this.getCellPhone() + ", displayName=" + this.getDisplayName() + ", personalData=" + this.getPersonalData() + ", password=[******], confirmationCode=" + this.getConfirmationCode() + ", lastConfirmed=" + this.getLastConfirmed() + ", entityAlias=" + this.getEntityAlias() + ", entityName=" + this.getEntityName() + ", pun=" + this.getPun() + ", admin=" + this.isAdmin() + ", isDomain=" + this.isDomain() + ", stateCode=" + this.getStateCode() + ", cityId=" + this.getCityId() + ", providerUserId=" + this.getProviderUserId() + ", role=" + this.getRole() + ", gRecaptchaResponse=" + this.getgRecaptchaResponse() + ")";
     }
 }

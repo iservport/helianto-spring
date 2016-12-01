@@ -8,9 +8,8 @@
     <div class="col-md-3">
         <h2>${msg('signup.form.WELCOME', [brandName])}</h2>
     </div>
-    <div class="col-md-6" >
-        <p></p>
-        <form class="m-t" role="form" method="POST" action="/signup">
+    <div class="col-md-6" data-ng-controller="ValidatorController as validatorCtrl">
+        <form class="form-horizontal" role="form" method="POST" action="/signup">
             <div class="panel panel-default">
                 <div class="panel-body">
                     [#include "/security/form-head.html" /]
@@ -19,21 +18,8 @@
                     [#if registration?? && registration.providerUserId??]<input type="hidden" name="providerUserId" value="${registration.providerUserId}" />[/#if]
                     [#if registration?? && registration.imgUrl??] <input type="hidden" name="imgUrl" value="${registration.imgUrl}" />[/#if]
 
-                    <div id="form-group-email" class="form-group">
-                        <div class="input-group">
-                            <input type="email" required="true" id="email"
-                                   data-ng-model="principal" name="principal"
-                                   data-ng-blur="saveEmail(principal)"
-                                   placeholder="E-mail" class="form-control">
+                    [#include "/security/form-principal.html" /]
 
-                            <span class="input-group-addon" data-ng-hide="principalExisting">
-                                          <i class="fa fa-check" style="color:green;" ></i>
-                                          </span>
-                            <span class="input-group-addon" data-ng-show="principalExisting">
-                                          <i class="fa fa-close" style="color:red;" ></i>
-                                          </span>
-                        </div>
-                    </div>
                     <div data-ng-show="principalExisting">
                         <div class="alert alert-danger alert-dismissible" role="alert" data-ng-show="showAlerts" >
                             <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
@@ -42,22 +28,31 @@
                             </div>
                         </div>
                     </div>
-                    <div>
-                        [#if enableCellPhone?? ]
-                        <div class="form-group" >
-                            <input type="text" class="form-control" name="cellPhone"  value="${registration.cellPhone}"
-                                   placeholder="${msg('signup.CELLPHONE')}" required="" />
+
+                    [#if enableCellPhone?? ]
+                    <div class="form-group" >
+                        <label class="col-sm-3 control-label">${msg('signup.CELLPHONE')}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="cellPhone"  value="${registration.cellPhone}" required="" />
                         </div>
-                        [/#if]
-                        <div class="form-group" >
-                            <input type="text" class="form-control" name="firstName"  value="${registration.firstName}"
-                                   placeholder="${msg('signup.NAME')}" required="" />
+                    </div>
+                    [/#if]
+                    <div class="form-group" >
+                        <label class="col-sm-3 control-label">${msg('signup.NAME')}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="firstName"  value="${registration.firstName}" required="" />
                         </div>
-                        <div class="form-group">
-                            <input type="text" required="true" name="lastName" id="lastName" value="${registration.lastName}"
-                                   placeholder="${msg('signup.LAST_NAME')}" class="form-control">
+                    </div>
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label">${msg('signup.LAST_NAME')}</label>
+                        <div class="col-sm-9">
+                            <input type="text" class="form-control" name="lastName" value="${registration.lastName}" required="" />
                         </div>
-                        <div class="form-group">
+                    </div>
+                    [#if enableAdmin?? ]
+                    <div class="form-group">
+                        <label class="col-sm-3 control-label"></label>
+                        <div class="col-sm-9">
                             <div class="checkbox" data-ng-init="adminValue=${registration.admin?c}" >
                                 <label>
                                     <input type="checkbox" name="admin" id="admin" data-ng-model="adminValue" value="{{adminValue}}">
@@ -65,26 +60,19 @@
                                 </label>
                             </div>
                         </div>
-                        <div class="form-group" data-ng-show="adminValue">
+                    </div>
+                    <div class="form-group" data-ng-show="adminValue">
+                        <label class="col-sm-3 control-label">${msg('signup.form.YOUR_COMPANY')}</label>
+                        <div class="col-sm-9">
                             <input type="text" name="entityAlias" id="entityAlias" value="${registration.entityAlias!''}"
                                    placeholder="${msg('signup.DOMAIN_NAME')}" class="form-control">
                         </div>
                     </div>
+                    [/#if]
                 </div>
-                <div class="panel-body">
-                    <div id="input-group-submit" class="form-group">
-                        <button type="submit" class="form-control btn btn-primary full-width" data-ng-disabled="principalExisting"> ${msg('signup.SEND_SIGNUO_EMAIL')} </button>
-                    </div>
+                <div class="panel-footer text-center">
+                    <button type="submit" class="btn btn-primary" data-ng-disabled="!validPin"> ${msg('access.form.CONTINUE')} </button>
                 </div>
-                <div class="panel-footer">
-                    <div class="row">
-                        <div class="col-md-6"> ${msg("signup.ALREADY_HAVE_ACCOUNT")}</div>
-                        <div class="col-md-6">	<a class="pull-right" href="/login">${msg("signup.BACK_TO_LOGIN")}</a></div>
-                    </div>
-                </div>
-            </div>
-            <div class="text-center">
-                <p >${msg("signup.SIGNUP_FREE_TEXT")}</p>
             </div>
         </form>
     </div>
@@ -92,6 +80,11 @@
         <div class="panel panel-default">
             <div class="panel-body small">
                 ${msg('signup.form.NOTICE')}
+            </div>
+        </div>
+        <div class="panel panel-default">
+            <div class="panel-body small">
+                ${msg("signup.ALREADY_HAVE_ACCOUNT")} <a class="pull-right" href="/login">${msg("signup.BACK_TO_LOGIN")}</a>
             </div>
         </div>
     </div>

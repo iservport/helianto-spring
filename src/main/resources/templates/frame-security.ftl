@@ -8,6 +8,7 @@
     <title>${titlePage!'Security'}</title>
 	[#include "/frame-head.ftl" /]
     <style>${inLineCss!''}</style>
+    [#if captchaKey?? ]<script src='https://www.google.com/recaptcha/api.js'></script>[/#if]
 </head>
 <body class="heliantoLogin"
       data-ng-controller="SecurityController as securityCtrl">
@@ -35,7 +36,16 @@
         </div>
         <p></p>
     </footer>
-	[#include "/frame-js.html" /]
+    [#include "/frame-js.html" /]
+    [#--
+     # Optional validators
+     # To override, create a file named "/security/js/form-validators.js"
+     #--]
+    <script >
+    angular.module('security').controller('ValidatorController', ['$scope', function($scope) {
+        [#include "/security/js/form-validators.js" /]
+    }])
+    </script>
 </body>
 </html>
 

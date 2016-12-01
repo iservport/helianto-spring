@@ -171,6 +171,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
                 .tokenValiditySeconds(REMEMBER_ME_DEFAULT_DURATION)
             .and().formLogin()
                 .loginPage("/login").permitAll()
+                .usernameParameter("principal")
                 .failureUrl("/login?error=bad_credentials")
                 .defaultSuccessUrl("/", false)
             .and().logout()

@@ -55,6 +55,9 @@ public class Identity implements IdentityData, Mergeable<Identity> {
     @Column(length=40)
     private String principal = "";
 
+    @Column(length=10)
+    private String principalType = "";
+
     @Column(length=40)
     private String email = "";
     
@@ -148,6 +151,19 @@ public class Identity implements IdentityData, Mergeable<Identity> {
         else {
             this.principal = null;
         }
+    }
+
+    /**
+     * One of EMAIL | PIN | PHONE | USERNAME
+     */
+    public String getPrincipalType() {
+        if (principalType==null) {
+            return "EMAIL";
+        }
+        return principalType;
+    }
+    public void setPrincipalType(String principalType) {
+        this.principalType = principalType;
     }
 
     /**

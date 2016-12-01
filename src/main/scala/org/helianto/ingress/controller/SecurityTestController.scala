@@ -48,7 +48,7 @@ class SecurityTestController(service: ResponseService) {
     */
   @GetMapping(Array("/signup"))
   def getSignup(model: Model, locale: Locale): String = {
-    service.signupResponse(model, locale, new Registration)
+    service.signUpPromptResponse(model, locale, new Registration)
   }
 
   /**

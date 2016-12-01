@@ -6,7 +6,7 @@
     <div class="col-md-3">
         <h2>${msg('register.form.WELCOME', [brandName])}</h2>
     </div>
-    <div class="col-md-6" >
+    <div class="col-md-6" data-ng-controller="ValidatorController as validatorCtrl">
         <form class="form-horizontal" name="form" role="form" action="/register" method="POST" novalidate >
             <div class="panel panel-default">
                 <div class="panel-body" data-ng-init="isAdmin=false; domain=true; noDomain=false; entityAliasPrefix='iservport.com'">
@@ -48,10 +48,11 @@
                         <label class="col-sm-3 control-label">${msg('register.form.PUN')}</label>
                         <div class="col-sm-9">
                             <div class="input-group">
-                                <input type="text" name="pun" required data-ng-keyup="valideCNPJ(registration.pun)"
-                                       data-ng-blur="valideCNPJ(entityAlias)"
+                                <input type="text" name="pun" required
+                                       data-ng-keyup="validPun=validatePun(registration.pun, 'CNPJ')"
+                                       data-ng-blur= "validPun=validatePun(registration.pun, 'CNPJ')"
                                        value="{{registration.pun}}"
-                                       class="form-control" data-ui-mask="99.999.999/9999-99" data-ng-model="registration.pun">
+                                       class="form-control" data-ui-mask="${punMask}" data-ng-model="registration.pun">
                                 <span class="input-group-btn">
                                     <button aria-label="Help" class="btn btn-default" type="button">
                                         <i class="fa fa-check text-success" data-ng-show="validPun"></i>
@@ -98,7 +99,7 @@
                 </div>
                 <div class="panel-footer text-center">
                     <button type="submit" class="btn btn-primary"
-                            data-ng-disabled="!passwordConfirmed || !checked || (!domain && !cnpjOk)">${msg('register.form.CREATE_ADMIN', [brandName])}</button>
+                            data-ng-disabled="!passwordConfirmed || !checked || (!domain && !validPun)">${msg('register.form.CREATE_ADMIN', [brandName])}</button>
                 </div>
             </div>
         </form>

@@ -6,21 +6,23 @@
         <br/>
         <div class="panel panel-default">
             <!-- E-MAIL SIGNIN -->
-            <div class="panel-body">
-                <form  name="form" action="/login" method="POST">
+            <div class="panel-body" data-ng-controller="ValidatorController as validatorCtrl">
+                <form class="form-horizontal" name="form" action="/login" method="POST">
                     [#include "/security/form-head.html" /]
 
-                    <div id="form-group-email" class="form-group">
-                        <input type="email"  required="" name="username"  data-ng-model="username" placeholder="E-mail" class="form-control">
-                    </div>
-                    <div id="form-group-password" class="form-group">
-                        <input type="password"  required="" name="password" data-ng-model="password" placeholder="{{'PASSWORD'|common}}" class="form-control">
+                    [#include "/security/form-principal.html" /]
+
+                    <div class="form-group">
+                        <label for="password" class="col-sm-3 control-label">${msg('access.form.PASSWORD')}</label>
+                        <div class="col-sm-9">
+                            <input id="password" type="password" required="" name="password" data-ng-model="password" class="form-control">
+                        </div>
                     </div>
 
                     <!--
                      ! Forgot password
                      !-->
-                    <div class="row">
+                    <div class="form-group">
                         <div class="col-md-6">
                             <p><input type="checkbox" name="remember-me" > {{'_LOGIN_REMEMBER'|i18n}}</p>
                         </div>
@@ -32,7 +34,7 @@
                     <!--
                      ! Submit
                      !-->
-                    <button type="submit" class="btn btn-primary" style="width: 100%" >{{'_CONTINUE'|common}}</button>
+                    <button type="submit" class="btn btn-primary" style="width: 100%" >${msg('access.form.CONTINUE')}</button>
                 </form>
                 <div class="row">
                     <div class="col-md-12">

@@ -4,6 +4,7 @@ import org.helianto.message.config.{MailerProperties, SmsProperties}
 import org.helianto.message.domain.{Message, MessageLog, TotalVoiceSmsMessage}
 import org.helianto.message.repository.MessageLogRepository
 import org.slf4j.{Logger, LoggerFactory}
+import org.springframework.beans.factory.annotation.Qualifier
 import org.springframework.http.{HttpEntity, HttpHeaders, HttpMethod, MediaType}
 import org.springframework.stereotype.Service
 import org.springframework.web.client.RestTemplate
@@ -11,6 +12,7 @@ import org.springframework.web.client.RestTemplate
 import scala.util.{Failure, Success, Try}
 
 @Service
+@Qualifier("localSMS")
 class TotalVoiceService
 (val restTemplate: RestTemplate
  , val smsProperties: SmsProperties

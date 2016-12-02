@@ -2,6 +2,10 @@ spring:
 # Profiles
   profiles:
     active: dev
+  freemarker:
+    template-loader-path: classpath:/templates/
+    prefer-file-system-access: false
+
 # Helianto
 helianto:
   contextName: DEFAULT

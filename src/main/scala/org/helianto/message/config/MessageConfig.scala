@@ -19,7 +19,7 @@ class MessageConfig {
   @Bean
   def messageSource = {
     val messageSource = new ResourceBundleMessageSource()
-    messageSource.setBasenames("_i18n/default")
+    messageSource.setBasenames("_i18n/default", "classpath:_i18n/default")
     messageSource.setUseCodeAsDefaultMessage(true)
     messageSource.setDefaultEncoding("UTF-8")
     messageSource

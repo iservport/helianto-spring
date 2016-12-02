@@ -24,10 +24,10 @@
                      !-->
                     <div class="form-group">
                         <div class="col-md-6">
-                            <p><input type="checkbox" name="remember-me" > {{'_LOGIN_REMEMBER'|i18n}}</p>
+                            <p><input type="checkbox" name="remember-me" > ${msg('access.form.REMEMBER')}}</p>
                         </div>
                         <div class="col-md-6">
-                            <a target="_self" class="pull-right" data-ng-href="/password/recovery/">{{'_LOGIN_FORGOT'|i18n}}</a>
+                            <a target="_self" class="pull-right" data-ng-href="/password/recovery/">${msg('access.form.FORGOT')}}</a>
                         </div>
                     </div>
 
@@ -39,14 +39,14 @@
                 <div class="row">
                     <div class="col-md-12">
                         <hr/>
-                        <p><a class="pull-right" href="/signup/">{{'_LOGIN_CREATE'|i18n}}</a></p>
-                        <p style="font-weight: bold;">{{'_LOGIN_JOIN'|i18n}}</p>
+                        <p><a class="pull-right" href="/signup/">${msg('access.form.CREATE')}</a></p>
+                        <p style="font-weight: bold;">${msg('access.form.JOIN')}}</p>
                     </div>
                 </div>
             </div><!-- panel body -->
             [#if enableFacebook?? || enableLinkedin?? || enableGoogle?? ]
             <div class="panel-body">
-                <div style ='float: left;'>{{'_OR'|common}} {{'_LOGIN_WITH'| i18n}}</div>
+                <div style ='float: left;'>${msg('access.form.OR')}} ${msg('access.form.WITH')}}</div>
                 [#if enableGoogle??]
                 <span style ='float: right; padding-right: 5px;'>
                     <form name="fb_signin" id="g_signin" action="/signin/google" method="POST" class="ng-pristine ng-valid">

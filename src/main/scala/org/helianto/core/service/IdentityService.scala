@@ -22,6 +22,8 @@ class IdentityService(val targetRepository: IdentityRepository) extends CommandM
 
   def findOption(principal: String):Option[Identity] = Option(targetRepository.findByPrincipal(principal))
 
+  def findById(id: String):Identity = Option(targetRepository.findOne(id)).getOrElse(throw new IllegalArgumentException)
+
   def install(root: IdentityData): Identity = {
     val password = Option(root.getPassword).filter(_.nonEmpty).getOrElse(getInitialPassword)
     install(root.getPrincipal, root.getDisplayName, root.getPersonalData, password)

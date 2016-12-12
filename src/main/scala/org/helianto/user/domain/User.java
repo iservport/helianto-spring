@@ -33,7 +33,7 @@ import java.util.UUID;
  * @author Mauricio Fernandes de Castro
  */
 @Entity
-@Table(name="user_user",
+@Table(name="core_user",
         uniqueConstraints = {@UniqueConstraint(columnNames={"entityId", "userKey"})}
 )
 public class User implements Comparable<User>{

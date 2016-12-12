@@ -19,7 +19,7 @@ helianto:
     install: h3l1@nt0
   welcome:
     brandName: Helianto
-    logo: /images/logo-iserv64.png
+    logo: /images/logo.png
     copyright: i-serv Consultoria Empresarial Ltda. 2004-2016
     inLineCss: |
       h2,h3,h5,.footer {color: white;}
@@ -32,8 +32,8 @@ helianto:
     # define admin option, one of ALLOW | DENY | a domain name
     admin: allow
     # define principal type, one of EMAIL | PIN  - to be implemented: | PHONE | USERNAME
-    principal: pin
-    pinMask: 999.999.999-99
+    principal: e-mail
+    # pinMask: 999.999.999-99
     # public unique number may be required
     pun: required
     punMask: 99.999.999/9999-99

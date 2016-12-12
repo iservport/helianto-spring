@@ -21,6 +21,8 @@ class EntityInstallService(val targetRepository: EntityRepository, val identityS
 
   def findOption(alias: String) = Option(targetRepository.findByContextNameAndAliasIgnoreCase(contextName, alias))
 
+  def findById(id: String) = Option(targetRepository.findOne(id)).getOrElse(throw new IllegalArgumentException)
+
   def install(registration: Registration): Entity =
     install(registration.getCityId
       , registration.getEntityAlias

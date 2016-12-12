@@ -47,6 +47,7 @@ class AbstractDetailsService {
           .map(new SimpleGrantedAuthority(_))
           .distinct
           .:+(new SimpleGrantedAuthority(s"SELF_ID_${user.getIdentityId}"))
+          .:+(new SimpleGrantedAuthority(s"USER_ID_${user.getUserId}"))
           .:+(new SimpleGrantedAuthority(s"ENTITY_ID_${user.getUser.getEntityId}"))
           .toList
         user.updateAuthorities(authorities)

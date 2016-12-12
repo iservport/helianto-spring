@@ -15,14 +15,6 @@ helianto:
       password: NONE
     senderEmail: noreply@helianto.org
     senderFullName: Maurício Fernandes de Castro
-  sms:
-    url: https://api.evoline.com.br/
-    accessToken: 67e750120e59192b118c81ea78a7d3d0
-    service:
-      serviceType: sms
-      serviceName: sms
-      user: iservport
-      password: NONE
 
 spring:
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)

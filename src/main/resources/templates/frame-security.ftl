@@ -5,7 +5,6 @@
 	data-ng-controller="ViewController as ViewCtrl" 
 >
 <head>
-    <title>${titlePage!'Security'}</title>
 	[#include "/frame-head.ftl" /]
     <style>${inLineCss!''}</style>
     [#if captchaKey?? ]<script src='https://www.google.com/recaptcha/api.js'></script>[/#if]

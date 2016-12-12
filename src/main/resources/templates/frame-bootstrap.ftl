@@ -6,18 +6,8 @@
     data-ng-cloak >
 
 <head>
-    <meta content="text/html; iso-8859-1" http-equiv="content-type">
-	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1.0">
-	
-    [#include "/frame-head.ftl" /]
 
-   <script type="text/javascript">var externalId = ${(externalId!0)?c};</script>
-
-	<link type="image/x-icon" href="/images/favicon.ico" rel="shortcut icon">
-	<link type="image/x-icon" href="/images/favicon.ico" rel="icon">
-
-    <title>${title!''}</title>
+	[#include "/frame-head.ftl" /]
 
 </head>
 <body id="app" 

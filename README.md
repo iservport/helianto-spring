@@ -152,3 +152,12 @@ logging:
     org.helianto.core: DEBUG
     org.helianto.message: DEBUG
 ```
+
+You will notice that the configuration follows the Spring Boot pattern, 
+except for the keys starting with ```helianto```. The current defaults 
+are quite useful in a production environment. You may only need to add 
+a ```application-prod.yaml``` to set your production database and details.
+
+
+
+

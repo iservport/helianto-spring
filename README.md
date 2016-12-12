@@ -158,6 +158,10 @@ except for the keys starting with ```helianto```. The current defaults
 are quite useful in a production environment. You may only need to add 
 a ```application-prod.yaml``` to set your production database and details.
 
+## Helianto Spring related services.
 
+The HSP needs other services to expose its full functionality.
 
+  ![org_helianto_components.png](docs/org_helianto_components.png)
+  
 

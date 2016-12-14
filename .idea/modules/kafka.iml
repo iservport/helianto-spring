@@ -22,11 +22,11 @@
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
     <orderEntry type="library" name="SBT: org.scala-lang:scala-library:2.11.8:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-sanitize:1.6.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-resource:1.6.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-i18n:1.6.0:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-animate:1.6.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:angular:1.6.0:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-sanitize:1.5.9:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-resource:1.5.9:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-i18n:1.5.9:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-animate:1.5.9:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.social:spring-social-linkedin:1.0.2.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-social-linkedin:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.social:spring-social-web:1.1.4.RELEASE:jar" level="project" />

@@ -29,7 +29,7 @@ spring:
     test-on-return: false
     test-while-idle: true
     time-between-eviction-runs-millis: 5000
-    url: jdbc:mysql://192.168.10.5:3306/helianto01?autoreconnect=true
+    url: jdbc:mysql://mysqlhost:3306/helianto02?autoreconnect=true
     username: helianto
     validation-query: SELECT 1
 # Spring Data JPA

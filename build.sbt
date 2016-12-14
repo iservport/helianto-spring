@@ -1,3 +1,4 @@
+import com.typesafe.sbt.packager.docker.Cmd
 import sbt.Keys._
 
 val heliantoSpringBootVersion = settingKey[String]("Spring Boot version")
@@ -6,7 +7,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.2.0.RELEASE"
+version in ThisBuild := "1.2.8.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -21,7 +22,7 @@ lazy val root = (project in file("."))
   .settings(commonSettings)
   .settings(
     name := "helianto-spring",
-    mainClass in (Compile, run) := Some("org.helianto.Application"),
+    mainClass in (Compile) := Some("org.helianto.Application"),
     libraryDependencies ++= Seq(
       "org.projectlombok"                  % "lombok"                         % "1.16.8",
       "org.springframework.boot"           % "spring-boot-starter-web"        % heliantoSpringBootVersion.value,
@@ -47,11 +48,17 @@ lazy val root = (project in file("."))
       "mysql"          % "mysql-connector-java" % "5.1.26",
       "org.scalactic" %% "scalactic"            % "3.0.0"
     ),
-    dockerBaseImage := "azul/zulu-openjdk:8",
+    dockerBaseImage := "anapsix/alpine-java:latest",
     dockerUpdateLatest := true,
     dockerExposedPorts := Seq(8081),
     dockerRepository := Some("iservport")
   )
+
+// because we use Alpine
+dockerCommands := dockerCommands.value.flatMap{
+  case cmd@Cmd("FROM",_) => List(cmd, Cmd("RUN", "apk update && apk add bash"))
+  case other => List(other)
+}
 
 lazy val kafka = (project in file("kafka")).
   enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
@@ -65,11 +72,11 @@ lazy val kafka = (project in file("kafka")).
   .dependsOn(root)
 
 libraryDependencies ++= Seq(
-  "org.webjars.bower" % "angular"              % "1.5.9",
-  "org.webjars.bower" % "angular-sanitize"     % "1.5.9",
-  "org.webjars.bower" % "angular-resource"     % "1.5.9",
-  "org.webjars.bower" % "angular-animate"      % "1.5.9",
-  "org.webjars.bower" % "angular-i18n"         % "1.5.9",
+  "org.webjars.bower" % "angular"              % "1.6.0",
+  "org.webjars.bower" % "angular-sanitize"     % "1.6.0",
+  "org.webjars.bower" % "angular-resource"     % "1.6.0",
+  "org.webjars.bower" % "angular-animate"      % "1.6.0",
+  "org.webjars.bower" % "angular-i18n"         % "1.6.0",
   "org.webjars.bower" % "angular-loading-bar"  % "0.9.0",
   "org.webjars.bower" % "slimScroll"           % "1.3.3"  exclude("org.webjars.bower", "jquery"),
   "org.webjars.bower" % "bootstrap"            % "3.3.7"  exclude("org.webjars.bower", "jquery"),

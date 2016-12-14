@@ -32,7 +32,7 @@ helianto:
     # define admin option, one of ALLOW | DENY | a domain name
     admin: allow
     # define principal type, one of EMAIL | PIN  - to be implemented: | PHONE | USERNAME
-    principal: e-mail
+    principal: email
     # pinMask: 999.999.999-99
     # public unique number may be required
     pun: required

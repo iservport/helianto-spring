@@ -19,6 +19,7 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Optional;
+import java.util.UUID;
 
 /**
  * State of a union or federation.
@@ -33,9 +34,9 @@ public class State
 	implements Serializable, Comparable<State> {
 
     private static final long serialVersionUID = 1L;
-    
-    @Id @GeneratedValue(strategy=GenerationType.AUTO)
-    private int id;
+
+	@Id @Column(length=32)
+	private String id;
 
 	@Column(length=20)
 	private String contextName = "";
@@ -65,6 +66,7 @@ public class State
 	 */
     public State() {
         super();
+		this.id = UUID.randomUUID().toString().replaceAll("-", "");
     }
 
     /**
@@ -157,7 +159,7 @@ public class State
 		return this;
 	}
 
-	public int getId() {
+	public String getId() {
 		return this.id;
 	}
 
@@ -185,7 +187,7 @@ public class State
 		return this.priority;
 	}
 
-	public void setId(int id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -245,7 +247,8 @@ public class State
 	public int hashCode() {
 		final int PRIME = 59;
 		int result = 1;
-		result = result * PRIME + this.id;
+		final Object $id = this.id;
+		result = result * PRIME + ($id == null ? 0 : $id.hashCode());
 		final Object $contextName = this.contextName;
 		result = result * PRIME + ($contextName == null ? 0 : $contextName.hashCode());
 		final Object $stateCode = this.stateCode;

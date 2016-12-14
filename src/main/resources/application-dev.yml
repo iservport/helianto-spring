@@ -4,9 +4,9 @@ server:
 
 helianto:
   api:
-    url: http://localhost:8081
+    url: http://heliantohost:8081
   mailer:
-    url: http://localhost:8082
+    url: http://heliantohost:8082
     entityName: helianto.org
     service:
       serviceType: echo_mailer
@@ -29,7 +29,7 @@ spring:
     test-on-return: false
     test-while-idle: true
     time-between-eviction-runs-millis: 5000
-    url: jdbc:mysql://mysqlhost:3306/helianto02?autoreconnect=true
+    url: jdbc:mysql://heliantohost:3306/helianto02?autoreconnect=true
     username: helianto
     validation-query: SELECT 1
 # Spring Data JPA

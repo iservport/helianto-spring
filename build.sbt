@@ -7,7 +7,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.2.9.RELEASE"
+version in ThisBuild := "1.3.6.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -48,10 +48,11 @@ lazy val root = (project in file("."))
       "mysql"          % "mysql-connector-java" % "5.1.26",
       "org.scalactic" %% "scalactic"            % "3.0.0"
     ),
+    packageName in Docker := "mvps-156214/helianto-spring",
     dockerBaseImage := "anapsix/alpine-java:latest",
     dockerUpdateLatest := true,
     dockerExposedPorts := Seq(8081),
-    dockerRepository := Some("iservport")
+    dockerRepository := Some("us.gcr.io")
   )
 
 // because we use Alpine
@@ -72,21 +73,25 @@ lazy val kafka = (project in file("kafka")).
   .dependsOn(root)
 
 libraryDependencies ++= Seq(
-  "org.webjars.bower" % "angular"              % "1.6.0",
-  "org.webjars.bower" % "angular-sanitize"     % "1.6.0",
-  "org.webjars.bower" % "angular-resource"     % "1.6.0",
-  "org.webjars.bower" % "angular-animate"      % "1.6.0",
-  "org.webjars.bower" % "angular-i18n"         % "1.6.0",
+  "org.webjars.bower" % "angular"              % "1.6.1",
+  "org.webjars.bower" % "angular-sanitize"     % "1.6.1",
+  "org.webjars.bower" % "angular-resource"     % "1.6.1",
+  "org.webjars.bower" % "angular-animate"      % "1.6.1",
+  "org.webjars.bower" % "angular-i18n"         % "1.6.1",
   "org.webjars.bower" % "angular-loading-bar"  % "0.9.0",
   "org.webjars.bower" % "slimScroll"           % "1.3.3"  exclude("org.webjars.bower", "jquery"),
   "org.webjars.bower" % "bootstrap"            % "3.3.7"  exclude("org.webjars.bower", "jquery"),
   "org.webjars.bower" % "jquery"               % "2.2.4",
-  "org.webjars.bower" % "fontawesome"          % "4.6.3"
+  "org.webjars.bower" % "fontawesome"          % "4.6.3",
+  "org.webjars.bower" % "angular-ui-bootstrap-bower" % "2.3.1",
+  "org.webjars.bower" % "angular-ui-mask"      % "1.8.7",
+  "org.webjars.bower" % "bootstrap-social"     % "5.0.0"
 )
 
 lazy val commonSettings = Seq(
   resolvers in ThisBuild ++= Seq(
     "Helianto Releases"  at "s3://maven.helianto.org/release",
+
     "Helianto Snapshots" at "s3://maven.helianto.org/snapshot",
     "Helianto Development" at "s3://maven.helianto.org/devel"
   ),
@@ -108,7 +113,3 @@ lazy val commonSettings = Seq(
 )
 
 licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
-
-
-
-

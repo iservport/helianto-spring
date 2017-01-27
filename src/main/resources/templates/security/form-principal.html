@@ -1,33 +1,33 @@
 [#ftl]
-[#if principalTypeEmail?? ]
-<div class="form-group">
-    <label class="col-sm-3 control-label">${msg('access.form.EMAIL')}</label>
-    <div class="col-sm-9">
-        <div class="input-group">
-            <input type="email" required="true" id="email"
-                   data-ng-model="principal" name="principal"
-                   data-ng-blur="saveEmail(principal)" class="form-control">
-            <span class="input-group-addon" data-ng-hide="principalExisting"><i class="fa fa-check text-success"></i></span>
-            <span class="input-group-addon" data-ng-show="principalExisting"><i class="fa fa-close text-danger"  ></i></span>
+<div  data-ng-controller="ValidatorController as validatorCtrl">
+    [#if principalTypeEmail?? ]
+    <div class="form-group">
+        <label class="col-sm-3 control-label">${msg('access.form.EMAIL')}</label>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input type="email" required="true" id="email"
+                       data-ng-model="principal" name="principal"
+                       data-ng-blur="saveEmail(principal)" class="form-control">
+                <span class="input-group-addon" data-ng-hide="principalExisting"><i class="fa fa-check text-success"></i></span>
+                <span class="input-group-addon" data-ng-show="principalExisting"><i class="fa fa-close text-danger"  ></i></span>
+            </div>
         </div>
     </div>
-</div>
-[/#if]
-
-[#if principalTypePin?? ]
-<div class="form-group">
-    <label class="col-sm-3 control-label">${msg('access.form.PIN')}</label>
-    <div class="col-sm-9">
-        <div class="input-group">
-            <input type="text" required="true" id="pin"
-                   data-ng-model="registration.pin" name="principal"
-                   data-ng-keyup="validPin=validatePin(registration.pin, 'CPF')"
-                   data-ng-blur= "validPin=validatePin(registration.pin, 'CPF')"
-                   data-ui-mask="${pinMask}" class="form-control">
-            <span class="input-group-addon" data-ng-show="validPin"><i class="fa fa-check text-success"></i></span>
-            <span class="input-group-addon" data-ng-hide="validPin"><i class="fa fa-close text-danger"  ></i></span>
+    [/#if]
+    [#if principalTypePin?? ]
+    <div class="form-group">
+        <label class="col-sm-3 control-label">${msg('access.form.PIN')}</label>
+        <div class="col-sm-9">
+            <div class="input-group">
+                <input type="text" required="true" id="pin"
+                       data-ng-model="registration.pin" name="principal"
+                       data-ng-keyup="validPin=validatePin(registration.pin, 'CPF')"
+                       data-ng-blur= "validPin=validatePin(registration.pin, 'CPF')"
+                       data-ui-mask="${pinMask}" class="form-control">
+                <span class="input-group-addon" data-ng-show="validPin"><i class="fa fa-check text-success"></i></span>
+                <span class="input-group-addon" data-ng-hide="validPin"><i class="fa fa-close text-danger"  ></i></span>
+            </div>
         </div>
     </div>
+    [/#if]
 </div>
-[/#if]
-

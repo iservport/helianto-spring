@@ -24,6 +24,7 @@ import org.springframework.security.oauth2.config.annotation.web.configurers.Aut
 import org.springframework.security.oauth2.provider.token.TokenEnhancerChain;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.KeyStoreKeyFactory;
+import org.springframework.security.web.authentication.LoginUrlAuthenticationEntryPoint;
 import org.springframework.security.web.authentication.rememberme.JdbcTokenRepositoryImpl;
 import org.springframework.security.web.authentication.rememberme.PersistentTokenRepository;
 import org.springframework.security.web.csrf.CsrfFilter;
@@ -65,6 +66,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @EnableAuthorizationServer
     protected static class OAuth2Config extends AuthorizationServerConfigurerAdapter {
 
+        @Value("${helianto.host}")
+        private String heliantoHost = "";
+
         @Value("${key-store.password}")
         private String keyStorePassword = "";
 
@@ -74,8 +78,31 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Autowired
         private CustomTokenEnhancer tokenEnhancer;
 
+        /**
+         * Configure the endpoints to collaborate with the authentication manager
+         * and convert tokens to and from JWT format.
+         *
+         * @param endpoints
+         * @throws Exception
+         */
+        @Override
+        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
+            endpoints
+                    .authenticationManager(authenticationManager)
+                    .accessTokenConverter(accessTokenConverter())
+                    .tokenEnhancer(tokenEnhancerChain());
+        }
+
+        // Token Enhancer to be used to configure endpoints
+        private TokenEnhancerChain tokenEnhancerChain() {
+            TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
+            tokenEnhancerChain.setTokenEnhancers(
+                    Arrays.asList(tokenEnhancer, accessTokenConverter()));
+            return tokenEnhancerChain;
+        }
+
         // key pair to be used by accessTokenConverter
-        public KeyPair getKeyPair() {
+        private KeyPair getKeyPair() {
             KeyStoreKeyFactory keyStoreKeyFactory = new KeyStoreKeyFactory(
                     new ClassPathResource("jwt.jks"),
                     keyStorePassword.toCharArray());
@@ -91,25 +118,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
         @Override
         public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
-            security.tokenKeyAccess("permitAll()")
-                    .checkTokenAccess("isAuthenticated()");
-        }
-
-
-        // Token Enhancer to be used to configure endpoints
-        private TokenEnhancerChain tokenEnhancerChain() {
-            TokenEnhancerChain tokenEnhancerChain = new TokenEnhancerChain();
-            tokenEnhancerChain.setTokenEnhancers(
-                    Arrays.asList(tokenEnhancer, accessTokenConverter()));
-            return tokenEnhancerChain;
-        }
-
-        @Override
-        public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
-            endpoints
-                .authenticationManager(authenticationManager)
-                .accessTokenConverter(accessTokenConverter())
-                .tokenEnhancer(tokenEnhancerChain());
+            security
+                    .tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
+                    .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
         }
 
         @Override
@@ -117,7 +128,7 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
             clients.inMemory()
                 .withClient("iservport-trusted-client")
                     .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
-                    .authorities("ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
+                    .authorities("ROLE_USER_READ", "ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
                     .scopes("read", "write", "trust")
                     .accessTokenValiditySeconds(60)
                     .refreshTokenValiditySeconds(160)
@@ -137,6 +148,8 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     }
 
+    // end of Authorization server config
+
     /**
      * Resource server
      */
@@ -148,10 +161,12 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         public void configure(HttpSecurity http) throws Exception {
             // @formatter:off
             http.antMatcher("/api/**")
-                    .authorizeRequests().anyRequest().permitAll() // access("#oauth2.hasScope('write')")
+                    .authorizeRequests().anyRequest().access("#oauth2.hasScope('write')")
                 .and().sessionManagement()
                     .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and().csrf().disable()
+                    .exceptionHandling()
+      .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
             ;
             // @formatter:on
         }
@@ -160,28 +175,42 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http.authorizeRequests()
-                .antMatchers("/oauth/**").authenticated()
-                .anyRequest().permitAll()
-            .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+        http
+                .authorizeRequests().antMatchers("/", "/login**", "/signup/", "/password/recovery/", "/webjars/**", "/js/**", "/css/**", "/trace/**").permitAll().and()
+                // default protection for all resources (including /oauth/authorize)
+                .authorizeRequests()
+                .anyRequest().authenticated()
+            .and().exceptionHandling()
+                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+                .and().formLogin().usernameParameter("principal")
+                .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository())
-                .ignoringAntMatchers("/app/content/upload", "/login/**", "/oauth/**")
-            .and().rememberMe()
-                .tokenRepository(persistentTokenRepository())
-                .tokenValiditySeconds(REMEMBER_ME_DEFAULT_DURATION)
-            .and().formLogin()
-                .loginPage("/login").permitAll()
-                .usernameParameter("principal")
-                .failureUrl("/login?error=bad_credentials")
-                .defaultSuccessUrl("/", false)
-            .and().logout()
-                .deleteCookies("JSESSIONID")
-                .deleteCookies("remember-me")
-                .deleteCookies("X-XSRF-TOKEN")
-                .logoutUrl("/logout")
-                .logoutSuccessUrl("/login")
-        ;
-
+                .ignoringAntMatchers("/oauth/**");
+//        http.antMatcher("/**")
+//                .authorizeRequests()
+//                .antMatchers("/", "/login**", "/webjars/**", "/js/**", "/css/**").permitAll()
+//                .anyRequest().authenticated()
+//            .and().exceptionHandling()
+//                .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
+//            .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+//                .csrf().csrfTokenRepository(csrfTokenRepository())
+//                .ignoringAntMatchers("/app/content/upload", "/login/**", "/oauth/**")
+//            .and().rememberMe()
+//                .tokenRepository(persistentTokenRepository())
+//                .tokenValiditySeconds(REMEMBER_ME_DEFAULT_DURATION)
+//            .and().formLogin()
+//                .loginPage("/login").permitAll()
+//                .usernameParameter("principal")
+//                .failureUrl("/login?error=bad_credentials")
+//                .defaultSuccessUrl("/", false)
+//            .and().logout()
+//                .deleteCookies("JSESSIONID")
+//                .deleteCookies("remember-me")
+//                .deleteCookies("X-XSRF-TOKEN")
+//                .logoutUrl("/logout")
+//                .logoutSuccessUrl("/login")
+//        ;
+//
     }
 
     @Override

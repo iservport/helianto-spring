@@ -3,10 +3,11 @@ server:
   port: 8081
 
 helianto:
+  host: localhost
   api:
-    url: http://heliantohost:8081
+    url: http://${helianto.host}:8081
   mailer:
-    url: http://heliantohost:8082
+    url: http://${helianto.mailer-host}:8082
     entityName: helianto.org
     service:
       serviceType: echo_mailer
@@ -29,7 +30,7 @@ spring:
     test-on-return: false
     test-while-idle: true
     time-between-eviction-runs-millis: 5000
-    url: jdbc:mysql://heliantohost:3306/helianto02?autoreconnect=true
+    url: jdbc:mysql://${helianto.db-host}:3306/helianto02?autoreconnect=true
     username: helianto
     validation-query: SELECT 1
 # Spring Data JPA

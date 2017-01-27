@@ -6,7 +6,7 @@
     <div class="col-md-3">
         <h2>${msg('register.form.WELCOME', [brandName])}</h2>
     </div>
-    <div class="col-md-6" data-ng-controller="ValidatorController as validatorCtrl">
+    <div class="col-md-6">
         <form class="form-horizontal" name="form" role="form" action="/register" method="POST" novalidate >
             <div class="panel panel-default">
                 <div class="panel-body" data-ng-init="isAdmin=false; domain=true; noDomain=false; entityAliasPrefix='iservport.com'">
@@ -44,10 +44,11 @@
                      # Public unique number
                      #--]
                     [#if enablePun?? ]
+                    [#-- Add optional validator as /js/form-validators.js --#]
                     <div class="form-group" data-ng-init="registration.pun='${registration.pun!''}'">
                         <label class="col-sm-3 control-label">${msg('register.form.PUN')}</label>
                         <div class="col-sm-9">
-                            <div class="input-group">
+                            <div class="input-group" data-ng-controller="ValidatorController as validatorCtrl">
                                 <input type="text" name="pun" required
                                        data-ng-keyup="validPun=validatePun(registration.pun, 'CNPJ')"
                                        data-ng-blur= "validPun=validatePun(registration.pun, 'CNPJ')"

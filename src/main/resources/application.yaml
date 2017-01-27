@@ -8,6 +8,11 @@ spring:
 
 # Helianto
 helianto:
+  host: localhost
+  mailer-host: ${helianto.host}
+  db-host: ${helianto.host}
+  title: Helianto Control Panel
+  base-name: home
   contextName: DEFAULT
   root:
     system:
@@ -48,5 +53,6 @@ key-store:
 logging:
   level:
     org.helianto: INFO
-    org.springframework.security: INFO
+    org.springframework.security: DEBUG
+    org.springframework.security.web: DEBUG
     org.helianto.message: DEBUG

@@ -1,7 +1,7 @@
 [#ftl]
 <!DOCTYPE html >
 <html id="ng-app" xmlns:ng="http://angularjs.org" 
-    data-ng-app="${baseName}" 
+    data-ng-app="app"
     data-ng-controller="ViewController as ViewCtrl" 
     data-ng-cloak >
 
@@ -33,7 +33,9 @@
 	    [/#if]
 	    <section class="view-container animate-fade-up">
 			<div class="page page-dashboard" >
-		    	<div class="row" data-ng-include="'/${baseName}/selection-${baseName}.html'"></div>
+		    	<div class="row">
+					[#include "/selection-${baseName}.html" /]
+				</div>
 		    </div><!-- end of page -->
 		</section>
 	    </div><!--content-->

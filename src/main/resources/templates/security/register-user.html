@@ -6,14 +6,15 @@
     <div class="col-md-3">
         <h2>${msg('register.form.WELCOME_USER', [brandName])}</h2>
     </div>
-    <div class="col-md-6" data-ng-controller="ValidatorController as validatorCtrl">
+    <div class="col-md-6" >
         <form class="form-horizontal" role="form" action="/register" method="POST">
             <div class="panel panel-default">
                 <div class="panel-body" data-ng-init="isAdmin=false; domain=true">
                     [#include "/security/form-head.html" /]
                     <input type="hidden" name="admin" value="false">
                     <input type="hidden" name="id" value="${registration.id!''}">
-                    <div class="form-group">
+                    [#-- Add optional validator as /js/form-validators.js --#]
+                    <div class="form-group" data-ng-controller="ValidatorController as validatorCtrl">
                         <label class="col-sm-3 control-label">${msg('register.form.ORG')}</label>
                         <div class="col-sm-9">
                             <input type="text" required name="entityAlias" data-ng-model="entityAlias" placeholder="${msg('register.form.DOMAIN')}" class="form-control" >

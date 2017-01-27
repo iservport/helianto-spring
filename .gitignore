@@ -2,6 +2,8 @@
 ### Scala template
 *.class
 *.log
+src/main/resources/application-gcp.yml
+/k8s
 
 # sbt specific
 .cache

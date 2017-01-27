@@ -1,7 +1,7 @@
 [#ftl]
 <!DOCTYPE html>
 <html id="ng-app" xmlns:ng="http://angularjs.org" 
-	data-ng-app="security" 
+	data-ng-app="app"
 	data-ng-controller="ViewController as ViewCtrl" 
 >
 <head>
@@ -38,11 +38,11 @@
     [#include "/frame-js.html" /]
     [#--
      # Optional validators
-     # To override, create a file named "/security/js/form-validators.js"
+     # To override, create a file named "/js/form-validators.js"
      #--]
     <script >
-    angular.module('security').controller('ValidatorController', ['$scope', function($scope) {
-        [#include "/security/js/form-validators.js" /]
+    angular.module('app').controller('ValidatorController', ['$scope', function($scope) {
+        [#include "/js/form-validators.js" /]
     }])
     </script>
 </body>

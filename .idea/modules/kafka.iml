@@ -156,5 +156,8 @@
     <orderEntry type="library" name="SBT: org.webjars.bower:angular-i18n:1.6.1:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:angular-resource:1.6.1:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:angular-sanitize:1.6.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.helianto:helianto-lang-de_2.11:1.0.3.RELEASE:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.helianto:helianto-lang-es_2.11:1.0.3.RELEASE:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.helianto:helianto-lang-pt_2.11:1.0.3.RELEASE:jar" level="project" />
   </component>
 </module>

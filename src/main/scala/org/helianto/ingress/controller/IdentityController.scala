@@ -17,6 +17,15 @@ class IdentityController(identityService: IdentityService) {
     */
   @GetMapping(params = Array("principal"))
   def isIdentityExisting(@RequestParam principal: String) =
-    s"""{"canCreate":${identityService.findOption(principal).nonEmpty}}"""
+  s"""{"canCreate":${identityService.findOption(principal).nonEmpty}}"""
+
+  /**
+    * The identity.
+    *
+    * @param id
+    */
+  @GetMapping(params = Array("id"))
+  def getIdentity(@RequestParam id: String) =
+    identityService.findById(id)
 
 }

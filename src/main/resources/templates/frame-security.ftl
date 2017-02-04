@@ -2,7 +2,6 @@
 <!DOCTYPE html>
 <html id="ng-app" xmlns:ng="http://angularjs.org" 
 	data-ng-app="app"
-	data-ng-controller="ViewController as ViewCtrl" 
 >
 <head>
 	[#include "/frame-head.ftl" /]

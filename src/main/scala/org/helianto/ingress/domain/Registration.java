@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.helianto.core.domain.Identity;
 import org.helianto.core.domain.IdentityData;
 import org.helianto.core.domain.PersonalData;
+import org.helianto.ingress.config.RegisterProperties;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -95,6 +96,13 @@ public class Registration extends AbstractRegistration implements IdentityData, 
             throw new IllegalArgumentException("Context name required");
         }
         this.contextName = contextName;
+    }
+
+    public Registration(String contextName, RegisterProperties properties, boolean failIfNoContext) {
+        this(contextName, failIfNoContext);
+        this.principalType = properties.principalType();
+        this.admin = properties.enableAdmin();
+        this.isDomain = properties.requireDomain();
     }
 
     public Registration(String principal) {

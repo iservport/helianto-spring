@@ -176,16 +176,20 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         http
-                .authorizeRequests().antMatchers("/", "/login**", "/signup/", "/password/recovery/", "/webjars/**", "/js/**", "/css/**", "/trace/**").permitAll().and()
-                // default protection for all resources (including /oauth/authorize)
-                .authorizeRequests()
-                .anyRequest().authenticated()
+            .authorizeRequests().antMatchers("/**").permitAll()
             .and().exceptionHandling()
                 .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
                 .and().formLogin().usernameParameter("principal")
                 .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository())
-                .ignoringAntMatchers("/oauth/**");
+                .ignoringAntMatchers("/oauth/**")
+            .and().logout()
+                .deleteCookies("JSESSIONID")
+                .deleteCookies("remember-me")
+                .deleteCookies("X-XSRF-TOKEN")
+                .logoutUrl("/logout")
+                .logoutSuccessUrl("/login")
+        ;
 //        http.antMatcher("/**")
 //                .authorizeRequests()
 //                .antMatchers("/", "/login**", "/webjars/**", "/js/**", "/css/**").permitAll()
@@ -203,12 +207,6 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
 //                .usernameParameter("principal")
 //                .failureUrl("/login?error=bad_credentials")
 //                .defaultSuccessUrl("/", false)
-//            .and().logout()
-//                .deleteCookies("JSESSIONID")
-//                .deleteCookies("remember-me")
-//                .deleteCookies("X-XSRF-TOKEN")
-//                .logoutUrl("/logout")
-//                .logoutSuccessUrl("/login")
 //        ;
 //
     }

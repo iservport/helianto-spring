@@ -7,7 +7,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.3.6.RELEASE"
+version in ThisBuild := "1.3.11.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -22,7 +22,7 @@ lazy val root = (project in file("."))
   .settings(commonSettings)
   .settings(
     name := "helianto-spring",
-    mainClass in (Compile) := Some("org.helianto.Application"),
+    mainClass in Compile := Some("org.helianto.Application"),
     libraryDependencies ++= Seq(
       "org.projectlombok"                  % "lombok"                         % "1.16.8",
       "org.springframework.boot"           % "spring-boot-starter-web"        % heliantoSpringBootVersion.value,
@@ -33,10 +33,13 @@ lazy val root = (project in file("."))
       "org.springframework.boot"           % "spring-boot-starter-freemarker" % heliantoSpringBootVersion.value,
       "org.springframework.boot"           % "spring-boot-starter-social-facebook" % heliantoSpringBootVersion.value,
       "org.springframework.boot"           % "spring-boot-starter-social-linkedin" % heliantoSpringBootVersion.value,
-      "org.springframework.boot"           % "spring-boot-starter-actuator"   % heliantoSpringBootVersion.value,
+//      "org.springframework.boot"           % "spring-boot-starter-actuator"   % heliantoSpringBootVersion.value,
       "org.springframework.security.oauth" % "spring-security-oauth2"         % "2.0.11.RELEASE",
       "org.springframework.security"       % "spring-security-jwt"            % "1.0.5.RELEASE",
       "org.springframework.social"         % "spring-social-google"           % "1.0.0.RELEASE",
+      "org.helianto"                      %% "helianto-lang-pt"               % "1.0.3.RELEASE",
+      "org.helianto"                      %% "helianto-lang-es"               % "1.0.3.RELEASE",
+      "org.helianto"                      %% "helianto-lang-de"               % "1.0.3.RELEASE",
       "com.twilio.sdk"                     % "twilio"                         % "7.1.0",
       "io.springfox"                       % "springfox-swagger2"             % "2.6.0",
       "io.springfox"                       % "springfox-swagger-ui"           % "2.6.0",

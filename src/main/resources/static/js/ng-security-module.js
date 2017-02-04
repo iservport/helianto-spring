@@ -5,6 +5,10 @@
 	.controller('SignupController', ['$scope', function($scope)
 	{
     	var self = this;
+
+        // TODO validate PIN
+        self.invalidPin=false;
+
 	    console.log("SignupController is active");
 	    self.adminValue = false;
     }])
@@ -62,7 +66,8 @@
 
 		$scope.baseName = "home";
 
-		$scope.validPin=false;
+        // TODO Será necessário aqui? agora ja tem no Security Controller
+		$scope.validPin=true;
 
 		$scope.validPun=false;
 
@@ -75,8 +80,5 @@
 		$scope.showAlerts = false;
 
 	}]) // SecurityController
-	.controller('SignUpController', ['$scope', '$window', '$http', function($scope, $window, $http) {
-
-	}]) // SignUpController
 	;
 } )();

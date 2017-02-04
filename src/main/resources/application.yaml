@@ -53,6 +53,9 @@ key-store:
 logging:
   level:
     org.helianto: INFO
+    org.springframework.web.servlet.mvc.method.annotation: off
     org.springframework.security: DEBUG
+    org.springframework.security.web.FilterChainProxy: off
+    org.springframework.security.web.util.matcher: off
     org.springframework.security.web: DEBUG
     org.helianto.message: DEBUG

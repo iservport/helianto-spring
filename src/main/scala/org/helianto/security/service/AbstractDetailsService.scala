@@ -5,12 +5,13 @@ import org.helianto.security.domain.{UserAuthority, UserDetailsAdapter}
 import org.helianto.security.repository.{SecretRepository, UserAuthorityRepository}
 import org.helianto.user.repository.{UserProjection, UserRepository}
 import org.slf4j.{Logger, LoggerFactory}
-import org.springframework.beans.factory.annotation.Autowired
+import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.security.core.authority.SimpleGrantedAuthority
 import org.springframework.security.core.userdetails.UsernameNotFoundException
 
 class AbstractDetailsService {
 
+  @Value("${helianto.contextName}") val contextName: String = ""
   @Autowired val secretRepository: SecretRepository = null
   @Autowired val userRepository: UserRepository = null
   @Autowired val userAuthorityRepository: UserAuthorityRepository = null
@@ -46,6 +47,7 @@ class AbstractDetailsService {
           .flatMap(getUserAuthoritiesAsString(_))
           .map(new SimpleGrantedAuthority(_))
           .distinct
+          .:+(new SimpleGrantedAuthority(s"CONTEXT_${contextName}"))
           .:+(new SimpleGrantedAuthority(s"SELF_ID_${user.getIdentityId}"))
           .:+(new SimpleGrantedAuthority(s"USER_ID_${user.getUserId}"))
           .:+(new SimpleGrantedAuthority(s"ENTITY_ID_${user.getUser.getEntityId}"))

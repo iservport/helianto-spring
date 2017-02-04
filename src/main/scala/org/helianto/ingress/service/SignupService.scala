@@ -2,7 +2,7 @@ package org.helianto.ingress.service
 
 import java.util.Locale
 
-import org.helianto.ingress.config.MfaProperties
+import org.helianto.ingress.config.{MfaProperties, RegisterProperties}
 import org.helianto.ingress.domain.Registration
 import org.helianto.message.domain.TotalVoiceSmsMessage
 import org.helianto.message.service.{SecurityNotificationService, TotalVoiceService}
@@ -37,6 +37,9 @@ class SignupService
   @Autowired
   val mfaProperties: MfaProperties = null
 
+  @Autowired
+  val registerProperties: RegisterProperties = null
+
   @Value("${helianto.contextName}")
   val contextName: String = ""
 
@@ -49,8 +52,8 @@ class SignupService
     */
   def prompt(request: WebRequest, model: Model): String =
     Option(providerSignInUtils).map(_.getConnectionFromSession(request)) match {
-      case Some(connection) => registrationService.register(connection, request, model)
-      case None => responseService.signUpPromptResponse(model, request.getLocale, new Registration(contextName, true))
+      case Some(connection) => registrationService.register(connection, request, model) // failed provider sign-in
+      case None => responseService.signUpPromptResponse(model, request.getLocale, new Registration(contextName, registerProperties, true))
     }
 
   /**
@@ -64,6 +67,7 @@ class SignupService
     * @return the response page
     */
   def confirm(command: Registration, request: WebRequest, model: Model, locale: Locale) = {
+    println("CONFIRM")
     val registration = registrationService.saveOrUpdate(command, getIp(request))
     if      (confirmViaSmsAfterSignUp(registration, locale)) responseService.signUpMfaResponse(model, request.getLocale, registration)
     else if (confirmViaEmailAfterSignUp(registration)) responseService.signUpEmailResponse(model, request.getLocale)
@@ -122,7 +126,11 @@ class SignupService
       }
       true
     }
-    else false
+    else {
+      println("NOTEMAIL")
+      logger.debug("Registration type is not e-mail.")
+      false
+    }
 
   private[service] def confirmViaSmsAfterSignUp(registration: Registration, locale: Locale): Boolean =
     if (mfaProperties.requireMfa && !registration.isConfirmationCodeVerified) {

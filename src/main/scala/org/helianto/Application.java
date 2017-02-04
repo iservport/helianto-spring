@@ -12,6 +12,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.servlet.config.annotation.CorsRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
@@ -24,6 +25,7 @@ import springfox.documentation.swagger2.annotations.EnableSwagger2;
 @Configuration
 @EnableAutoConfiguration
 @Import({SecurityConfig.class, SocialConfig.class, MessageConfig.class, IngressConfig.class})
+@EnableWebSecurity
 @SpringBootApplication(scanBasePackages={"org.helianto.*.service","org.helianto.*.controller"})
 @EnableJpaRepositories(basePackages={"org.helianto.*.repository"})
 @EntityScan(basePackages={"org.helianto.*.domain"})

@@ -1,39 +1,21 @@
 [#ftl]
+[#include "/security/lang.ftl" /]
 <div class="row">
 	<div class="col-md-3 offset-md-3"></div>
 	<div class="col-md-6" >
 		<div class="heading">
-			<h2 align="middle">{{'VERIFY_EMAIL'|common}}</h2>
+			<h2 align="middle">${VERIFY_EMAIL}</h2>
 		<div class="well well-lg">
 			[#if emailSent?? && !emailSent ]
-				<div class="alert alert-danger" role="alert">
-				<@spring.message "label.user.email.sent.not" />
-				</div>
+				<div class="alert alert-danger" role="alert">${EMAIL_NOT_SENT}</div>
 			[/#if]
 
 			[#--
 			 # Send E-mail
 			 #--]
-			[#if emailSent?? && emailSent]
+			[#if emailSent?? && emailSent]<h4>${EMAIL_SENT}</h4>[/#if]
 
-			<h4>{{'_E_MAIL_SENT'|common}}</h4>
-
-			<p>{{'_E_MAIL_SPAM_WARN'|common}}</p>
-			[/#if]
-
-			[#if passError?? && passError ]
-				<div class="alert alert-danger" role="alert">
-				<@spring.message "label.user.password.create.not" />
-				</div>
-			[/#if]
-
-			[#if passError?? && !passError]
-				<div class="alert alert-success" role="alert">
-				<@spring.message "label.user.password.create" />
-				</div>
-			[/#if]
-
-			<h2><a class="form-control btn btn-primary full-width" href="/home/">{{'_BACK_TO_LOGIN'|common}}</a></h2>
+			<h2><a class="form-control btn btn-primary full-width" href="/home/">${BACK_TO_LOGIN}</a></h2>
 			</div>
 		</div>
 		<footer class="footer" >[#include "/security/legal.html" /]</footer>

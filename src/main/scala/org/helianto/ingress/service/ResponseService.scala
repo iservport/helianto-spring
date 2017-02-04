@@ -78,6 +78,7 @@ class ResponseService
   }
 
   def signUpEmailResponse(model: Model, locale: Locale) = {
+    println("SEND!!!!")
     model.addAttribute("main", "security/read-your-email.html")
     model.addAttribute("inLineCss", welcomeProperties.inLineCss)
     response(model, locale)

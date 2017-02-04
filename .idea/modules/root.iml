@@ -96,10 +96,8 @@
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-tomcat:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-logging:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-freemarker:1.4.0.RELEASE:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-actuator:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-autoconfigure:1.4.0.RELEASE:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-actuator:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework:spring-webmvc:4.3.2.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework:spring-web:4.3.2.RELEASE:jar" level="project" />

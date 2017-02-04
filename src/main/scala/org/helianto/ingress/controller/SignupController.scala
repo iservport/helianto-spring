@@ -30,7 +30,7 @@ class SignupController(signUpService:SignupService, responseService:ResponseServ
     */
   @GetMapping
   def getSignupPage(model: Model, @RequestParam(defaultValue = "1") contextId: Integer, @RequestParam(required = false) principal: String, request: WebRequest):String =
-    signUpService.prompt(request, model)
+    { val x = signUpService.prompt(request, model);println("XXXXXXX");println(model.asMap().get("registration"));x}
 
 
   /**

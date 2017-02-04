@@ -37,8 +37,6 @@
     <orderEntry type="library" name="SBT: org.webjars.bower:bootstrap:3.3.7:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:angular-loading-bar:0.9.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-freemarker:1.4.0.RELEASE:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-actuator:1.4.0.RELEASE:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-actuator:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework:spring-context-support:4.3.2.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.scala-js:scalajs-library_2.11:0.6.12:jar" level="project" />
     <orderEntry type="library" name="SBT: org.freemarker:freemarker:2.3.25-incubating:jar" level="project" />

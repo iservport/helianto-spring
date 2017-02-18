@@ -1,5 +1,7 @@
 package org.helianto.security.service
 
+import javax.servlet.http.HttpServletRequest
+
 import org.helianto.security.domain.UserDetailsAdapter
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
@@ -17,6 +19,20 @@ class UserSignInService extends AbstractDetailsService {
         val userDetails = afterLoadUser(new UserDetailsAdapter(user))
         val auth = new UsernamePasswordAuthenticationToken(userDetails, null.asInstanceOf[Any], userDetails.getAuthorities)
         SecurityContextHolder.getContext.setAuthentication(auth)
+      case None =>
+    }
+
+  /**
+    * Ensure the userId shares the same identity with the currently authorized user.
+    *
+    * @param identityId
+    * @param toUserId
+    */
+  def signin(identityId: String, toUserId: String, request: HttpServletRequest ) =
+    Option(userRepository.findByIdAndIdentity_Id(toUserId, identityId)) match {
+      case Some(userProjection) =>
+        Option(userRepository.findOne(toUserId)).map(user => userRepository.saveAndFlush(user.updateLastEvent()))
+        userProjection
       case None =>
     }
 

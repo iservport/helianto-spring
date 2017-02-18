@@ -9,6 +9,8 @@ trait UserRepository extends JpaRepository[User, String] {
 
   def findById(userId: String): UserProjection
 
+  def findByIdAndIdentity_Id(userId: String, identityId: String): UserProjection
+
   def findByEntityIdAndUserKey(entityId: String, userKey: String): User
 
   def findByEntityIdAndIdentity_Id(entityId: String, identityId: Int): User
@@ -17,6 +19,22 @@ trait UserRepository extends JpaRepository[User, String] {
 
   @Query("select a_.parent.id from UserAssociation a_ where a_.child.id = ?1 ")
   def findParentsByChildId(childId: String): java.util.List[String]
+
+  @Query("select c_.id as userId, e_.alias as alias, e_.entityDesc as entityDesc from User c_, UserAssociation a_, User p_, Entity e_ where a_.parent.id = p_.id AND a_.child.id = c_.id AND p_.entityId = e_.id AND lower(p_.userKey) = 'user' AND c_.identity.id = ?1 AND e_.activityState = ?2 AND c_.userState = ?3  order by c_.lastEvent DESC ")
+  def findUserAccessByIdentityIdOrderByLastEventDesc(identityId: String, acitivtyState: Char, userState: UserState): java.util.List[UserAccessProjection]
+
+  @Query("select c_.id as userId, e_.alias as alias, e_.entityDesc as entityDesc from User c_, UserAssociation a_, User p_, Entity e_ where a_.parent.id = p_.id AND a_.child.id = c_.id AND p_.entityId = e_.id AND lower(p_.userKey) = 'user' AND c_.identity.id = ?1 AND e_.activityState = 'A' AND c_.userState = 'ACTIVE' AND lower(e_.alias) like %?2 order by c_.lastEvent DESC ")
+  def findUserAccessByIdentityIdOrderByLastEventDesc(identityId: String, searchText: String): java.util.List[UserAccessProjection]
+
+}
+
+trait UserAccessProjection {
+
+  def getUserId: String
+
+  def getAlias: String
+
+  def getEntityDesc: String
 
 }
 
@@ -34,6 +52,7 @@ trait UserProjection {
 
   def getUserState: UserState
 
+  @Value("#{target.identity.principal}")
   def getUserName: String
 
 }

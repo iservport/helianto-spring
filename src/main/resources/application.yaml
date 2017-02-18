@@ -54,8 +54,12 @@ logging:
   level:
     org.helianto: INFO
     org.springframework.web.servlet.mvc.method.annotation: off
-    org.springframework.security: DEBUG
+    org.springframework.security: off
+    org.springframework.security.config.annotation.web.builders: debug
+    org.springframework.security.oauth2: DEBUG
     org.springframework.security.web.FilterChainProxy: off
     org.springframework.security.web.util.matcher: off
+    org.springframework.security.web.header: off
     org.springframework.security.web: DEBUG
     org.helianto.message: DEBUG
+    org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG

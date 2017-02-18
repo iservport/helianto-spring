@@ -11,6 +11,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
+import org.springframework.security.config.annotation.web.builders.WebSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -76,6 +77,9 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         private AuthenticationManager authenticationManager;
 
         @Autowired
+        private UserDetailsService userDetailsService;
+
+        @Autowired
         private CustomTokenEnhancer tokenEnhancer;
 
         /**
@@ -88,9 +92,10 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void configure(AuthorizationServerEndpointsConfigurer endpoints) throws Exception {
             endpoints
-                    .authenticationManager(authenticationManager)
+                    .authenticationManager(authenticationManager).userDetailsService(userDetailsService) // very important
                     .accessTokenConverter(accessTokenConverter())
-                    .tokenEnhancer(tokenEnhancerChain());
+                    .tokenEnhancer(tokenEnhancerChain())
+                    .approvalStoreDisabled();
         }
 
         // Token Enhancer to be used to configure endpoints
@@ -119,20 +124,28 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
         @Override
         public void configure(AuthorizationServerSecurityConfigurer security) throws Exception {
             security
-                    .tokenKeyAccess("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
-                    .checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
+                    .tokenKeyAccess("permitAll()") //("isAnonymous() || hasAuthority('ROLE_TRUSTED_CLIENT')")
+                    .checkTokenAccess("isAuthenticated()"); //("hasAuthority('ROLE_TRUSTED_CLIENT')");
         }
 
         @Override
         public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
             clients.inMemory()
-                .withClient("iservport-trusted-client")
-                    .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
+                .withClient("iservport-implicit")
+                    .authorizedGrantTypes("refresh_token", "implicit")
                     .authorities("ROLE_USER_READ", "ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
                     .scopes("read", "write", "trust")
                     .accessTokenValiditySeconds(60)
                     .refreshTokenValiditySeconds(160)
-                .and()
+                    .and()
+                .withClient("iservport-trusted-client")
+                    .authorizedGrantTypes("password", "authorization_code", "refresh_token", "implicit")
+                    .authorities("ROLE_USER_READ", "ROLE_CLIENT", "ROLE_TRUSTED_CLIENT")
+                    .scopes("read", "write", "trust")
+                    .autoApprove(true)
+                    .accessTokenValiditySeconds(60)
+                    .refreshTokenValiditySeconds(160)
+                    .and()
                 .withClient("iservport-registered-redirect-client")
                     .authorizedGrantTypes("authorization_code")
                     .authorities("ROLE_CLIENT")
@@ -174,15 +187,22 @@ public class SecurityConfig extends WebSecurityConfigurerAdapter {
     }
 
     @Override
+    public void configure(WebSecurity web) throws Exception {
+        web.ignoring().antMatchers("/resources/**", "/static/**", "/css/**", "/js/**", "/images/**", "/webjars/**");
+    }
+
+    @Override
     protected void configure(HttpSecurity http) throws Exception {
-        http
-            .authorizeRequests().antMatchers("/**").permitAll()
+        http.antMatcher("/**")
+            .authorizeRequests()
+                .antMatchers("/**").permitAll()
             .and().exceptionHandling()
                 .authenticationEntryPoint(new LoginUrlAuthenticationEntryPoint("/login"))
-                .and().formLogin().usernameParameter("principal")
-                .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
+            .and().formLogin()
+                .usernameParameter("principal").loginPage("/login")
+            .and().addFilterAfter(csrfHeaderFilter(), CsrfFilter.class)
                 .csrf().csrfTokenRepository(csrfTokenRepository())
-                .ignoringAntMatchers("/oauth/**")
+                .ignoringAntMatchers("/app/content/upload", "/login/**", "/oauth/**")
             .and().logout()
                 .deleteCookies("JSESSIONID")
                 .deleteCookies("remember-me")

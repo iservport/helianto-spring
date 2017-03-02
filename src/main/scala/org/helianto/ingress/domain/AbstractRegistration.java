@@ -18,6 +18,8 @@ public class AbstractRegistration {
     @Temporal(TemporalType.TIMESTAMP)
     private Date issueDate;
 
+    private Date lastConfirmed;
+
     public String getRemoteAddress() {
         return remoteAddress;
     }
@@ -28,11 +30,24 @@ public class AbstractRegistration {
     public Date getIssueDate() {
         return issueDate;
     }
+
+    public Date getLastConfirmed() {
+        return lastConfirmed;
+    }
+
     public void setIssueDate(Date issueDate) {
         this.issueDate = issueDate;
     }
 
-    protected Instant getValidTo(int days) {
+    public void setLastConfirmed(Date lastConfirmed) {
+        this.lastConfirmed = lastConfirmed;
+    }
+
+    public boolean isConfirmed() {
+        return getLastConfirmed()!=null;
+    }
+
+    public Instant getValidTo(int days) {
         return Optional.ofNullable(getIssueDate()).orElse(new Date()).toInstant().minus(days, ChronoUnit.DAYS);
     }
 
@@ -42,6 +57,7 @@ public class AbstractRegistration {
 
     public void merge(AbstractRegistration command) {
         setIssueDate(command.getIssueDate());
+        setLastConfirmed(command.getLastConfirmed());
     }
 
     protected AbstractRegistration merge(String remoteAddress) {

@@ -25,11 +25,6 @@
     <orderEntry type="library" name="SBT: org.helianto:helianto-lang-pt_2.11:1.0.3.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.helianto:helianto-lang-es_2.11:1.0.3.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.helianto:helianto-lang-de_2.11:1.0.3.RELEASE:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-sanitize:1.6.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-resource:1.6.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-i18n:1.6.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular-animate:1.6.1:jar" level="project" />
-    <orderEntry type="library" name="SBT: org.webjars.bower:angular:1.6.1:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:font-awesome:4.5.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:bootstrap-social:5.0.0:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:angular-ui-mask:1.8.7:jar" level="project" />
@@ -170,5 +165,10 @@
     <orderEntry type="library" name="SBT: org.springframework.boot:spring-boot-starter-social-linkedin:1.4.0.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.springframework.social:spring-social-linkedin:1.0.2.RELEASE:jar" level="project" />
     <orderEntry type="library" name="SBT: org.webjars.bower:angular-ui-bootstrap-bower:2.3.1:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular:1.6.2:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-animate:1.6.2:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-i18n:1.6.2:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-resource:1.6.2:jar" level="project" />
+    <orderEntry type="library" name="SBT: org.webjars.bower:angular-sanitize:1.6.2:jar" level="project" />
   </component>
 </module>

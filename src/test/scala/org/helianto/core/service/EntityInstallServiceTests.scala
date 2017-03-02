@@ -11,13 +11,13 @@ class EntitySaveOrUpdateTests extends UnitSpec {
 
   import org.mockito.Mockito._
 
-  val service = new EntityInstallService(mock[EntityRepository], mock[IdentityRepository]) {
+  val service = new EntityInstallService(mock[EntityRepository], mock[IdentityService]) {
     override val contextName: String = "CONTEXT"
   }
 
   "An entity command" should "should be saved as an entity" in {
-    val c = new Entity("CONTEXT", "A", "B")
-    val t = new Entity("CONTEXT", "A", "B")
+    val c = new Entity("CONTEXT", "A", "B", "A", "A", "A")
+    val t = new Entity("CONTEXT", "A", "B", "A", "A", "A")
     when(service.targetRepository.findOne(c.getId))
       .thenReturn(t)
     when(service.targetRepository.saveAndFlush(t))
@@ -27,7 +27,7 @@ class EntitySaveOrUpdateTests extends UnitSpec {
   }
 
   it should "have a context name" in {
-    val c = new Entity("CONTEXT", "", "")
+    val c = new Entity("CONTEXT", "A", "B", "A", "A", "A")
     when(service.targetRepository.findOne(c.getId))
       .thenReturn(new Entity)
     service.saveOrUpdate(new Entity)

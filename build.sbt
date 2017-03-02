@@ -7,7 +7,7 @@ heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.3.14.RELEASE"
+version in ThisBuild := "1.4.0.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -49,6 +49,7 @@ lazy val root = (project in file("."))
       "com.zaxxer"     % "HikariCP"             % "2.4.3",
       "com.h2database" % "h2"                   % "1.4.192",
       "mysql"          % "mysql-connector-java" % "5.1.26",
+      "org.scalactic" %% "scalactic"            % "3.0.0",
       "org.scalactic" %% "scalactic"            % "3.0.0"
     ),
     packageName in Docker := "mvps-156214/helianto-spring",
@@ -76,11 +77,11 @@ lazy val kafka = (project in file("kafka")).
   .dependsOn(root)
 
 libraryDependencies ++= Seq(
-  "org.webjars.bower" % "angular"              % "1.6.1",
-  "org.webjars.bower" % "angular-sanitize"     % "1.6.1",
-  "org.webjars.bower" % "angular-resource"     % "1.6.1",
-  "org.webjars.bower" % "angular-animate"      % "1.6.1",
-  "org.webjars.bower" % "angular-i18n"         % "1.6.1",
+  "org.webjars.bower" % "angular"              % "1.6.2",
+  "org.webjars.bower" % "angular-sanitize"     % "1.6.2",
+  "org.webjars.bower" % "angular-resource"     % "1.6.2",
+  "org.webjars.bower" % "angular-animate"      % "1.6.2",
+  "org.webjars.bower" % "angular-i18n"         % "1.6.2",
   "org.webjars.bower" % "angular-loading-bar"  % "0.9.0",
   "org.webjars.bower" % "slimScroll"           % "1.3.3"  exclude("org.webjars.bower", "jquery"),
   "org.webjars.bower" % "bootstrap"            % "3.3.7"  exclude("org.webjars.bower", "jquery"),

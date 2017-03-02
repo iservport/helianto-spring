@@ -52,6 +52,16 @@ class ContextController
   def postState(@RequestBody command: State, error: BindingResult): State = stateService.installState(command)
 
   /**
+    * GET /api/context/:contextName/state
+    *
+    * @param contextName the state request
+    *
+    * @return a list of states
+    */
+  @GetMapping(value = Array("/{contextName}/state"))
+  def getStates(@PathVariable contextName: String) = stateService.list(contextName)
+
+  /**
     * GET /api/context/state
     *
     * @return a list of states

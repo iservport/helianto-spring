@@ -1,3 +1,8 @@
+server:
+  port: 8081
+  session:
+    timeout: 45
+
 spring:
 # Profiles
   profiles:
@@ -5,6 +10,12 @@ spring:
   freemarker:
     template-loader-path: classpath:/templates/
     prefer-file-system-access: false
+  jackson:
+    default-property-inclusion: non_null
+
+security:
+  basic:
+    enabled: false
 
 # Helianto
 helianto:
@@ -54,7 +65,7 @@ logging:
   level:
     org.helianto: INFO
     org.springframework.web.servlet.mvc.method.annotation: off
-    org.springframework.security: off
+    org.springframework.security: debug
     org.springframework.security.config.annotation.web.builders: debug
     org.springframework.security.oauth2: DEBUG
     org.springframework.security.web.FilterChainProxy: off
@@ -63,3 +74,4 @@ logging:
     org.springframework.security.web: DEBUG
     org.helianto.message: DEBUG
     org.springframework.web.filter.CommonsRequestLoggingFilter: DEBUG
+

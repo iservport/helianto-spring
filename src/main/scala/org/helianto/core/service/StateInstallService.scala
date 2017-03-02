@@ -16,6 +16,8 @@ class StateInstallService(stateRepository: StateRepository) {
 
   def list() = stateRepository.findByContextName(contextName, new Sort("stateAlias"))
 
+  def list(contextName: String) = stateRepository.findByContextName(contextName, new Sort("stateAlias"))
+
   def installState(command: State): State =
     Option(stateRepository)
       .map(_.findByContextNameAndCountryCodeAndStateCode(command.getContextName, command.getCountryCode, command.getStateCode)) match {

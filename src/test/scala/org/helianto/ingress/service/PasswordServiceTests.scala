@@ -17,7 +17,7 @@ class PasswordServiceTests extends UnitSpec {
 
   val locale = Locale.getDefault
 
-  val responseService = new ResponseService(null, null) {
+  val responseService = new ResponseService(null, null, null) {
     override def response(model: Model, locale: Locale) = "frame-security"
     }
 

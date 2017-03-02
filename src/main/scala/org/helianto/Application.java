@@ -5,6 +5,7 @@ import org.helianto.message.config.MessageConfig;
 import org.helianto.security.config.SecurityConfig;
 import org.helianto.security.config.SocialConfig;
 import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.config.MethodInvokingFactoryBean;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.EnableAutoConfiguration;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
@@ -15,6 +16,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Import;
 import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.oauth2.provider.approval.Approval;
 import org.springframework.security.oauth2.provider.approval.TokenApprovalStore;
 import org.springframework.security.oauth2.provider.approval.TokenStoreUserApprovalHandler;
@@ -49,6 +51,15 @@ public class Application {
                 registry.addMapping("/api/**");
             }
         };
+    }
+
+    @Bean
+    public MethodInvokingFactoryBean methodInvokingFactoryBean() {
+        MethodInvokingFactoryBean methodInvokingFactoryBean = new MethodInvokingFactoryBean();
+        methodInvokingFactoryBean.setTargetClass(SecurityContextHolder.class);
+        methodInvokingFactoryBean.setTargetMethod("setStrategyName");
+        methodInvokingFactoryBean.setArguments(new String[]{SecurityContextHolder.MODE_INHERITABLETHREADLOCAL});
+        return methodInvokingFactoryBean;
     }
 
     @Bean

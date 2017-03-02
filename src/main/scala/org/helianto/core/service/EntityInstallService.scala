@@ -1,9 +1,8 @@
 package org.helianto.core.service
 
-import org.helianto.core.domain.{Entity, Identity}
-import org.helianto.core.repository.{EntityRepository, IdentityRepository}
+import org.helianto.core.domain.{Entity, EntityData, Identity, IdentityData}
+import org.helianto.core.repository.EntityRepository
 import org.helianto.core.utils.CommandMixin
-import org.helianto.ingress.domain.Registration
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
 import org.springframework.stereotype.Service
@@ -23,21 +22,21 @@ class EntityInstallService(val targetRepository: EntityRepository, val identityS
 
   def findById(id: String) = Option(targetRepository.findOne(id)).getOrElse(throw new IllegalArgumentException)
 
-  def install(registration: Registration): Entity =
-    install(registration.getCityId
-      , registration.getEntityAlias
-      , registration.getEntityName
-      , identityService.install(registration)
-      , registration.getStateCode
-      , registration.getPun)
+  def install(installData: EntityData): Entity =
+    install(installData.getCityId
+      , installData.getEntityAlias
+      , installData.getEntityName
+      , identityService.install(installData.asInstanceOf[IdentityData])
+      , installData.getStateCode
+      , installData.getEntityType
+      , installData.getPun)
 
-
-  def install(cityId: String, alias: String, entityName: String, identity: Identity, stateCode: String, pun: String): Entity = {
+  def install(cityId: String, alias: String, entityName: String, identity: Identity, stateCode: String, entityType: Char, pun: String): Entity = {
     val entity = findOption(alias) match {
       case Some(e) => e.verify(contextName)
       case None => {
         logger.info(s"Installing entity: $contextName/$alias")
-        targetRepository.saveAndFlush(new Entity(contextName, alias, entityName, cityId, stateCode, pun))
+        targetRepository.saveAndFlush(new Entity(contextName, alias, entityName, cityId, stateCode, entityType, pun))
       }
     }
     Option(postInstaller) match {
@@ -53,6 +52,6 @@ class EntityInstallService(val targetRepository: EntityRepository, val identityS
   override def validateTarget(target: Entity, command: Entity) = (target.getContextName equals contextName)
 
   def getNewTarget(command: Entity) =
-    new Entity(contextName, command.getAlias, command.getEntityName, command.getCityId, command.getStateCode, command.getPun)
+    new Entity(contextName, command.getAlias, command.getEntityName, command.getCityId, command.getStateCode, command.getEntityType, command.getPun)
 
 }

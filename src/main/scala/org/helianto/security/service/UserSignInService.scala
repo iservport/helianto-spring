@@ -1,17 +1,31 @@
 package org.helianto.security.service
 
-import javax.servlet.http.HttpServletRequest
+import java.util.Date
+import javax.servlet.http.{HttpServletRequest, HttpServletResponse, HttpSession}
 
 import org.helianto.security.domain.UserDetailsAdapter
+import org.helianto.user.domain.User
+import org.helianto.user.repository.UserProjection
+import org.springframework.beans.factory.annotation.Autowired
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken
 import org.springframework.security.core.context.SecurityContextHolder
+import org.springframework.security.oauth2.client.OAuth2ClientContext
+import org.springframework.security.oauth2.common.exceptions.{InvalidGrantException, InvalidTokenException}
+import org.springframework.security.web.context.{HttpSessionSecurityContextRepository, SecurityContextPersistenceFilter, SecurityContextRepository}
 import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
 
 /**
   * Authenticate and authorize a given user.
   */
 @Service("userSigninService")
 class UserSignInService extends AbstractDetailsService {
+
+  val key = "SPRING_SECURITY_CONTEXT"
+  var repo: SecurityContextRepository = new HttpSessionSecurityContextRepository()
+
+  @Autowired
+  val oauth2ClientContext: OAuth2ClientContext = null
 
   def signin(userId: String) =
     Option(userRepository.findById(userId)) match {
@@ -28,12 +42,30 @@ class UserSignInService extends AbstractDetailsService {
     * @param identityId
     * @param toUserId
     */
-  def signin(identityId: String, toUserId: String, request: HttpServletRequest ) =
-    Option(userRepository.findByIdAndIdentity_Id(toUserId, identityId)) match {
-      case Some(userProjection) =>
-        Option(userRepository.findOne(toUserId)).map(user => userRepository.saveAndFlush(user.updateLastEvent()))
-        userProjection
-      case None =>
-    }
+  @Transactional
+  def signin(identityId: String, toUserId: String, request: HttpServletRequest): Option[String] = {
+    println(s"""BEFORE SIGNIN
+                |
+                |${SecurityContextHolder.getContext.getAuthentication}
+                |
+              """.stripMargin)
+    Option(userRepository.setUserLastInfoByIdAndIdentity_Id(toUserId, identityId, new Date())) match {
+      case Some(()) =>
+//        Option(request.getCookies).getOrElse(Array()).foreach(_.setMaxAge(0))
+//        SecurityContextHolder.clearContext()
+//        Option(request.getSession(false)) match {
+//          case Some(session) => session.invalidate()
+//          case None =>
+//        }
+        signin(toUserId)
+        println(s"""AFTER SIGNIN
+                    |
+                    |${SecurityContextHolder.getContext.getAuthentication}
+                    |
+              """.stripMargin)
+//        session.setAttribute(key, SecurityContextHolder.getContext)
+        Some(toUserId)
+      case None => None
+  }}
 
 }

@@ -1,7 +1,3 @@
-# Server
-server:
-  port: 8081
-
 helianto:
   host: localhost
   api:

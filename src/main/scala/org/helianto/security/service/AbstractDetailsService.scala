@@ -31,6 +31,12 @@ class AbstractDetailsService {
       case _ => error(identityId)
     }
 
+  private[service]  def loadLastUserByUserKey(userKey: String): UserProjection =
+    Option(userRepository.findByUserKeyOrderByLastEventDesc(userKey)) match {
+      case Some(list) if !list.isEmpty => list.get(0)
+      case _ => error(userKey)
+    }
+
   private[service] def updateLastEvent(userDetails: UserDetailsAdapter): Unit = {
     Option(userRepository.findOne(userDetails.getUserId)) match {
       case Some(u) =>

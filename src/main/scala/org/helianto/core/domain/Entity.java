@@ -137,15 +137,17 @@ public class Entity implements Mergeable<Entity>
      * @param entityName the entity name
      * @param cityId id of the city
      * @param stateCode the state code
+     * @param entityType entity type
      * @param pun public unique number, optional
      */
-    public Entity(String contextName, String alias, String entityName, String cityId, String stateCode, String pun) {
+    public Entity(String contextName, String alias, String entityName, String cityId, String stateCode, char entityType, String pun) {
     	this();
         setContextName(Objects.requireNonNull(contextName));
         setAlias(Objects.requireNonNull(alias));
         setEntityName(entityName);
         setCityId(Objects.requireNonNull(cityId));
         setStateCode(stateCode);
+        setEntityType(entityType);
         setPun(pun);
     }
     

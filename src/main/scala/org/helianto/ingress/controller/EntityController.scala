@@ -9,12 +9,18 @@ import org.springframework.web.bind.annotation.{GetMapping, RequestMapping, Rest
   */
 @RestController
 @RequestMapping(Array("/api/entity"))
-class EntityController(entityService: EntityInstallService) extends AuthorityExtractor {
+class EntityController(service: EntityInstallService) extends AuthorityExtractor {
+
+  /**
+    * The authenticated entity data.
+    */
+  @GetMapping(path = Array("/list"))
+  def list() = service.findByContext()
 
   /**
     * The authenticated entity data.
     */
   @GetMapping
-  def entity(implicit principal: OAuth2Authentication) = entityService.findById(_entityId)
+  def entity(implicit principal: OAuth2Authentication) = service.findById(_entityId)
 
 }

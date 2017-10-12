@@ -12,11 +12,26 @@ helianto:
       password: NONE
     senderEmail: noreply@helianto.org
     senderFullName: Maurício Fernandes de Castro
+  root:
+    identity:
+      principal: mauricio@iservport.com
+      displayName: Maurício
+      personalData:
+        firstName: Maurício
+        lastName: Fernandes de Castro
+        gender: M
+    entity:
+      alias: DEFAULT
+      stateCode: 41
+      cityCode: 4106902
+  defaultCountry: BRA
+  intialSecret: changeme
 
 spring:
 # DATASOURCE (DataSourceAutoConfiguration & DataSourceProperties)
   datasource:
     driver-class-name: com.mysql.jdbc.Driver
+    continue-on-error: true
     hikari:
       maximum-pool-size: 3
       connection-timeout: 10

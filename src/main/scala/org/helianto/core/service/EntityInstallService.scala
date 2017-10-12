@@ -5,6 +5,7 @@ import org.helianto.core.repository.EntityRepository
 import org.helianto.core.utils.CommandMixin
 import org.slf4j.LoggerFactory
 import org.springframework.beans.factory.annotation.{Autowired, Value}
+import org.springframework.data.domain.Sort
 import org.springframework.stereotype.Service
 
 @Service
@@ -17,6 +18,8 @@ class EntityInstallService(val targetRepository: EntityRepository, val identityS
 
   @Autowired(required = false)
   val postInstaller: EntityPostInstallService = null
+
+  def findByContext() = targetRepository.findByContextName(contextName, new Sort(Sort.Direction.ASC, "alias"))
 
   def findOption(alias: String) = Option(targetRepository.findByContextNameAndAliasIgnoreCase(contextName, alias))
 

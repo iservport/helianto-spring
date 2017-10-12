@@ -3,22 +3,19 @@ import sbt.Keys._
 
 val heliantoSpringBootVersion = settingKey[String]("Spring Boot version")
 
-heliantoSpringBootVersion in ThisBuild := "1.4.0.RELEASE"
+heliantoSpringBootVersion in ThisBuild := "1.5.4.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.4.0.RELEASE"
+version in ThisBuild := "1.4.1.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
 scalaVersion in ThisBuild := "2.11.8"
 
-scalaJSUseRhino in Global := false
-
 lazy val root = (project in file("."))
   .enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
   .enablePlugins(DockerPlugin)
-  .enablePlugins(ScalaJSPlugin)
   .settings(commonSettings)
   .settings(
     name := "helianto-spring",

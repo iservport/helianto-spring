@@ -4,11 +4,14 @@ import java.util.Date
 
 import org.helianto.core.domain.Entity
 import org.springframework.beans.factory.annotation.Value
+import org.springframework.data.domain.Sort
 import org.springframework.data.jpa.repository.JpaRepository
 
 trait EntityRepository extends JpaRepository[Entity, String] {
 
   def findById(entityId: String): EntityProjection
+
+  def findByContextName(contextName: String, sort: Sort): java.util.List[EntityProjection]
 
   def countByContextNameAndAliasIgnoreCase(contextName: String, alias: String): Long
 

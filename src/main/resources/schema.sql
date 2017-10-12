@@ -10,5 +10,5 @@ create table if not exists `core_UserConnection` (userId varchar(255) not null,
 	refreshToken varchar(512),
 	expireTime bigint,
 	primary key (userId, providerId, providerUserId));
-alter table `core_UserConnection` drop index `UserConnectionRank`;
 create unique index `UserConnectionRank` on core_UserConnection(userId, providerId, rank);
+

@@ -7,7 +7,7 @@ heliantoSpringBootVersion in ThisBuild := "1.5.4.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.4.2.RELEASE"
+version in ThisBuild := "1.4.3.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -109,7 +109,7 @@ lazy val commonSettings = Seq(
     else
       Some("Helianto Development"  at helianto + "devel")
   },
-  credentials += Credentials(Path.userHome / ".sbt" / ".s3credentials"),
+//  credentials += Credentials(Path.userHome / ".sbt" / ".s3credentials"),
   publishMavenStyle := true
 )
 

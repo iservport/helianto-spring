@@ -7,7 +7,7 @@ heliantoSpringBootVersion in ThisBuild := "1.5.4.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.4.4.RELEASE"
+version in ThisBuild := "1.4.5.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -86,6 +86,10 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular-ui-bootstrap-bower" % "2.3.1",
   "org.webjars.bower" % "angular-ui-mask"      % "1.8.7",
   "org.webjars.bower" % "bootstrap-social"     % "5.0.0"
+)
+
+resolvers  ++= Seq(
+  "Helianto Releases"   at "http://s3-sa-east-1.amazonaws.com/maven.helianto.org/release"
 )
 
 licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))

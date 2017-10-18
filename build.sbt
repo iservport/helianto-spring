@@ -7,7 +7,7 @@ heliantoSpringBootVersion in ThisBuild := "1.5.4.RELEASE"
 
 organization in ThisBuild := "org.helianto"
 
-version in ThisBuild := "1.4.3.RELEASE"
+version in ThisBuild := "1.4.4.RELEASE"
 
 sbtVersion in ThisBuild := "0.13.9"
 
@@ -16,7 +16,6 @@ scalaVersion in ThisBuild := "2.11.8"
 lazy val root = (project in file("."))
   .enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
   .enablePlugins(DockerPlugin)
-  .settings(commonSettings)
   .settings(
     name := "helianto-spring",
     mainClass in Compile := Some("org.helianto.Application"),
@@ -30,7 +29,6 @@ lazy val root = (project in file("."))
       "org.springframework.boot"           % "spring-boot-starter-freemarker" % heliantoSpringBootVersion.value,
       "org.springframework.boot"           % "spring-boot-starter-social-facebook" % heliantoSpringBootVersion.value,
       "org.springframework.boot"           % "spring-boot-starter-social-linkedin" % heliantoSpringBootVersion.value,
-//      "org.springframework.boot"           % "spring-boot-starter-actuator"   % heliantoSpringBootVersion.value,
       "org.springframework.security.oauth" % "spring-security-oauth2"         % "2.0.11.RELEASE",
       "org.springframework.security"       % "spring-security-jwt"            % "1.0.5.RELEASE",
       "org.springframework.social"         % "spring-social-google"           % "1.0.0.RELEASE",
@@ -41,13 +39,15 @@ lazy val root = (project in file("."))
       "io.springfox"                       % "springfox-swagger2"             % "2.6.0",
       "io.springfox"                       % "springfox-swagger-ui"           % "2.6.0",
       "io.swagger"                         % "swagger-core"                   % "1.5.10",
-      "javax.servlet"  % "javax.servlet-api"    % "3.0.1"                     % "provided",
-      "commons-io"     % "commons-io"           % "2.4",
-      "com.zaxxer"     % "HikariCP"             % "2.4.3",
-      "com.h2database" % "h2"                   % "1.4.192",
-      "mysql"          % "mysql-connector-java" % "5.1.26",
-      "org.scalactic" %% "scalactic"            % "3.0.0",
-      "org.scalactic" %% "scalactic"            % "3.0.0"
+      "javax.servlet"                      % "javax.servlet-api"              % "3.0.1"   % "provided",
+      "commons-io"                         % "commons-io"                     % "2.4",
+      "com.zaxxer"                         % "HikariCP"                       % "2.4.3",
+      "com.h2database"                     % "h2"                             % "1.4.192",
+      "mysql"                              % "mysql-connector-java"           % "5.1.26",
+      "org.scalactic"                     %% "scalactic"                      % "3.0.0",
+      "org.scalactic"                     %% "scalactic"                      % "3.0.0",
+      "org.scalatest"                     %% "scalatest"                      % "3.0.0"   % "test",
+      "org.mockito"                        % "mockito-all"                    % "1.10.19" % "test"
     ),
     packageName in Docker := "mvps-156214/helianto-spring",
     dockerBaseImage := "anapsix/alpine-java:latest",
@@ -64,7 +64,6 @@ dockerCommands := dockerCommands.value.flatMap{
 
 lazy val kafka = (project in file("kafka")).
   enablePlugins(JavaServerAppPackaging, UniversalDeployPlugin)
-  .settings(commonSettings)
   .settings(
     name := "helianto-spring-kafka",
     libraryDependencies ++= Seq(
@@ -87,30 +86,6 @@ libraryDependencies ++= Seq(
   "org.webjars.bower" % "angular-ui-bootstrap-bower" % "2.3.1",
   "org.webjars.bower" % "angular-ui-mask"      % "1.8.7",
   "org.webjars.bower" % "bootstrap-social"     % "5.0.0"
-)
-
-lazy val commonSettings = Seq(
-  resolvers in ThisBuild ++= Seq(
-    "Helianto Releases"  at "s3://maven.helianto.org/release",
-
-    "Helianto Snapshots" at "s3://maven.helianto.org/snapshot",
-    "Helianto Development" at "s3://maven.helianto.org/devel"
-  ),
-  libraryDependencies ++= Seq(
-    "org.scalatest" %% "scalatest" % "3.0.0" % "test",
-    "org.mockito" % "mockito-all" % "1.10.19" % "test"
-  ),
-  publishTo in ThisBuild := {
-    val helianto = "s3://maven.helianto.org/"
-    if (version.value.trim.endsWith("SNAPSHOT"))
-      Some("Helianto Snapshots" at helianto + "snapshot")
-    else if (version.value.trim.endsWith("RELEASE"))
-      Some("Helianto Releases" at helianto + "release")
-    else
-      Some("Helianto Development"  at helianto + "devel")
-  },
-//  credentials += Credentials(Path.userHome / ".sbt" / ".s3credentials"),
-  publishMavenStyle := true
 )
 
 licenses in ThisBuild := Seq("Apache-2.0" -> url("http://www.apache.org/licenses/LICENSE-2.0"))
